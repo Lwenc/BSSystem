@@ -1,0 +1,168 @@
+﻿<UserControl x:Class="HASystem.Panels.GoodsTestPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:HASystem.Panels"
+             mc:Ignorable="d" 
+             d:DesignHeight="528.8" d:DesignWidth="1008">
+    <Grid>
+        <Grid.Resources>
+            <!--下拉框箭头-->
+            <ControlTemplate x:Key="ComboBoxTextBox" TargetType="{x:Type TextBox}">
+                <Border x:Name="PART_ContentHost" Focusable="False" Background="{TemplateBinding Background}" />
+            </ControlTemplate>
+            <ControlTemplate x:Key="ComboBoxToggleButton" TargetType="{x:Type ToggleButton}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="40" />
+                    </Grid.ColumnDefinitions>
+                    <Border Grid.Column="0" BorderThickness="2" BorderBrush="Black" Opacity="0.8"/>
+
+                    <Border Grid.Column="1" Background="Black" Opacity="0.8" Cursor="Hand"/>
+                    <Path x:Name="Arrow" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Data="M 0 0 L 4 4 L 8 0 Z" Margin="11,10,11,5" Stretch="Fill" Fill="White" />
+                </Grid>
+            </ControlTemplate>
+            <Style TargetType="{x:Type ComboBox}">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type ComboBox}">
+                            <Grid>
+                                <!-- ToggleButton 已数据绑定到 ComboBox 本身以切换 IsDropDownOpen -->
+                                <ToggleButton Grid.Column="2" Template="{DynamicResource ComboBoxToggleButton}" x:Name="ToggleButton" Focusable="false" IsChecked="{Binding Path=IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" ClickMode="Press"/>
+                                <ContentPresenter HorizontalAlignment="Center" Margin="3,3,23,3" x:Name="ContentSite" VerticalAlignment="Center" Content="{TemplateBinding SelectionBoxItem}" ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}" ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}" IsHitTestVisible="False"/>
+
+                                <!-- 必须将 TextBox 命名为 PART_EditableTextBox，否则 ComboBox 将无法识别它 -->
+                                <TextBox Visibility="Hidden" Template="{DynamicResource ComboBoxTextBox}" HorizontalAlignment="Left" Margin="3,3,23,3" x:Name="PART_EditableTextBox" Style="{x:Null}" VerticalAlignment="Center" Focusable="True" Background="Transparent" IsReadOnly="{TemplateBinding IsReadOnly}"/>
+
+                                <!-- Popup 可显示 ComboBox 中的项列表。IsOpen 已数据绑定到通过 ComboBoxToggleButton 来切换的 IsDropDownOpen -->
+                                <Popup IsOpen="{TemplateBinding IsDropDownOpen}" Placement="Bottom" x:Name="Popup" Focusable="False" AllowsTransparency="True" PopupAnimation="Slide">
+                                    <Grid MaxHeight="{TemplateBinding MaxDropDownHeight}" MinWidth="{TemplateBinding ActualWidth}" x:Name="DropDown" SnapsToDevicePixels="True">
+                                        <Border x:Name="DropDownBorder" Background="{DynamicResource WindowBackgroundBrush}" BorderBrush="{DynamicResource SolidBorderBrush}" BorderThickness="1"/>
+                                        <ScrollViewer Margin="4,6,4,6" Style="{DynamicResource SimpleScrollViewer}" SnapsToDevicePixels="True" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" CanContentScroll="True">
+                                            <!-- StackPanel 用于显示子级，方法是将 IsItemsHost 设置为 True -->
+                                            <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained" Background="White"/>
+                                        </ScrollViewer>
+                                    </Grid>
+                                </Popup>
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="FontSize" Value="12"/>
+            </Style>
+        </Grid.Resources>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="3*"/>
+            <RowDefinition Height="6*"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0" Margin="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="2*"/>
+            </Grid.ColumnDefinitions>
+            <GroupBox Header="测试控制" FontSize="18" FontWeight="Bold" Grid.Column="0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="1.5*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Content="型   号：" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Right"/>
+                    <ComboBox x:Name="omboModel" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Width="130" Height="25" HorizontalAlignment="Left"/>
+                    <Label Content="测试类型：" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right"/>
+                    <ComboBox x:Name="comboType" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Width="130" Height="25" HorizontalAlignment="Left"/>
+                    <CheckBox x:Name="checkBoxVolt" Content="电压补偿:3V" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                    <Button  x:Name="btnReset" Content="复位" Width="80" Height="30" FontSize="15" Foreground="White" Background="#414c57" 
+                             Grid.Row="3" Grid.Column="0" HorizontalAlignment="Right" Margin="0,1,0,0" VerticalAlignment="Top" Click="btnStart_Click"/>
+                    <Button  x:Name="btnStart" Content="点击开始" Width="80" Height="30" FontSize="15" Foreground="White" Background="#414c57" 
+                             Grid.Row="3" Grid.Column="1" HorizontalAlignment="Center" Margin="0,1,0,0" VerticalAlignment="Top" Click="btnStart_Click"/>
+                    <Button  x:Name="btnStop" Content="测试结束" Width="80" Height="30" FontSize="15"  Foreground="White" Background="#414c57" 
+                             Grid.Row="3" Grid.Column="1" HorizontalAlignment="Left" Visibility="Collapsed" Click="btnStop_Click"/>
+                </Grid>
+            </GroupBox>
+            <GroupBox Header="测试规格" FontWeight="Bold" FontSize="18" Margin="5,0" Grid.Column="1">
+                <Grid>
+                    <Grid.Resources>
+                        <Style TargetType="Label">
+                            <Setter Property="HorizontalAlignment" Value="Center"/>
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                            <Setter Property="FontSize" Value="14"/>
+                        </Style>
+                    </Grid.Resources>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Label Content="电压上限(V)：" />
+                    <Label Content="电压下限(V)：" Grid.Column="2"/>
+                    <Label Content="内阻上限(Ω)：" Grid.Row="1"/>
+                    <Label Content="内阻下限(Ω)：" Grid.Row="1" Grid.Column="2"/>
+                    <Label Content="       K值上限：" Grid.Row="2"/>
+                    <Label Content="       K值下限：" Grid.Row="2" Grid.Column="2"/>
+                    <Label x:Name="labVoltMax" Content="112.51325" HorizontalAlignment="Left" Grid.Column="1"/>
+                    <Label x:Name="labVoltMin" Content="18.325" HorizontalAlignment="Left" Grid.Column="3"/>
+                    <Label x:Name="labResistanceMax" Content="224.5132" HorizontalAlignment="Left" Grid.Row="1" Grid.Column="1"/>
+                    <Label x:Name="labResistanceMin" Content="11.32" HorizontalAlignment="Left" Grid.Row="1" Grid.Column="3"/>
+                    <Label x:Name="labKMax" Content="12.513" HorizontalAlignment="Left" Grid.Row="2" Grid.Column="1"/>
+                    <Label x:Name="labKMin" Content="1.1" HorizontalAlignment="Left" Grid.Row="2" Grid.Column="3"/>
+                </Grid>
+            </GroupBox>
+            <GroupBox Header="测试统计" FontSize="20" FontWeight="Bold" Grid.Column="2">
+                <Grid>
+                    <Grid.Resources>
+                        <Style TargetType="Label">
+                            <Setter Property="HorizontalAlignment" Value="Right"/>
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                            <Setter Property="FontSize" Value="16"/>
+                        </Style>
+                    </Grid.Resources>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="6*"/>
+                        <ColumnDefinition Width="4*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Content="总数(个)："/>
+                    <Label Content="合格(个)：" Grid.Row="1"/>
+                    <Label Content="不合格(个)：" Grid.Row="2"/>
+                    <Label Content="合格率(%)：" Grid.Row="3"/>
+                    <Label x:Name="labTotal" Content="0" Grid.Column="1" HorizontalAlignment="Left"/>
+                    <Label x:Name="labQualified" Content="0" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left"/>
+                    <Label x:Name="labUnQualified" Content="0" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left"/>
+                    <Label x:Name="labUnQualifiedRate" Content="0" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Left"/>
+                </Grid>
+            </GroupBox>
+        </Grid>
+        <Grid Grid.Row="1" Margin="13,7,7,13">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid x:Name="gd">
+
+            </Grid>
+        </Grid>
+    </Grid>
+</UserControl>

@@ -1,0 +1,173 @@
+﻿<UserControl x:Class="HASystem.Panels.ModelManagerPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:HASystem.Panels"
+             mc:Ignorable="d" 
+             d:DesignHeight="528.8" d:DesignWidth="1008">
+    <Grid Background="White">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.15*"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="0"  Background="#323b44">
+            <Grid.Resources>
+                <Style TargetType="ButtonBase" x:Key="btnBase">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ButtonBase">
+                                <Label x:Name="lbContent" Content="{TemplateBinding Content}" Background="{TemplateBinding Background}"
+                               HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="true">
+                                        <Setter Property="Background" Value="#323b44"/>
+                                    </Trigger>
+                                    <Trigger Property="IsPressed" Value="true">
+                                        <Setter Property="Background" Value="#95aabe"/>
+                                    </Trigger>
+                                    <Trigger Property="IsEnabled" Value="false">
+                                        <Setter Property="Background" Value="White"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+                <Style TargetType="Button" BasedOn="{StaticResource btnBase}">
+                    <Setter Property="Width" Value="128"/>
+                    <Setter Property="Height" Value="40"/>
+                    <Setter Property="Background" Value="#414c57"/>
+                    <Setter Property="FontSize" Value="15"/>
+                </Style>
+            </Grid.Resources>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Button x:Name="btnModelInfo" Content="型号信息" Click="btnModelInfo_Click" Grid.Row="0"/>
+            <Button x:Name="btnModleAdd" Content="型号信息录入" Click="btnModleAdd_Click" Grid.Row="1"/>
+        </Grid>
+        <Grid Grid.Column="1">
+            <Grid x:Name="gridInfo">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="6*"/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="9*"/>
+                    <ColumnDefinition Width="0.02*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+                <TextBox Width="200" Height="30" x:Name="txtSearch" HorizontalAlignment="Right" VerticalAlignment="Center"
+                         VerticalContentAlignment="Center" Foreground="Indigo" TabIndex="0" BorderThickness="1" Grid.Column="0">
+                    <TextBox.Resources>
+                        <VisualBrush x:Key="HelpBrush" TileMode="None" Opacity="0.3" Stretch="None" AlignmentX="Left">
+                            <VisualBrush.Visual>
+                                <TextBlock FontStyle="Italic" Text="请输入关键字"/>
+                            </VisualBrush.Visual>
+                        </VisualBrush>
+                    </TextBox.Resources>
+                    <TextBox.Style>
+                        <Style TargetType="TextBox">
+                            <Style.Triggers>
+                                <Trigger Property="Text" Value="{x:Null}">
+                                    <Setter Property="Background" Value="{StaticResource HelpBrush}"/>
+                                </Trigger>
+                                <Trigger Property="Text" Value="">
+                                    <Setter Property="Background" Value="{StaticResource HelpBrush}"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBox.Style>
+                </TextBox>
+                <Button x:Name="btnSearch" Content="查找" Width="80" Height="30" HorizontalAlignment="Left" Foreground="White" Background="#414c57" Grid.Column="2" Click="btnSearch_Click"/>
+            </Grid>
+                <Grid Grid.Row="2">
+                    <DataGrid x:Name="dgModelInfo" Margin="9,0,6,5" AutoGenerateColumns="False" BorderBrush="#323b44"
+                          IsReadOnly="True" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                          CanUserAddRows="False">
+                        <!--<DataGrid.Resources>
+                            <Style x:Key="fontStyle" TargetType="DataGridColumnHeader">
+                                
+                            </Style>
+                        </DataGrid.Resources>-->
+                    <!--给整个表添加颜色开始-->
+                    <DataGrid.ColumnHeaderStyle>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="Background">
+                                <Setter.Value>
+                                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                        <GradientStop Color="Transparent" Offset="0"/>
+                                        <GradientStop Color="#323b44" Offset="0.9"/>
+                                        <GradientStop Color="Transparent" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="Foreground" Value="Black"/>
+                            <Setter Property="FontSize" Value="13" />
+                        </Style>
+                    </DataGrid.ColumnHeaderStyle>
+                    <DataGrid.RowStyle>
+                        <Style TargetType="DataGridRow">
+                            <!--<Setter Property="Background" Value="LightBlue" />-->
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <!--当鼠标经过时 改变颜色-->
+                                    <Setter Property="Background" Value="#414c00"/>
+                                    <Setter Property="Foreground" Value="White"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGrid.RowStyle>
+                    <DataGrid.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <Style.Triggers>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <!--单元格被选中时 改变颜色-->
+                                    <Setter Property="Background" Value="#414c57"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGrid.CellStyle>
+                    <!--给整个表添加颜色结束-->
+
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="型号" Width="auto" Binding="{Binding model}"/>
+                        <DataGridTextColumn Header="类型" Width="auto" Binding="{Binding type1}"/>
+                        <DataGridTextColumn Header="电压上限(V)" Width="auto" Binding="{Binding voltMax1}"/>
+                        <DataGridTextColumn Header="电压下限(V)" Width="auto" Binding="{Binding voltMin1}"/>
+                        <DataGridTextColumn Header="内阻上限(mΩ)" Width="auto" Binding="{Binding resistanceMax1}"/>
+                        <DataGridTextColumn Header="内阻下限(mΩ)" Width="auto" Binding="{Binding resistanceMin1}"/>
+                        <DataGridTextColumn Header="类型" Width="auto" Binding="{Binding type2}"/>
+                        <DataGridTextColumn Header="电压上限(V)" Width="auto" Binding="{Binding voltMax2}"/>
+                        <DataGridTextColumn Header="电压下限(V)" Width="auto" Binding="{Binding voltMin2}"/>
+                        <DataGridTextColumn Header="内阻上限(mΩ)" Width="auto" Binding="{Binding resistanceMax2}"/>
+                        <DataGridTextColumn Header="内阻下限(mΩ)" Width="auto" Binding="{Binding resistanceMin2}"/>
+                        <DataGridTextColumn Header="K值上限" Width="auto" Binding="{Binding k_valueMax2}"/>
+                        <DataGridTextColumn Header="K值下限" Width="auto" Binding="{Binding k_valueMin2}"/>
+                        <DataGridTextColumn Header="电压补偿" Width="auto" Binding="{Binding k_valueMin2}"/>
+                        <DataGridTextColumn Header="操作人" Width="auto" Binding="{Binding k_valueMin2}"/>
+                        <DataGridTextColumn Header="更新时间" Width="auto" Binding="{Binding k_valueMin2}"/>
+                        </DataGrid.Columns>
+                    <DataGrid.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="刷新" x:Name="menuRefresh" Click="menuRefresh_Click"/>
+                            <Separator x:Name="sepAlter"/>
+                            <MenuItem Header="修改" x:Name="menuAlter" Click="menuAlter_Click"/>
+                            <Separator x:Name="sepDelete"/>
+                            <MenuItem Header="删除" x:Name="menuDelete" Click="menuDelete_Click"/>
+                            <Separator x:Name="sepSelect"/>
+                            <MenuItem Header="测试规格选定" x:Name="menuSelect"/>
+                            </ContextMenu>
+                    </DataGrid.ContextMenu>
+                </DataGrid>
+                </Grid>
+            </Grid>
+            <local:AddModelInfo x:Name="panelAddModelInfo" Visibility="Collapsed"/>
+            <local:AlterModelInfo x:Name="panelAlterInfo" Visibility="Collapsed"/>
+        </Grid>
+    </Grid>
+</UserControl>

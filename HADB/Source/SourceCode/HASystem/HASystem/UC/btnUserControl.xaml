@@ -1,0 +1,72 @@
+﻿<UserControl x:Class="HASystem.UC.btnUserControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:HASystem.UC"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             mc:Ignorable="d" 
+             Width="20" Height="20"
+             d:DesignHeight="118.846" d:DesignWidth="300"
+             DataContext="{Binding RelativeSource={RelativeSource Self}}">
+    <Grid x:Name="rootCtrl"  MouseEnter="rootCtrl_MouseEnter" MouseLeave="rootCtrl_MouseLeave">
+        <Grid.Resources>
+            <Style TargetType="ToggleButton" x:Name="SelectChecked">
+            </Style>
+        </Grid.Resources>
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState Name="MouseEnter">
+                    <Storyboard>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="btnClick"
+                                                       Storyboard.TargetProperty="RenderTransform.ScaleX"
+                                                       Duration="0:0:0">
+                            <DiscreteObjectKeyFrame KeyTime="0:0:0">
+                                <DiscreteObjectKeyFrame.Value>
+                                    <sys:Double>1.1</sys:Double>
+                                </DiscreteObjectKeyFrame.Value>
+                            </DiscreteObjectKeyFrame>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="btnClick"
+                                                               Storyboard.TargetProperty="RenderTransform.ScaleY"
+                                                               Duration="0:0:0">
+                            <DiscreteObjectKeyFrame KeyTime="0:0:0">
+                                <DiscreteObjectKeyFrame.Value>
+                                    <sys:Double>1.1</sys:Double>
+                                </DiscreteObjectKeyFrame.Value>
+                            </DiscreteObjectKeyFrame>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="backLayer"
+                                                               Storyboard.TargetProperty="Visibility"
+                                                               Duration="0:0:0">
+                            <DiscreteObjectKeyFrame KeyTime="0:0:0">
+                                <DiscreteObjectKeyFrame.Value>
+                                    <Visibility>Visible</Visibility>
+                                </DiscreteObjectKeyFrame.Value>
+                            </DiscreteObjectKeyFrame>
+                        </ObjectAnimationUsingKeyFrames>
+                    </Storyboard>
+                </VisualState>
+                <VisualState Name="OriginalState"/>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+        <Rectangle  x:Name="backLayer" Fill="White" Opacity="0.5" IsHitTestVisible="True" Visibility="Hidden">
+            <Rectangle.OpacityMask>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                    <GradientStop Color="Transparent" Offset="0"/>
+                    <GradientStop Color="White" Offset="1.8"/>
+                </LinearGradientBrush>
+            </Rectangle.OpacityMask>
+        </Rectangle>
+        <RadioButton x:Name="btnClick" GroupName="gpButton" BorderBrush="Transparent" RenderTransformOrigin="0.5,0.5" Checked="btnClick_Checked" Unchecked="btnClick_Unchecked">
+            <RadioButton.RenderTransform>
+                <ScaleTransform x:Name="scale"/>
+            </RadioButton.RenderTransform>
+            <RadioButton.Template>
+                <ControlTemplate TargetType="ToggleButton">
+                    <Image Source="{Binding AppearanceSource}"/>
+                </ControlTemplate>
+            </RadioButton.Template>
+        </RadioButton>
+    </Grid>
+</UserControl>

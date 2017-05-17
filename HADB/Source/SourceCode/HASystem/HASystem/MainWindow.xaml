@@ -1,0 +1,67 @@
+﻿<Window x:Class="HASystem.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:HASystem"
+        xmlns:uc="clr-namespace:HASystem.UC"
+        xmlns:panel="clr-namespace:HASystem.Panels"
+        mc:Ignorable="d"
+        Icon="Image/thunder.jpg"
+        WindowStartupLocation="CenterScreen"
+        Title="电压与内阻测试系统" Height="700" Width="1024">
+    <Grid>
+        <Grid.Background>
+            <ImageBrush ImageSource="Image/thunder.jpg"/>
+        </Grid.Background>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.2*"/>
+            <RowDefinition/>
+            <RowDefinition Height="0.05*"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.1*"/>
+                <ColumnDefinition Width="0.1*"/>
+                <ColumnDefinition Width="0.1*"/>
+                <ColumnDefinition Width="0.1*"/>
+                <ColumnDefinition Width="0.1*"/>
+                <ColumnDefinition Width="0.1*"/>
+                <ColumnDefinition Width="0.1*"/>
+                <ColumnDefinition Width="0.1*"/>
+            </Grid.ColumnDefinitions>
+            <uc:btnUserControl x:Name="rdiTest" AppearanceSource="Image/test.png" Click="Switching" Width="100" Height="100" Grid.Column="0"/>
+            <uc:btnUserControl x:Name="rdiData" AppearanceSource="Image/data.png" Click="Switching" Width="100" Height="100" Grid.Column="1"/>
+            <uc:btnUserControl x:Name="rdiModel" AppearanceSource="Image/model.png" Click="Switching" Width="100" Height="100" Grid.Column="2"/>
+            <uc:btnUserControl x:Name="rdiUser" AppearanceSource="Image/user.png" Click="Switching" Width="100" Height="100" Grid.Column="3"/>
+            <uc:btnUserControl x:Name="rdiSystem" AppearanceSource="Image/system.png" Click="Switching" Width="100" Height="100" Grid.Column="4"/>
+        </Grid>
+        <Grid x:Name="contentDisplay" Background="White" Opacity="0.8" Grid.Row="1">
+            <Grid.RenderTransform>
+                <TranslateTransform x:Name="trans"/>
+            </Grid.RenderTransform>
+            <Rectangle>
+                <Rectangle.Effect>
+                    <DropShadowEffect BlurRadius="5" ShadowDepth="3" Direction="2" Opacity="0.5"/>
+                </Rectangle.Effect>
+                <Rectangle.Fill>
+                    <LinearGradientBrush ColorInterpolationMode="SRgbLinearInterpolation" StartPoint="0,0" EndPoint="0,2">
+                        <GradientStop Color="Transparent" Offset="-0.2"/>
+                        <GradientStop Color="White" Offset="0.02"/>
+                        <GradientStop Color="White" Offset="0.03"/>
+                        <GradientStop Color="White" Offset="0.1"/>
+                        <GradientStop Color="Transparent" Offset="1.2"/>
+                    </LinearGradientBrush>
+                </Rectangle.Fill>
+            </Rectangle>
+            <panel:GoodsTestPanel x:Name="panelGoodsTest" Visibility="Collapsed"/>
+            <panel:DataManagerPanel x:Name="panelDataManager" Visibility="Collapsed"/>
+            <panel:ModelManagerPanel x:Name="panelModelManager" Visibility="Collapsed"/>
+            <panel:UserManagerPanel x:Name="panelUserManager" Visibility="Collapsed"/>
+            <panel:SystemManagerPanel x:Name="panelSystemManager" Visibility="Collapsed"/>
+        </Grid>
+        <Grid Grid.Row="2">
+            <Label Content="东莞莱克软件科技有限公司 版权所有" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        </Grid>
+    </Grid>
+</Window>

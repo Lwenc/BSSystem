@@ -1,0 +1,80 @@
+﻿<UserControl x:Class="HASystem.Panels.PassagewayPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:HASystem.Panels"
+             xmlns:check="clr-namespace:HASystem.EnumInfo"
+             mc:Ignorable="d" 
+             d:DesignHeight="528.8" d:DesignWidth="876.5">
+    <Grid>
+        <TabControl Margin="60">
+            <TabItem Header="参数设置">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="4*"/>
+                        <RowDefinition Height="4*"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <GroupBox Header="通道设置" BorderThickness="3" Margin="25">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Label Content="通道数：" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                            <RadioButton Content="1" GroupName="gppassageway" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                            <RadioButton Content="2" GroupName="gppassageway" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                            <RadioButton Content="3" GroupName="gppassageway" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                            <RadioButton Content="4" GroupName="gppassageway" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox Header="数据设置" Grid.Column="1" BorderThickness="3" Margin="25">
+                        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                            <CheckBox x:Name="cbCover" Content="如果有相同电池编号，覆盖原有测试数据"/>
+                            <Label/>
+                            <CheckBox x:Name="cbClear" Content="测完一个电池后清空条码输入框"/>
+                        </StackPanel>
+                    </GroupBox>
+                    <Line X1="0" X2="1500" Y1="0" Y2="0" Grid.Row="1" Grid.ColumnSpan="2" Stroke="#b6bfc6" StrokeThickness="3"/>
+                    <GroupBox Header="电压挡位" BorderThickness="3" Grid.Row="1" Margin="25">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Label Content="V：" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                            <RadioButton Content="0.01" GroupName="gpvolt" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                            <RadioButton Content="0.001" GroupName="gpvolt" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox Header="内阻挡位" BorderThickness="3" Grid.Row="1" Grid.Column="1" Margin="32">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Label Content="mΩ ：" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                            <RadioButton Content="0.1" GroupName="gpResistance" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                            <RadioButton Content="1" GroupName="gpResistance" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                        </Grid>
+                    </GroupBox>
+                    <Button Grid.Row="2" Content="确定" Grid.ColumnSpan="2" Width="80" Height="25" Background="#414c57"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="分类条件">
+
+            </TabItem>
+        </TabControl>
+     
+    </Grid>
+</UserControl>
