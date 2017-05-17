@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Data.SqlClient;
 using System.Windows;
 using System.Windows.Controls;
+using System.Data.SQLite;
 using mi = HASystem.StaticClass.ModelInfo;
 
 namespace HASystem.Panels
@@ -13,7 +14,7 @@ namespace HASystem.Panels
     public partial class ModelManagerPanel : UserControl
     {
         private ObservableCollection<mi.ModelResult> list;
-        SqlConnection conn = new SqlConnection("Server=localhost;Database=HADB;User id=sa;PWD=Lwenc");
+        private SqlConnection conn = new SqlConnection("Server=localhost;Database=HADB;User id=sa;PWD=Lwenc");
         public ModelManagerPanel()
         {
             InitializeComponent();
@@ -59,9 +60,17 @@ namespace HASystem.Panels
 
         //获取型号信息
         private void GetModel()
-        {            
-            list = mi.GetModelData();
-            dgModelInfo.ItemsSource = list;
+        {
+            try
+            {
+                list = mi.GetModelData();
+                dgModelInfo.ItemsSource = list;
+            }
+            catch(Exception ex)
+            {
+
+            }
+           
         }
         //刷新按钮
         private void menuRefresh_Click(object sender, RoutedEventArgs e)

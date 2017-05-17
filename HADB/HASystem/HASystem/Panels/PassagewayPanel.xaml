@@ -68,7 +68,7 @@
                             <RadioButton Content="1" GroupName="gpResistance" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Left"/>
                         </Grid>
                     </GroupBox>
-                    <Button Grid.Row="2" Content="确定" Grid.ColumnSpan="2" Width="80" Height="25" Background="#414c57"/>
+                    <Button Grid.Row="2" Content="保存" Grid.ColumnSpan="2" Width="70" Height="25" Background="#414c57"/>
                 </Grid>
             </TabItem>
             <TabItem Header="分类条件">

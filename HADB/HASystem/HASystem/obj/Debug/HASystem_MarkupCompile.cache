@@ -4,16 +4,16 @@
 winexe
 C#
 .cs
-F:\Work\HADB\HASystem\HASystem\obj\Debug\
+D:\GitData\BSSystem\HADB\HASystem\HASystem\obj\Debug\
 HASystem
 none
 false
 DEBUG;TRACE
-F:\Work\HADB\HASystem\HASystem\App.xaml
+D:\GitData\BSSystem\HADB\HASystem\HASystem\App.xaml
 171445410435
 
 27-1004963771
-171620664701
+17-923419866
 LoginWindow.xaml;MainWindow.xaml;Panels\AddModelInfo.xaml;Panels\AddUserPanel.xaml;Panels\AlterModelInfo.xaml;Panels\AlterPassWordPanel.xaml;Panels\AlterUserPanel.xaml;Panels\CommunicationPanel.xaml;Panels\DataManagerPanel.xaml;Panels\GoodsTestPanel.xaml;Panels\ModelManagerPanel.xaml;Panels\PassagewayPanel.xaml;Panels\SystemManagerPanel.xaml;Panels\UserManagerPanel.xaml;UC\btnUserControl.xaml;UC\PassageWayUC.xaml;UC\treeUserControl.xaml;
 
 False

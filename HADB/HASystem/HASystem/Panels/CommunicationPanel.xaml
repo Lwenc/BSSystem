@@ -65,6 +65,7 @@
                         <RowDefinition/>
                         <RowDefinition/>
                         <RowDefinition Height="30"/>
+                        <RowDefinition Height="30"/>
                     </Grid.RowDefinitions>
                     <GroupBox Header="设备型号配置"  Margin="10" FontSize="20" FontWeight="Bold">
                         <Grid>
@@ -77,7 +78,7 @@
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                             <Label Content="型号选择：" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Right"/>
-                            <ComboBox x:Name="comboModel" Height="35" Grid.Column="1"/>
+                            <ComboBox x:Name="comboModel" Height="30" Grid.Column="1"/>
                         </Grid>
                     </GroupBox>
                     <GroupBox Header="串口参数配置" Margin="10" FontSize="20" FontWeight="Bold" Grid.Row="1">
@@ -103,11 +104,11 @@
                                     <ColumnDefinition/>
                                 </Grid.ColumnDefinitions>
                                 <Label Content="通讯口：" Grid.Column="0"/>
-                                <ComboBox x:Name="comboSerial" Height="35" Grid.Column="1"/>
+                                <ComboBox x:Name="comboSerial" Height="30" Grid.Column="1"/>
                                 <Label Content="波特率：" Grid.Column="2"/>
-                                <ComboBox x:Name="comBoBaueRate" Height="35" Grid.Column="3"/>
+                                <ComboBox x:Name="comBoBaueRate" Height="30" Grid.Column="3"/>
                                 <Label Content="停止位：" Grid.Column="4"/>
-                                <ComboBox x:Name="comBoStopBit" Height="35" Grid.Column="5"/>
+                                <ComboBox x:Name="comBoStopBit" Height="30" Grid.Column="5"/>
                             </Grid>
                             <Grid Grid.Row="1">
                                 <Grid.Resources>
@@ -126,9 +127,9 @@
                                     <ColumnDefinition/>
                                 </Grid.ColumnDefinitions>
                                 <Label Content="校验位：" Grid.Column="0"/>
-                                <ComboBox x:Name="comboParityBit" Height="35" Grid.Column="1"/>
+                                <ComboBox x:Name="comboParityBit" Height="30" Grid.Column="1"/>
                                 <Label Content="数据位：" Grid.Column="2"/>
-                                <ComboBox x:Name="comBoDataBit" Height="35" Grid.Column="3"/>
+                                <ComboBox x:Name="comBoDataBit" Height="30" Grid.Column="3"/>
                             </Grid>
                         </Grid>  
                     </GroupBox>
@@ -146,6 +147,7 @@
                         <RadioButton x:Name="rdiSerial" Content="串口通讯：" HorizontalAlignment="Left" VerticalAlignment="Center" IsChecked="True" Grid.Column="1"/>
                         <RadioButton x:Name="rdiNet" Content="网口选通讯：" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Column="1"/>
                     </Grid>
+                    <Button x:Name="btnSave" Content="保存" Width="70" Background="#414c57" Grid.Row="4"/>
                 </Grid>
             </TabItem>
          

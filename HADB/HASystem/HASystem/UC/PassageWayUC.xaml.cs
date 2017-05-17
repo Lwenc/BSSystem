@@ -17,8 +17,8 @@ namespace HASystem.UC
 
         private void SetResult()
         {
-            list = mi.GetModelData();
-            dgDG.ItemsSource = list[0].model.ToString();
+            //list = mi.GetModelData();
+            //dgDG.ItemsSource = list[0].model.ToString();
         }
     }
 }
