@@ -3,7 +3,9 @@ using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.IO.Ports;
+using System.Windows.Media;
 using System.Windows.Threading;
+using System.Text;
 using ssi = HASystem.StaticClass.StructSerialInfo;
 using si = HASystem.StaticClass.SerialInfo;
 using mi = HASystem.StaticClass.ModelInfo;
@@ -15,8 +17,10 @@ namespace HASystem.Panels
     /// </summary>
     public partial class GoodsTestPanel : UserControl
     {
-        private DispatcherTimer timer = new DispatcherTimer();
+        private DispatcherTimer timer;
         private string[] model = new string[] { };
+        private int sum = 0;
+        private string strReset = "23 AA AA 41 37 41 31 33 46 33 45 0D";
         SerialPort sp = new SerialPort();
 
         public GoodsTestPanel()
@@ -35,34 +39,129 @@ namespace HASystem.Panels
         //开始按钮
         private void btnStart_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            btnStart.Visibility = Visibility.Collapsed;
-            btnStop.Visibility = Visibility.Visible;
-            btnReset.IsEnabled = false;
-            comboType.IsEnabled = false;
-            comboModel.IsEnabled = false;
-            txtBarcode.Focus();
+            if (comboModel.SelectedIndex != -1)
+            {
+                btnStart.Visibility = Visibility.Collapsed;
+                btnStop.Visibility = Visibility.Visible;
+                btnReset.IsEnabled = false;
+                comboType.IsEnabled = false;
+                comboModel.IsEnabled = false;
+                txtBarcode.Focus();
+                ReadTestData();
+            }
+            else
+                MessageBox.Show("请选择型号进行测试！");
+        }
+        //初始化和打开串口
+        private void IniSerial()
+        {
+            try
+            {
+                //从Ini文件读取串口信息
+                si.GetSerialInfo();
+                sp.PortName = ssi.portName;
+                sp.BaudRate = int.Parse(ssi.baudRate);
+                sp.StopBits = (StopBits)(double.Parse(ssi.stopBite));
+                sp.Parity = (Parity)Enum.Parse(typeof(Parity), ssi.parity);
+                sp.DataBits = int.Parse(ssi.dataBits);
+                sp.Open();
+            }
+            catch { }
         }
         //读取测量数据
         private void ReadTestData()
-        {
-            if (txtBarcode.Text != "")
-            {
+        { 
                 try
                 {
-                    //从Ini文件读取串口信息
-                    si.GetSerialInfo();
-                    sp.PortName = ssi.portName;
-                    sp.BaudRate = int.Parse(ssi.baudRate);
-                    sp.StopBits = (StopBits)(double.Parse(ssi.stopBite));
-                    sp.Parity = (Parity)Enum.Parse(typeof(Parity), ssi.parity);
-                    sp.DataBits = int.Parse(ssi.dataBits);
-                    sp.Open();
+                    IniSerial();              
+                    //设置上下限
+                    if(comboType.SelectedIndex==0)
+                    {
+                        //方法体
+                        //将命令转换成十六进制
+                        //var strs = strReset.Split(' ');
+                        //var bytes = new byte[strs.Length];
+                        //for (int i = 0; i < strs.Length; i++)
+                        //{
+                        //    bytes[i] = byte.Parse(strs[i], System.Globalization.NumberStyles.HexNumber);
+                        //}
+                        //sp.Write(bytes, 0, bytes.Length);
+
+                        //try
+                        //{
+                        //    int lenght = sp.BytesToRead;
+                        //    if (lenght != 0)
+                        //    {
+                        //        byte[] by = new byte[lenght];
+                        //        sp.Read(by, 0, lenght);
+                        //    }
+                        //}
+                        //catch { }
+ 
+                        StartTimer();
+                    }
+                    else
+                    {
+                        //方法体
+                        StartTimer();
+                    }      
                 }
                 catch (Exception ex)
                 {
                     System.Diagnostics.Debug.WriteLine(ex.Message);
                 }
+            
+        }
+        //开始计时
+        private void StartTimer()
+        {
+            timer = new DispatcherTimer();
+            timer.Tick += new EventHandler(GetTestData);
+            timer.Interval = new TimeSpan(0,0,0,2);
+          
+            timer.Start();
+        }
+        //获得数据方法
+        public void GetTestData(object sender, EventArgs e)
+        {
+            System.Threading.Thread.Sleep(1000);
+            if (txtBarcode.Text != "")
+            {
+                int lenght = sp.BytesToRead;
+                if (lenght != 0)
+                {
+                   byte[] by = new byte[lenght];
+                   sp.Read(by, 0, lenght);
+                   SetData(by);
+                }
+
+                labTotal.Content = sum++;
+                tbResult.Text = "PASS";
+                tbResult.Foreground = new SolidColorBrush(Colors.GreenYellow);
+                txtBarcode.Clear();
             }
+            else
+            {
+                tbResult.Text = "FALSE";
+                tbResult.Foreground = new SolidColorBrush(Colors.Red);
+            }
+        }
+        private static void SetData(byte[] by)
+        {
+            double v;
+            double r;
+            string isRBit = ((char)by[2]).ToString();
+            string isVBit = ((char)by[7]).ToString();
+            string strResistance = ((char)by[3]).ToString()+ ((char)by[4]).ToString()+ ((char)by[5]).ToString()+ ((char)by[6]).ToString();
+            string strVolt= ((char)by[8]).ToString() + ((char)by[9]).ToString() + ((char)by[10]).ToString() + ((char)by[11]).ToString();
+            if (isRBit=="0")
+                v =double.Parse(strResistance) / 10;
+            else
+                v = double.Parse(strResistance)/10;
+            if(isVBit=="2")
+                r= double.Parse(strVolt) / 100;
+            else
+                r = double.Parse(strVolt) / 1000;
         }
         //结束按钮
         private void btnStop_Click(object sender, RoutedEventArgs e)
@@ -74,6 +173,7 @@ namespace HASystem.Panels
             comboModel.IsEnabled = true;
 
             sp.Close();
+            timer.Stop();
         }
         //复位按钮
         private void btnReset_Click(object sender, RoutedEventArgs e)
@@ -85,6 +185,22 @@ namespace HASystem.Panels
             labResistanceMin.Content = 0;
             labKMax.Content = 0;
             labKMin.Content = 0;
+            labTotal.Content = 0;
+            labUnQualified.Content = 0;
+            labUnQualifiedRate.Content = 0;
+            labQualified.Content = 0;
+            sum = 0;
+            //方法体
+            IniSerial();
+            //将命令转换成十六进制
+            var strs = strReset.Split(' ');
+            var bytes = new byte[strs.Length];
+            for (int i = 0; i < strs.Length; i++)
+            {
+                bytes[i] = byte.Parse(strs[i], System.Globalization.NumberStyles.HexNumber);
+            }
+            sp.Write(bytes, 0, bytes.Length);
+            sp.Close();
         }
         //选择型号变更测试规格
         private void comboType_SelectionChanged(object sender, SelectionChangedEventArgs e)
