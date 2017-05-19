@@ -1,6 +1,8 @@
 ﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Windows.Controls;
 using mi = HASystem.StaticClass.ModelInfo;
+
 namespace HASystem.UC
 {
     /// <summary>
@@ -11,14 +13,17 @@ namespace HASystem.UC
         private ObservableCollection<mi.ModelResult> list;
         public PassageWayUC()
         {
+            
             InitializeComponent();
             SetResult();
         }
 
         private void SetResult()
         {
-            //list = mi.GetModelData();
-            //dgDG.ItemsSource = list[0].model.ToString();
+            if (DesignerProperties.GetIsInDesignMode(this))
+                return;
+            list = mi.GetModelData();
+            dgDG.ItemsSource = list;
         }
     }
 }

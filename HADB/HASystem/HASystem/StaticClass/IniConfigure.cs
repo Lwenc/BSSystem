@@ -34,7 +34,7 @@ namespace HASystem.StaticClass
         /// <summary>
         /// 保存ini文件的路径
         /// </summary>
-        public static string path = "..\\..\\Setting.ini";
+        public static string path = @"..\\..\\IniConfigures\\SerialSetting.ini";
 
         /// <summary>
         /// 写ini文件

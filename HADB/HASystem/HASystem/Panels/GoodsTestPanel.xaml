@@ -57,8 +57,10 @@
             </Style>
         </Grid.Resources>
         <Grid.RowDefinitions>
+            <!--<RowDefinition Height="2*"/>
+            <RowDefinition Height="6.2*"/>-->
             <RowDefinition Height="2*"/>
-            <RowDefinition Height="6.2*"/>
+            <RowDefinition Height="5*"/>
         </Grid.RowDefinitions>
         <Grid Grid.Row="0" Margin="10">
             <Grid.ColumnDefinitions>
@@ -78,6 +80,7 @@
                         <RowDefinition/>
                         <RowDefinition/>
                         <RowDefinition/>
+                        <RowDefinition/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="2*"/>
@@ -85,22 +88,22 @@
                         <ColumnDefinition Width="1*"/>
                     </Grid.ColumnDefinitions>
                     <Label Content="型   号：" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Right"/>
-                    <ComboBox x:Name="comboModel" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Width="120" Height="20" HorizontalAlignment="Left"/>
+                    <ComboBox x:Name="comboModel" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Width="120" Height="25" HorizontalAlignment="Left" SelectionChanged="comboType_SelectionChanged"/>
                     <Label Content="测试类型：" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right"/>
-                    <ComboBox x:Name="comboType" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Width="120" Height="20" HorizontalAlignment="Left"/>
-                    <!--<Label Content="条   码：" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Right"/>
-                    <numeric:NumericBox x:Name="txtBarcode" Grid.Row="2" Grid.Column="1" MaxFractionDigits="4" Grid.ColumnSpan="2" Width="90" FontSize="11"
+                    <ComboBox x:Name="comboType" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Width="120" Height="25" HorizontalAlignment="Left" SelectionChanged="comboType_SelectionChanged"/>
+                    <Label Content="条   码：" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Right"/>
+                    <numeric:NumericBox x:Name="txtBarcode" Grid.Row="2" Grid.Column="1" MaxFractionDigits="4" Grid.ColumnSpan="2" Width="120" FontSize="11"
                                          Height="20" IsPadding="False" InputMethod.IsInputMethodEnabled="False" HorizontalAlignment="Left">
                         <i:Interaction.Behaviors>
                             <numeric:TextBoxFilterBehavior  TextBoxFilterOptions="Numeric,Dot"/>
                         </i:Interaction.Behaviors>
-                    </numeric:NumericBox>-->
+                    </numeric:NumericBox>
                     <Button  x:Name="btnReset" Content="复位" Width="35" Height="20" FontSize="11" Foreground="White" Background="#414c57" Grid.ColumnSpan="2"
-                             Grid.Row="2" Grid.Column="0" HorizontalAlignment="Center" Margin="0,1,0,0" VerticalAlignment="Top" Click="btnStart_Click"/>
+                             Grid.Row="3" Grid.Column="0" HorizontalAlignment="Center" Margin="0,1,0,0" VerticalAlignment="Center" Click="btnReset_Click"/>
                     <Button  x:Name="btnStart" Content="开始" Width="35" Height="20" FontSize="11" Foreground="White" Background="#414c57" Grid.ColumnSpan="2"
-                             Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" Margin="0,1,0,0" VerticalAlignment="Top" Click="btnStart_Click"/>
+                             Grid.Row="3" Grid.Column="1" HorizontalAlignment="Center" Margin="0,1,0,0" VerticalAlignment="Center" Click="btnStart_Click"/>
                     <Button  x:Name="btnStop" Content="结束" Width="35" Height="20" FontSize="11"  Foreground="White" Background="#414c57" Grid.ColumnSpan="2"
-                             Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" Margin="0,1,0,1" VerticalAlignment="Top" Visibility="Collapsed" Click="btnStop_Click"/>
+                             Grid.Row="3" Grid.Column="1" HorizontalAlignment="Center" Margin="0,1,0,1" VerticalAlignment="Center" Visibility="Collapsed" Click="btnStop_Click"/>
                 </Grid>
             </GroupBox>
             <GroupBox Header="测试规格" FontWeight="Bold" FontSize="12" Margin="5,0" Grid.Column="1" BorderThickness="2">
@@ -129,12 +132,12 @@
                     <Label Content="内阻下限(mΩ):" Grid.Row="1" Grid.Column="2"/>
                     <Label Content="       K值上限：" Grid.Row="2"/>
                     <Label Content="       K值下限：" Grid.Row="2" Grid.Column="2"/>
-                    <Label x:Name="labVoltMax" Content="112.51325" HorizontalAlignment="Left" Grid.Column="1"/>
-                    <Label x:Name="labVoltMin" Content="18.325" HorizontalAlignment="Left" Grid.Column="3"/>
-                    <Label x:Name="labResistanceMax" Content="224.5132" HorizontalAlignment="Left" Grid.Row="1" Grid.Column="1"/>
-                    <Label x:Name="labResistanceMin" Content="11.32" HorizontalAlignment="Left" Grid.Row="1" Grid.Column="3"/>
-                    <Label x:Name="labKMax" Content="12.513" HorizontalAlignment="Left" Grid.Row="2" Grid.Column="1"/>
-                    <Label x:Name="labKMin" Content="1.1" HorizontalAlignment="Left" Grid.Row="2" Grid.Column="3"/>
+                    <Label x:Name="labVoltMax" Content="0" HorizontalAlignment="Left" Grid.Column="1"/>
+                    <Label x:Name="labVoltMin" Content="0" HorizontalAlignment="Left" Grid.Column="3"/>
+                    <Label x:Name="labResistanceMax" Content="0" HorizontalAlignment="Left" Grid.Row="1" Grid.Column="1"/>
+                    <Label x:Name="labResistanceMin" Content="0" HorizontalAlignment="Left" Grid.Row="1" Grid.Column="3"/>
+                    <Label x:Name="labKMax" Content="0" HorizontalAlignment="Left" Grid.Row="2" Grid.Column="1"/>
+                    <Label x:Name="labKMin" Content="0" HorizontalAlignment="Left" Grid.Row="2" Grid.Column="3"/>
                 </Grid>
             </GroupBox>
             <GroupBox Header="测试统计" FontSize="12" FontWeight="Bold" Grid.Column="2" BorderThickness="2">

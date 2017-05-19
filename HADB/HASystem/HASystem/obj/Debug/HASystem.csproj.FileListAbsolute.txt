@@ -130,7 +130,6 @@ D:\GitData\BSSystem\HADB\HASystem\HASystem\bin\Debug\ko\System.Windows.Interacti
 D:\GitData\BSSystem\HADB\HASystem\HASystem\bin\Debug\ru\System.Windows.Interactivity.resources.dll
 D:\GitData\BSSystem\HADB\HASystem\HASystem\bin\Debug\zh-Hans\System.Windows.Interactivity.resources.dll
 D:\GitData\BSSystem\HADB\HASystem\HASystem\bin\Debug\zh-Hant\System.Windows.Interactivity.resources.dll
-D:\GitData\BSSystem\HADB\HASystem\HASystem\obj\Debug\HASystem.csprojResolveAssemblyReference.cache
 D:\GitData\BSSystem\HADB\HASystem\HASystem\obj\Debug\LoginWindow.g.cs
 D:\GitData\BSSystem\HADB\HASystem\HASystem\obj\Debug\MainWindow.g.cs
 D:\GitData\BSSystem\HADB\HASystem\HASystem\obj\Debug\Panels\AddModelInfo.g.cs
@@ -172,3 +171,4 @@ D:\GitData\BSSystem\HADB\HASystem\HASystem\obj\Debug\UC\treeUserControl.baml
 D:\GitData\BSSystem\HADB\HASystem\HASystem\obj\Debug\HASystem.g.resources
 D:\GitData\BSSystem\HADB\HASystem\HASystem\obj\Debug\HASystem.Properties.Resources.resources
 D:\GitData\BSSystem\HADB\HASystem\HASystem\obj\Debug\HASystem.csproj.GenerateResource.Cache
+D:\GitData\BSSystem\HADB\HASystem\HASystem\obj\Debug\HASystem.csprojResolveAssemblyReference.cache

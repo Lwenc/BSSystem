@@ -19,10 +19,10 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <!--<Label x:Name="lbTPassageWay" Content="通道1"  VerticalAlignment="Center" FontWeight="Bold" FontSize="18" HorizontalAlignment="Center"/>-->
-        <Label Content="条码：" Grid.Column="1" VerticalAlignment="Center" FontSize="11" HorizontalAlignment="Right"/>
-                <TextBox x:Name="tbBatMod" Height="18" Grid.Column="2" TextWrapping="Wrap" FontSize="11" VerticalAlignment="Center" HorizontalAlignment="Left" Width="100"/>
+        <!--<Label Content="条码：" Grid.Column="1" VerticalAlignment="Center" FontSize="11" HorizontalAlignment="Right"/>
+                <TextBox x:Name="tbBatMod" Height="18" Grid.Column="2" TextWrapping="Wrap" FontSize="11" VerticalAlignment="Center" HorizontalAlignment="Left" Width="100"/>-->
 
-                <DataGrid x:Name="dgDG"  Grid.Row="1" Grid.ColumnSpan="3" CanUserResizeRows="False" HeadersVisibility="Column" 
+                <DataGrid x:Name="dgDG"  Grid.Row="0" Grid.ColumnSpan="3" Grid.RowSpan="2" CanUserResizeRows="False" HeadersVisibility="Column" 
                           ScrollViewer.HorizontalScrollBarVisibility="Auto" IsReadOnly="True" FontSize="9">
                     <!--给整个表添加颜色开始-->
                     <DataGrid.ColumnHeaderStyle>
@@ -42,10 +42,11 @@
                     </DataGrid.ColumnHeaderStyle>
                     <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding model}" Width="*" Header="电池条码"/>
-                <DataGridTextColumn Binding="{Binding model}" Width="*" Header="测试类型"/>
+                <DataGridTextColumn Binding="{Binding type}" Width="*" Header="测试类型"/>
                 <DataGridTextColumn Binding="{Binding model}" Width="*" Header="电压/V"/>
                 <DataGridTextColumn Binding="{Binding model}" Width="*" Header="电阻/mΩ"/>
                 <DataGridTextColumn Binding="{Binding model}" Width="*" Header="是否合格"/>
+                <DataGridTextColumn Binding="{Binding model}" Width="*" Header="K值"/>
             </DataGrid.Columns>
             <DataGrid.RowStyle >
                 <Style TargetType="DataGridRow">

@@ -1,18 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO.Ports;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO.Ports;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using ini = HASystem.StaticClass.IniConfigure;
 
 namespace HASystem.Panels
 {
@@ -49,6 +38,17 @@ namespace HASystem.Panels
             string[] spnumber = SerialPort.GetPortNames();
             comboSerial.ItemsSource = spnumber;
             comboSerial.SelectedIndex = 0;
+        }
+        //保存按钮
+        private void btnSave_Click(object sender, RoutedEventArgs e)
+        {
+            ini.path = @"..\\..\\IniConfigures\\SerialSetting.ini";
+            ini.IniWritevalue("Section1", "Key1",comboSerial.Text);
+            ini.IniWritevalue("Section1", "Key2", comBoBaueRate.Text);
+            ini.IniWritevalue("Section1", "Key3", comBoStopBit.Text);
+            ini.IniWritevalue("Section1", "Key4", comboParityBit.Text);
+            ini.IniWritevalue("Section1", "Key5", comBoDataBit.Text);
+            MessageBox.Show("保存成功！");
         }
     }
 }

@@ -148,9 +148,9 @@
                         <DataGridTextColumn Header="内阻下限(mΩ)" Width="auto" Binding="{Binding resistanceMin2}"/>
                         <DataGridTextColumn Header="K值上限" Width="auto" Binding="{Binding k_valueMax2}"/>
                         <DataGridTextColumn Header="K值下限" Width="auto" Binding="{Binding k_valueMin2}"/>
-                        <DataGridTextColumn Header="电压补偿" Width="auto" Binding="{Binding k_valueMin2}"/>
-                        <DataGridTextColumn Header="操作人" Width="auto" Binding="{Binding k_valueMin2}"/>
-                        <DataGridTextColumn Header="更新时间" Width="auto" Binding="{Binding k_valueMin2}"/>
+                        <DataGridTextColumn Header="电压补偿" Width="auto" Binding="{Binding volt_compensate}"/>
+                        <DataGridTextColumn Header="操作人" Width="auto" Binding="{Binding from_user}"/>
+                        <DataGridTextColumn Header="更新时间" Width="auto" Binding="{Binding update_time}"/>
                         </DataGrid.Columns>
                     <DataGrid.ContextMenu>
                         <ContextMenu>

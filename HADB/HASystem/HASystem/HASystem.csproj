@@ -16,7 +16,7 @@
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>x64</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -102,6 +102,7 @@
     </Compile>
     <Compile Include="StaticClass\IniConfigure.cs" />
     <Compile Include="StaticClass\ModelInfo.cs" />
+    <Compile Include="StaticClass\SerialInfo.cs" />
     <Compile Include="StaticClass\UserInfo.cs" />
     <Compile Include="UC\btnUserControl.xaml.cs">
       <DependentUpon>btnUserControl.xaml</DependentUpon>
