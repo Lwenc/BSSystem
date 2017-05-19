@@ -185,7 +185,7 @@
                 <RowDefinition/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-                <uc:PassageWayUC Grid.ColumnSpan="2" Grid.RowSpan="2"/>
+                <uc:PassageWayUC x:Name="panelPassageUC" Grid.ColumnSpan="2" Grid.RowSpan="2"/>
                 <!--<uc:PassageWayUC Grid.Column="1"/>
                 <uc:PassageWayUC Grid.Row="1"/>
                 <uc:PassageWayUC  Grid.Row="1" Grid.Column="1"/>-->

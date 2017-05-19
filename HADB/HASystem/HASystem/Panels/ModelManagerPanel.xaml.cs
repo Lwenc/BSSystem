@@ -68,7 +68,7 @@ namespace HASystem.Panels
             }
             catch(Exception ex)
             {
-
+                System.Diagnostics.Debug.WriteLine(ex.Message);
             }
            
         }

@@ -9,6 +9,7 @@ using System.Text;
 using ssi = HASystem.StaticClass.StructSerialInfo;
 using si = HASystem.StaticClass.SerialInfo;
 using mi = HASystem.StaticClass.ModelInfo;
+using System.ComponentModel;
 
 namespace HASystem.Panels
 {
@@ -30,6 +31,9 @@ namespace HASystem.Panels
         }
         private void InitCombo()
         {
+            if (DesignerProperties.GetIsInDesignMode(this))
+                return;
+
             string[] type = new string[] {"O1","OB" };
             comboType.ItemsSource = type;            
             comboType.SelectedIndex = 0;
@@ -97,7 +101,7 @@ namespace HASystem.Panels
                         //    }
                         //}
                         //catch { }
- 
+  
                         StartTimer();
                     }
                     else
@@ -118,7 +122,7 @@ namespace HASystem.Panels
             timer = new DispatcherTimer();
             timer.Tick += new EventHandler(GetTestData);
             timer.Interval = new TimeSpan(0,0,0,2);
-          
+            System.Threading.Thread.Sleep(2000);
             timer.Start();
         }
         //获得数据方法

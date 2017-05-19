@@ -22,6 +22,8 @@ namespace HASystem.UC
         {
             if (DesignerProperties.GetIsInDesignMode(this))
                 return;
+
+
             list = mi.GetModelData();
             dgDG.ItemsSource = list;
         }

@@ -29,7 +29,7 @@ namespace HASystem.Panels
         private void btnTestInfo_Click(object sender, RoutedEventArgs e)
         {
             dgTestInfo.Visibility = Visibility.Visible;
-             dgLogInfo.Visibility = Visibility.Collapsed;
+            dgLogInfo.Visibility = Visibility.Collapsed;
             _isTestInfo = true;
         }
         //操作日志
