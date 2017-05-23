@@ -6,6 +6,7 @@ using System.IO.Ports;
 using System.Windows.Media;
 using System.Windows.Threading;
 using System.Text;
+using test = HASystem.StaticClass.TestResultInfo;
 using ssi = HASystem.StaticClass.StructSerialInfo;
 using si = HASystem.StaticClass.SerialInfo;
 using mi = HASystem.StaticClass.ModelInfo;
@@ -18,11 +19,18 @@ namespace HASystem.Panels
     /// </summary>
     public partial class GoodsTestPanel : UserControl
     {
+        DataGridRow dgr;
         private DispatcherTimer timer;
         private string[] model = new string[] { };
         private int sum = 0;
         private string strReset = "23 AA AA 41 37 41 31 33 46 33 45 0D";
         SerialPort sp = new SerialPort();
+        string strModel;
+        string strFrom_user1="";
+        string strTesttype_1;
+        string strPassageway_1="1";
+        DateTime dtTime_1;
+
 
         public GoodsTestPanel()
         {
@@ -34,8 +42,11 @@ namespace HASystem.Panels
             if (DesignerProperties.GetIsInDesignMode(this))
                 return;
 
+            mi.GetModelData();
             string[] type = new string[] {"O1","OB" };
-            comboType.ItemsSource = type;            
+            string[] CunFang = new string[] { "本地", "网络" };
+            comboType.ItemsSource = type;
+            cbCunFang.ItemsSource = CunFang;     
             comboType.SelectedIndex = 0;
             comboModel.ItemsSource = (from l in mi.list
                                       select l.model).Distinct();
@@ -50,8 +61,9 @@ namespace HASystem.Panels
                 btnReset.IsEnabled = false;
                 comboType.IsEnabled = false;
                 comboModel.IsEnabled = false;
+                cbCunFang.IsEnabled = false;
+                txtBarcode.IsEnabled = true;
                 txtBarcode.Focus();
-                ReadTestData();
             }
             else
                 MessageBox.Show("请选择型号进行测试！");
@@ -101,7 +113,7 @@ namespace HASystem.Panels
                         //    }
                         //}
                         //catch { }
-  
+
                         StartTimer();
                     }
                     else
@@ -122,13 +134,13 @@ namespace HASystem.Panels
             timer = new DispatcherTimer();
             timer.Tick += new EventHandler(GetTestData);
             timer.Interval = new TimeSpan(0,0,0,2);
-            System.Threading.Thread.Sleep(2000);
+          //  System.Threading.Thread.Sleep(2000);
             timer.Start();
         }
         //获得数据方法
         public void GetTestData(object sender, EventArgs e)
         {
-            System.Threading.Thread.Sleep(1000);
+            //System.Threading.Thread.Sleep(1000);
             if (txtBarcode.Text != "")
             {
                 int lenght = sp.BytesToRead;
@@ -137,35 +149,77 @@ namespace HASystem.Panels
                    byte[] by = new byte[lenght];
                    sp.Read(by, 0, lenght);
                    SetData(by);
-                }
 
-                labTotal.Content = sum++;
-                tbResult.Text = "PASS";
-                tbResult.Foreground = new SolidColorBrush(Colors.GreenYellow);
-                txtBarcode.Clear();
+                   labTotal.Content = sum++;
+                   //tbResult.Text = "PASS";
+                   //test.ispass = "PASS";
+                   //tbResult.Foreground = new SolidColorBrush(Colors.GreenYellow);
+                   txtBarcode.Clear();
+                   timer.Stop();
+                }     
             }
             else
             {
-                tbResult.Text = "FALSE";
-                tbResult.Foreground = new SolidColorBrush(Colors.Red);
+                MessageBox.Show("请扫描电池条码");
+                timer.Stop();
+                //tbResult.Text = "FAIL";
+                //test.ispass = "FAIL";
+                //tbResult.Foreground = new SolidColorBrush(Colors.Red);
+                //timer.Stop();
             }
         }
-        private static void SetData(byte[] by)
-        {
-            double v;
-            double r;
+        private void SetData(byte[] by)
+        {           
             string isRBit = ((char)by[2]).ToString();
             string isVBit = ((char)by[7]).ToString();
             string strResistance = ((char)by[3]).ToString()+ ((char)by[4]).ToString()+ ((char)by[5]).ToString()+ ((char)by[6]).ToString();
             string strVolt= ((char)by[8]).ToString() + ((char)by[9]).ToString() + ((char)by[10]).ToString() + ((char)by[11]).ToString();
-            if (isRBit=="0")
-                v =double.Parse(strResistance) / 10;
+            test.barcode = txtBarcode.Text;
+            test.type = comboType.Text;
+            
+            if (isRBit == "0")
+            {
+                test.resistance = double.Parse(strResistance);
+            }
             else
-                v = double.Parse(strResistance)/10;
-            if(isVBit=="2")
-                r= double.Parse(strVolt) / 100;
+            {
+                test.resistance = double.Parse(strResistance) / 10;
+            }   
+
+            if (isVBit == "2")
+                test.volt = double.Parse(strVolt) / 100;
             else
-                r = double.Parse(strVolt) / 1000;
+                test.volt = double.Parse(strVolt) / 1000;
+
+            if (test.type.Equals("O1"))//执行O1测试
+            {
+                if (test.volt >= double.Parse(labVoltMin.Content.ToString()) && test.volt <= double.Parse(labVoltMax.Content.ToString()) && test.resistance >= double.Parse(labResistanceMin.Content.ToString()) && test.resistance <= double.Parse(labResistanceMax.Content.ToString()))
+                {
+                    strModel = comboModel.Text;
+                    strFrom_user1 = "";
+                    strPassageway_1 = "1";
+                    dtTime_1 = DateTime.Now;
+                    dgr = new DataGridRow() { Item = new {barcod = test.barcode, model = strModel, from_user1 = strFrom_user1, testtype_1=test.type, passageway_1=strPassageway_1,time_1=dtTime_1,volt_1=test.volt, resistance_1=test.resistance, ispass_1="PASS" } };
+                    dgO1.Items.Add(dgr);
+                    
+                }
+                else
+                {
+                    strModel = comboModel.Text;
+                    strFrom_user1 = "";
+                    strPassageway_1 = "1";
+                    dtTime_1 = DateTime.Now;
+                    dgr = new DataGridRow() { Item = new { barcod = test.barcode, model = strModel, from_user1 = strFrom_user1, testtype_1 = test.type, passageway_1 = strPassageway_1, time_1 = dtTime_1, volt_1 = test.volt, resistance_1 = test.resistance, ispass_1 = "FAIL" } };
+                    dgr.Background = new SolidColorBrush(Colors.Red);
+                    dgO1.Items.Add(dgr);
+                }
+               
+            }
+            else//下面执行OB测试的代码
+            {
+
+            }
+
         }
         //结束按钮
         private void btnStop_Click(object sender, RoutedEventArgs e)
@@ -175,7 +229,8 @@ namespace HASystem.Panels
             btnReset.IsEnabled = true;
             comboType.IsEnabled = true;
             comboModel.IsEnabled = true;
-
+            cbCunFang.IsEnabled = true;
+            txtBarcode.IsEnabled = false;
             sp.Close();
             timer.Stop();
         }
@@ -229,6 +284,8 @@ namespace HASystem.Panels
                                             select l.resistanceMin1).ToArray()[0];
                 labKMax.Content = 0;
                 labKMin.Content = 0;
+                test.type = "O1";
+
             }
             else
             {
@@ -250,9 +307,17 @@ namespace HASystem.Panels
                 labKMin.Content = (from l in mi.list
                                    where l.model == selected
                                    select l.k_valueMin2).ToArray()[0];
+                test.type = "OB";
             }
 
         }
 
+
+ 
+
+        private void txtBarcode_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            ReadTestData();
+        }
     }
 }

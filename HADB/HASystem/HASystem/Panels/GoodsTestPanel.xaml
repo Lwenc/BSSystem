@@ -92,18 +92,15 @@
                     <Label Content="测试类型：" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right"/>
                     <ComboBox x:Name="comboType" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Width="120" Height="25" HorizontalAlignment="Left" SelectionChanged="comboType_SelectionChanged"/>
                     <Label Content="条   码：" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Right"/>
-                    <numeric:NumericBox x:Name="txtBarcode" Grid.Row="2" Grid.Column="1" MaxFractionDigits="4" Grid.ColumnSpan="2" Width="120" FontSize="11"
-                                         Height="20" IsPadding="False" InputMethod.IsInputMethodEnabled="False" HorizontalAlignment="Left">
-                        <i:Interaction.Behaviors>
-                            <numeric:TextBoxFilterBehavior  TextBoxFilterOptions="Numeric,Dot"/>
-                        </i:Interaction.Behaviors>
-                    </numeric:NumericBox>
-                    <Button  x:Name="btnReset" Content="复位" Width="35" Height="20" FontSize="11" Foreground="White" Background="#414c57" Grid.ColumnSpan="2"
-                             Grid.Row="3" Grid.Column="0" HorizontalAlignment="Center" Margin="0,1,0,0" VerticalAlignment="Center" Click="btnReset_Click"/>
-                    <Button  x:Name="btnStart" Content="开始" Width="35" Height="20" FontSize="11" Foreground="White" Background="#414c57" Grid.ColumnSpan="2"
-                             Grid.Row="3" Grid.Column="1" HorizontalAlignment="Center" Margin="0,1,0,0" VerticalAlignment="Center" Click="btnStart_Click"/>
+                    <Button  x:Name="btnReset" Content="复位" Width="35" Height="20" FontSize="11" Foreground="White" Background="#414c57"
+                             Grid.Row="3" Grid.Column="1" HorizontalAlignment="Center" Margin="47,4,13,3" VerticalAlignment="Center" Click="btnReset_Click"/>
+                    <Button  x:Name="btnStart" Content="开始" Height="20" FontSize="11" Foreground="White" Background="#414c57" Grid.ColumnSpan="2"
+                             Grid.Row="3" Grid.Column="1" Margin="85,4,13,3" VerticalAlignment="Center" Click="btnStart_Click"/>
                     <Button  x:Name="btnStop" Content="结束" Width="35" Height="20" FontSize="11"  Foreground="White" Background="#414c57" Grid.ColumnSpan="2"
                              Grid.Row="3" Grid.Column="1" HorizontalAlignment="Center" Margin="0,1,0,1" VerticalAlignment="Center" Visibility="Collapsed" Click="btnStop_Click"/>
+                    <TextBox x:Name="txtBarcode" Grid.ColumnSpan="2" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="0,4,0,0" Grid.Row="2" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" IsEnabled="False" KeyDown="txtBarcode_KeyDown"/>
+                    <ComboBox x:Name="cbCunFang" Grid.ColumnSpan="2" HorizontalAlignment="Left" Margin="15,4,0,0" Grid.Row="3" VerticalAlignment="Top" Width="91" Height="20" SelectedIndex="0">
+                    </ComboBox>
                 </Grid>
             </GroupBox>
             <GroupBox Header="测试规格" FontWeight="Bold" FontSize="12" Margin="5,0" Grid.Column="1" BorderThickness="2">
@@ -169,7 +166,7 @@
                     <Label x:Name="labUnQualifiedRate" Content="0" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Left"/>
                 </Grid>
             </GroupBox>
-           
+
             <GroupBox Header="测试结果" FontSize="12" FontWeight="Bold" Grid.Column="3" BorderThickness="2">
                 <Grid>
                     <TextBlock x:Name="tbResult" FontSize="50" Text="PASS" Foreground="GreenYellow" VerticalAlignment="Center" HorizontalAlignment="Center"/>
@@ -185,8 +182,20 @@
                 <RowDefinition/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-                <uc:PassageWayUC x:Name="panelPassageUC" Grid.ColumnSpan="2" Grid.RowSpan="2"/>
-                <!--<uc:PassageWayUC Grid.Column="1"/>
+            <DataGrid x:Name="dgO1" Grid.ColumnSpan="2" Grid.RowSpan="2" Margin="10,0,10,10">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Binding="{Binding barcod}" ClipboardContentBinding="{x:Null}" Header="电池条码"/>
+                    <DataGridTextColumn Binding="{Binding model}" ClipboardContentBinding="{x:Null}" Header="电池类型"/>
+                    <DataGridTextColumn Binding="{Binding from_user1}" ClipboardContentBinding="{x:Null}" Header="测试用户"/>
+                    <DataGridTextColumn Binding="{Binding testtype_1}" ClipboardContentBinding="{x:Null}" Header="测试类型"/>
+                    <DataGridTextColumn Binding="{Binding passageway_1}" ClipboardContentBinding="{x:Null}" Header="通道"/>
+                    <DataGridTextColumn Binding="{Binding time_1}" ClipboardContentBinding="{x:Null}" Header="时间"/>
+                    <DataGridTextColumn Binding="{Binding volt_1}" ClipboardContentBinding="{x:Null}" Header="电压/V"/>
+                    <DataGridTextColumn Binding="{Binding resistance_1}" ClipboardContentBinding="{x:Null}" Header="电阻/ mΩ"/>
+                    <DataGridTextColumn Binding="{Binding ispass_1}" ClipboardContentBinding="{x:Null}" Header="是否通过"/>
+                </DataGrid.Columns>
+            </DataGrid>
+            <!--<uc:PassageWayUC Grid.Column="1"/>
                 <uc:PassageWayUC Grid.Row="1"/>
                 <uc:PassageWayUC  Grid.Row="1" Grid.Column="1"/>-->
         </Grid>

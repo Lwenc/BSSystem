@@ -103,6 +103,7 @@
     <Compile Include="StaticClass\IniConfigure.cs" />
     <Compile Include="StaticClass\ModelInfo.cs" />
     <Compile Include="StaticClass\SerialInfo.cs" />
+    <Compile Include="StaticClass\TestResultInfo.cs" />
     <Compile Include="StaticClass\UserInfo.cs" />
     <Compile Include="UC\btnUserControl.xaml.cs">
       <DependentUpon>btnUserControl.xaml</DependentUpon>

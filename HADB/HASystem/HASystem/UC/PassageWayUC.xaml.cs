@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Controls;
-using mi = HASystem.StaticClass.ModelInfo;
+using test = HASystem.StaticClass.TestResultInfo;
 
 namespace HASystem.UC
 {
@@ -10,21 +10,22 @@ namespace HASystem.UC
     /// </summary>
     public partial class PassageWayUC : UserControl
     {
-        private ObservableCollection<mi.ModelResult> list;
+        private ObservableCollection<test.Result> list = new ObservableCollection<test.Result>();
+
+
         public PassageWayUC()
         {
             
             InitializeComponent();
-            SetResult();
         }
 
-        private void SetResult()
+        public void SetResult()
         {
             if (DesignerProperties.GetIsInDesignMode(this))
                 return;
 
-
-            list = mi.GetModelData();
+            list = test.SetTestInfo();
+            //list = mi.GetModelData();
             dgDG.ItemsSource = list;
         }
     }
