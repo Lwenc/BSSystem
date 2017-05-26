@@ -52,8 +52,8 @@
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                             <Label Content="V：" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                            <RadioButton Content="0.01" GroupName="gpvolt" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left"/>
-                            <RadioButton Content="0.001" GroupName="gpvolt" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                            <RadioButton x:Name="rdiVoltTwo" Content="0.01" GroupName="gpvolt" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                            <RadioButton x:Name="rdiVoltThree" Content="0.001" GroupName="gpvolt" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Left"/>
                         </Grid>
                     </GroupBox>
                     <GroupBox Header="内阻挡位" BorderThickness="3" Grid.Row="1" Grid.Column="1" Margin="32">
@@ -64,8 +64,8 @@
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                             <Label Content="mΩ ：" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                            <RadioButton Content="0.1" GroupName="gpResistance" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left"/>
-                            <RadioButton Content="1" GroupName="gpResistance" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                            <RadioButton x:Name="rdiResisOne" Content="0.1" GroupName="gpResistance" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                            <RadioButton x:Name="rdiResisZero" Content="1" GroupName="gpResistance" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Left"/>
                         </Grid>
                     </GroupBox>
                     <Button Grid.Row="2" Content="保存" Grid.ColumnSpan="2" Width="70" Height="25" Background="#414c57" Click="btnSave_Click"/>

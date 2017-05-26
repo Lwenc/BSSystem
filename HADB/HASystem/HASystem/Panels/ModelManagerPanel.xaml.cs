@@ -18,13 +18,14 @@ namespace HASystem.Panels
         public ModelManagerPanel()
         {
             InitializeComponent();
-            GetModel();
+            //GetModel();
             panelAlterInfo.RequestBack += (s, e) => Return();
         }
 
         //查看型号信息
         private void btnModelInfo_Click(object sender, RoutedEventArgs e)
         {
+            GetModel();
             btnModelInfo.IsEnabled = false;
             btnModleAdd.IsEnabled = true;
             panelAddModelInfo.Visibility = Visibility.Collapsed;
@@ -69,8 +70,7 @@ namespace HASystem.Panels
             catch(Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine(ex.Message);
-            }
-           
+            } 
         }
         //刷新按钮
         private void menuRefresh_Click(object sender, RoutedEventArgs e)
@@ -118,8 +118,20 @@ namespace HASystem.Panels
         //查找按钮
         private void btnSearch_Click(object sender, RoutedEventArgs e)
         {
-            list = mi.SearchModelData(txtSearch.Text);
-            dgModelInfo.ItemsSource = list;
-        }
+            try
+            {
+                if (txtSearch.Text != "")
+                {
+                    list = mi.SearchModelData(txtSearch.Text);
+                    dgModelInfo.ItemsSource = list;
+                }
+                else
+                    MessageBox.Show("请输入关键字查询型号！");
+             }
+            catch(Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+            }
+}
     }
 }

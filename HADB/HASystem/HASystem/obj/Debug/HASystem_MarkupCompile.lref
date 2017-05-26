@@ -1,20 +1,20 @@
 ﻿
 
-FC:\Users\小浩\Desktop\HASystem\HASystem\LoginWindow.xaml;;
-FC:\Users\小浩\Desktop\HASystem\HASystem\MainWindow.xaml;;
-FC:\Users\小浩\Desktop\HASystem\HASystem\Panels\AddModelInfo.xaml;;
-FC:\Users\小浩\Desktop\HASystem\HASystem\Panels\AddUserPanel.xaml;;
-FC:\Users\小浩\Desktop\HASystem\HASystem\Panels\AlterModelInfo.xaml;;
-FC:\Users\小浩\Desktop\HASystem\HASystem\Panels\AlterPassWordPanel.xaml;;
-FC:\Users\小浩\Desktop\HASystem\HASystem\Panels\AlterUserPanel.xaml;;
-FC:\Users\小浩\Desktop\HASystem\HASystem\Panels\CommunicationPanel.xaml;;
-FC:\Users\小浩\Desktop\HASystem\HASystem\Panels\DataManagerPanel.xaml;;
-FC:\Users\小浩\Desktop\HASystem\HASystem\Panels\GoodsTestPanel.xaml;;
-FC:\Users\小浩\Desktop\HASystem\HASystem\Panels\ModelManagerPanel.xaml;;
-FC:\Users\小浩\Desktop\HASystem\HASystem\Panels\PassagewayPanel.xaml;;
-FC:\Users\小浩\Desktop\HASystem\HASystem\Panels\SystemManagerPanel.xaml;;
-FC:\Users\小浩\Desktop\HASystem\HASystem\Panels\UserManagerPanel.xaml;;
-FC:\Users\小浩\Desktop\HASystem\HASystem\UC\btnUserControl.xaml;;
-FC:\Users\小浩\Desktop\HASystem\HASystem\UC\PassageWayUC.xaml;;
-FC:\Users\小浩\Desktop\HASystem\HASystem\UC\treeUserControl.xaml;;
+FD:\GitData\BSSystem\HADB\HASystem\HASystem\LoginWindow.xaml;;
+FD:\GitData\BSSystem\HADB\HASystem\HASystem\MainWindow.xaml;;
+FD:\GitData\BSSystem\HADB\HASystem\HASystem\Panels\AddModelInfo.xaml;;
+FD:\GitData\BSSystem\HADB\HASystem\HASystem\Panels\AddUserPanel.xaml;;
+FD:\GitData\BSSystem\HADB\HASystem\HASystem\Panels\AlterModelInfo.xaml;;
+FD:\GitData\BSSystem\HADB\HASystem\HASystem\Panels\AlterPassWordPanel.xaml;;
+FD:\GitData\BSSystem\HADB\HASystem\HASystem\Panels\AlterUserPanel.xaml;;
+FD:\GitData\BSSystem\HADB\HASystem\HASystem\Panels\CommunicationPanel.xaml;;
+FD:\GitData\BSSystem\HADB\HASystem\HASystem\Panels\DataManagerPanel.xaml;;
+FD:\GitData\BSSystem\HADB\HASystem\HASystem\Panels\GoodsTestPanel.xaml;;
+FD:\GitData\BSSystem\HADB\HASystem\HASystem\Panels\ModelManagerPanel.xaml;;
+FD:\GitData\BSSystem\HADB\HASystem\HASystem\Panels\PassagewayPanel.xaml;;
+FD:\GitData\BSSystem\HADB\HASystem\HASystem\Panels\SystemManagerPanel.xaml;;
+FD:\GitData\BSSystem\HADB\HASystem\HASystem\Panels\UserManagerPanel.xaml;;
+FD:\GitData\BSSystem\HADB\HASystem\HASystem\UC\btnUserControl.xaml;;
+FD:\GitData\BSSystem\HADB\HASystem\HASystem\UC\PassageWayUC.xaml;;
+FD:\GitData\BSSystem\HADB\HASystem\HASystem\UC\treeUserControl.xaml;;
 

@@ -9,7 +9,7 @@ namespace HASystem.StaticClass
     static class ModelInfo
     {
         public static ObservableCollection<ModelResult> list;
-        private static SQLiteConnection conn = new SQLiteConnection("Data Source=DB\\BS.db");
+        public static SQLiteConnection conn = new SQLiteConnection("Data Source=DB\\BS.db");
 
         public struct ModelResult
         {
@@ -86,7 +86,9 @@ namespace HASystem.StaticClass
             {
                 conn.Open();
                 SQLiteCommand cmd = conn.CreateCommand();
-                cmd.CommandText = $"use HADB exec proc_searchModel '{search}'";
+                cmd.CommandText = $"select model,type_1,voltMax_1,voltMin_1,resistanceMax_1,resistanceMin_1,type_2,voltMax_2,"
+                 + $"voltMin_2,resistanceMax_2,resistanceMin_2,k_valueMax_2,k_valueMin_2,volt_compensate,from_user,update_time from ModelInfo "
+                 +$"where model like '%{search}%' or type_2 like '%{search}%' or type_1 like '%{search}%' or update_time like '%{search}%'";
                 SQLiteDataReader reader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
                 ModelResult result = default(ModelResult);
                 foreach (var item in reader)
@@ -104,6 +106,9 @@ namespace HASystem.StaticClass
                     result.resistanceMin2 = reader["resistanceMin_2"].ToString();
                     result.k_valueMax2 = reader["k_valueMax_2"].ToString();
                     result.k_valueMin2 = reader["k_valueMin_2"].ToString();
+                    result.volt_compensate = reader["volt_compensate"].ToString();
+                    result.from_user = reader["from_user"].ToString();
+                    result.update_time = reader["update_time"].ToString();
                     list.Add(result);
                 }
                 conn.Close();

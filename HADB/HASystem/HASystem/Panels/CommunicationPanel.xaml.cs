@@ -25,7 +25,7 @@ namespace HASystem.Panels
             //赋值波特率
             int[] bauRate = new int[] { 110, 300, 600, 1200, 2400, 4800, 9600, 14400, 19200, 38400, 56000, 57600, 115200, 128000, 128000, 256000 };
             comBoBaueRate.ItemsSource = bauRate;
-            comBoBaueRate.SelectedIndex = 6;
+            comBoBaueRate.SelectedIndex = 12;
             //赋值数据位
             int[] dataBits = new int[] { 5, 6, 7, 8 };
             comBoDataBit.ItemsSource = dataBits;

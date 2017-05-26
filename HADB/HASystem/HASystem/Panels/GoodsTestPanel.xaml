@@ -90,12 +90,12 @@
                     <Label Content="型   号：" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Right"/>
                     <ComboBox x:Name="comboModel" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Width="120" Height="25" HorizontalAlignment="Left" SelectionChanged="comboType_SelectionChanged"/>
                     <Label Content="测试类型：" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right"/>
-                    <ComboBox x:Name="comboType" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Width="120" Height="25" HorizontalAlignment="Left" SelectionChanged="comboType_SelectionChanged"/>
+                    <ComboBox x:Name="comboType" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Width="120" Height="25" HorizontalAlignment="Left" SelectionChanged="comboType_SelectionChanged" DropDownClosed="comboType_DropDownClosed"/>
                     <Label Content="条   码：" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Right"/>
                     <Button  x:Name="btnReset" Content="复位" Width="35" Height="20" FontSize="11" Foreground="White" Background="#414c57"
                              Grid.Row="3" Grid.Column="1" HorizontalAlignment="Center" Margin="47,4,13,3" VerticalAlignment="Center" Click="btnReset_Click"/>
-                    <Button  x:Name="btnStart" Content="开始" Height="20" FontSize="11" Foreground="White" Background="#414c57" Grid.ColumnSpan="2"
-                             Grid.Row="3" Grid.Column="1" Margin="85,4,13,3" VerticalAlignment="Center" Click="btnStart_Click"/>
+                    <Button  x:Name="btnStart" Content="开始" Width="35" Height="20" FontSize="11" Foreground="White" Background="#414c57" Grid.ColumnSpan="2"
+                             Grid.Row="3" Grid.Column="1" Margin="85,4,13,3" VerticalAlignment="Center" IsEnabled="False" Click="btnStart_Click"/>
                     <Button  x:Name="btnStop" Content="结束" Width="35" Height="20" FontSize="11"  Foreground="White" Background="#414c57" Grid.ColumnSpan="2"
                              Grid.Row="3" Grid.Column="1" HorizontalAlignment="Center" Margin="0,1,0,1" VerticalAlignment="Center" Visibility="Collapsed" Click="btnStop_Click"/>
                     <TextBox x:Name="txtBarcode" Grid.ColumnSpan="2" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="0,4,0,0" Grid.Row="2" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" IsEnabled="False" KeyDown="txtBarcode_KeyDown"/>
@@ -109,41 +109,41 @@
                         <Style TargetType="Label">
                             <Setter Property="HorizontalAlignment" Value="Center"/>
                             <Setter Property="VerticalAlignment" Value="Center"/>
-                            <Setter Property="FontSize" Value="11"/>
+                            <Setter Property="FontSize" Value="14.1"/>
                         </Style>
                     </Grid.Resources>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="1.25*"/>
-                        <ColumnDefinition/>
-                        <ColumnDefinition  Width="1.25*"/>
-                        <ColumnDefinition/>
+                        <ColumnDefinition Width="1.4*"/>
+                        <ColumnDefinition Width="0.7*"/>
+                        <ColumnDefinition  Width="1.4*"/>
+                        <ColumnDefinition Width="0.7*"/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition/>
                         <RowDefinition/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
-                    <Label Content="电压上限(V)：" />
-                    <Label Content="电压下限(V)：" Grid.Column="2"/>
-                    <Label Content="内阻上限(mΩ):" Grid.Row="1"/>
-                    <Label Content="内阻下限(mΩ):" Grid.Row="1" Grid.Column="2"/>
+                    <Label Content="电压上限/V：" />
+                    <Label Content="电压下限/V：" Grid.Column="2"/>
+                    <Label Content="内阻上限/mΩ:" Grid.Row="1"/>
+                    <Label Content="内阻下限/mΩ:" Grid.Row="1" Grid.Column="2"/>
                     <Label Content="       K值上限：" Grid.Row="2"/>
                     <Label Content="       K值下限：" Grid.Row="2" Grid.Column="2"/>
-                    <Label x:Name="labVoltMax" Content="0" HorizontalAlignment="Left" Grid.Column="1"/>
-                    <Label x:Name="labVoltMin" Content="0" HorizontalAlignment="Left" Grid.Column="3"/>
+                    <Label x:Name="labVoltMax" Content="00.00" HorizontalAlignment="Left" Grid.Column="1"/>
+                    <Label x:Name="labVoltMin" Content="00.00" HorizontalAlignment="Left" Grid.Column="3"/>
                     <Label x:Name="labResistanceMax" Content="0" HorizontalAlignment="Left" Grid.Row="1" Grid.Column="1"/>
                     <Label x:Name="labResistanceMin" Content="0" HorizontalAlignment="Left" Grid.Row="1" Grid.Column="3"/>
                     <Label x:Name="labKMax" Content="0" HorizontalAlignment="Left" Grid.Row="2" Grid.Column="1"/>
                     <Label x:Name="labKMin" Content="0" HorizontalAlignment="Left" Grid.Row="2" Grid.Column="3"/>
                 </Grid>
             </GroupBox>
-            <GroupBox Header="测试统计" FontSize="12" FontWeight="Bold" Grid.Column="2" BorderThickness="2">
+            <GroupBox Header="测试统计" Width="215" Height="132" FontSize="12" FontWeight="Bold" Grid.Column="2" BorderThickness="2">
                 <Grid>
                     <Grid.Resources>
                         <Style TargetType="Label">
                             <Setter Property="HorizontalAlignment" Value="Right"/>
                             <Setter Property="VerticalAlignment" Value="Center"/>
-                            <Setter Property="FontSize" Value="11"/>
+                            <Setter Property="FontSize" Value="16"/>
                         </Style>
                     </Grid.Resources>
                     <Grid.RowDefinitions>
@@ -160,14 +160,14 @@
                     <Label Content="合格(个)：" Grid.Row="1"/>
                     <Label Content="不合格(个)：" Grid.Row="2"/>
                     <Label Content="合格率(%)：" Grid.Row="3"/>
-                    <Label x:Name="labTotal" Content="0" Grid.Column="1" HorizontalAlignment="Left"/>
-                    <Label x:Name="labQualified" Content="0" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left"/>
+                    <Label x:Name="labTotal" Content="0" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,1" VerticalAlignment="Bottom"/>
+                    <Label x:Name="labQualified" Content="0" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,2" VerticalAlignment="Bottom"/>
                     <Label x:Name="labUnQualified" Content="0" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left"/>
-                    <Label x:Name="labUnQualifiedRate" Content="0" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Left"/>
+                    <Label x:Name="labQualifiedRate" Content="0" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Left"/>
                 </Grid>
             </GroupBox>
 
-            <GroupBox Header="测试结果" FontSize="12" FontWeight="Bold" Grid.Column="3" BorderThickness="2">
+            <GroupBox Header="测试结果" FontSize="12" Width="215" Height="132" FontWeight="Bold" Grid.Column="3" BorderThickness="2">
                 <Grid>
                     <TextBlock x:Name="tbResult" FontSize="50" Text="PASS" Foreground="GreenYellow" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                 </Grid>
@@ -182,7 +182,7 @@
                 <RowDefinition/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <DataGrid x:Name="dgO1" Grid.ColumnSpan="2" Grid.RowSpan="2" Margin="10,0,10,10">
+            <DataGrid x:Name="dgO1" Grid.ColumnSpan="2" Grid.RowSpan="2" Margin="10,0,10,10" IsReadOnly="True">
                 <DataGrid.Columns>
                     <DataGridTextColumn Binding="{Binding barcod}" ClipboardContentBinding="{x:Null}" Header="电池条码"/>
                     <DataGridTextColumn Binding="{Binding model}" ClipboardContentBinding="{x:Null}" Header="电池类型"/>
@@ -193,6 +193,20 @@
                     <DataGridTextColumn Binding="{Binding volt_1}" ClipboardContentBinding="{x:Null}" Header="电压/V"/>
                     <DataGridTextColumn Binding="{Binding resistance_1}" ClipboardContentBinding="{x:Null}" Header="电阻/ mΩ"/>
                     <DataGridTextColumn Binding="{Binding ispass_1}" ClipboardContentBinding="{x:Null}" Header="是否通过"/>
+                </DataGrid.Columns>
+            </DataGrid>
+            <DataGrid x:Name="dgOB" Margin="10,0,10,10" Grid.ColumnSpan="2" Grid.RowSpan="2" Visibility="Hidden" IsReadOnly="True">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Binding="{Binding barcod}" ClipboardContentBinding="{x:Null}" Header="电池条码"/>
+                    <DataGridTextColumn Binding="{Binding model}" ClipboardContentBinding="{x:Null}" Header="电池类型"/>
+                    <DataGridTextColumn Binding="{Binding from_user2}" ClipboardContentBinding="{x:Null}" Header="测试用户"/>
+                    <DataGridTextColumn Binding="{Binding testtype_2}" ClipboardContentBinding="{x:Null}" Header="测试类型"/>
+                    <DataGridTextColumn Binding="{Binding passageway_2}" ClipboardContentBinding="{x:Null}" Header="通道"/>
+                    <DataGridTextColumn Binding="{Binding time_2}" ClipboardContentBinding="{x:Null}" Header="时间"/>
+                    <DataGridTextColumn Binding="{Binding volt_2}" ClipboardContentBinding="{x:Null}" Header="电压/V"/>
+                    <DataGridTextColumn Binding="{Binding resistance_2}" ClipboardContentBinding="{x:Null}" Header="电阻/mΩ"/>
+                    <DataGridTextColumn Binding="{Binding k_value_2}" ClipboardContentBinding="{x:Null}" Header="K值"/>
+                    <DataGridTextColumn Binding="{Binding ispass_2}" ClipboardContentBinding="{x:Null}" Header="是否通过"/>
                 </DataGrid.Columns>
             </DataGrid>
             <!--<uc:PassageWayUC Grid.Column="1"/>

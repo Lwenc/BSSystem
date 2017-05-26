@@ -15,6 +15,7 @@ namespace HASystem.StaticClass
     {
          public static void GetSerialInfo()
         {
+            ini.path = @"..\\..\\IniConfigures\\SerialSetting.ini";
             StructSerialInfo.portName= ini.IniReadvalue("section1", "key1");
             StructSerialInfo.baudRate = ini.IniReadvalue("section1", "key2");
             StructSerialInfo.stopBite = ini.IniReadvalue("section1", "key3");

@@ -36,6 +36,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CommOperator, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\CommOperator.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.SQLite">
@@ -62,6 +66,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="CRCHelper.cs" />
     <Compile Include="EnumInfo\CheckBoxConvert.cs" />
     <Compile Include="EnumInfo\OperatingType.cs" />
     <Compile Include="Panels\AddModelInfo.xaml.cs">
@@ -102,7 +107,9 @@
     </Compile>
     <Compile Include="StaticClass\IniConfigure.cs" />
     <Compile Include="StaticClass\ModelInfo.cs" />
+    <Compile Include="StaticClass\SaveTestData.cs" />
     <Compile Include="StaticClass\SerialInfo.cs" />
+    <Compile Include="StaticClass\StringExtension.cs" />
     <Compile Include="StaticClass\TestResultInfo.cs" />
     <Compile Include="StaticClass\UserInfo.cs" />
     <Compile Include="UC\btnUserControl.xaml.cs">

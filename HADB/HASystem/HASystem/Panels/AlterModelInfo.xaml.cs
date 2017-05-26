@@ -12,7 +12,6 @@ namespace HASystem.Panels
     public partial class AlterModelInfo : UserControl
     {
         private string _oldModel;
-        SqlConnection conn=new SqlConnection("Server=localhost;Database=HADB;User id=sa;PWD=Lwenc");
         public event EventHandler RequestBack;
 
         public AlterModelInfo()
@@ -33,26 +32,12 @@ namespace HASystem.Panels
             txtMinResistance2.Text = (((mi.ModelResult)list).resistanceMin2).ToString();
             txtMaxK2.Text = (((mi.ModelResult)list).k_valueMax2).ToString();
             txtMinK2.Text = (((mi.ModelResult)list).k_valueMin2).ToString();
+            txtCompence.Text = (((mi.ModelResult)list).volt_compensate).ToString();
         }
-        //确认按钮
+        //保存按钮
         private void btnSave_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            try
-            {
-                conn.Open();
-                SqlCommand cmd = conn.CreateCommand();
-                cmd.CommandText = $"use HADB exec proc_alterModel  '{_oldModel}','{txtModel.Text}'," +
-                    $"'{txtMaxVolt.Text}','{txtMinVolt.Text}','{txtMaxResistance.Text}','{txtMinResistance.Text}'," +
-                   $"'{txtMaxVolt2.Text}','{txtMinVolt2.Text}','{txtMaxResistance2.Text}','{txtMinResistance2.Text}','{txtMaxK2.Text}','{txtMinK2.Text}'";
-                cmd.ExecuteNonQuery();
-                conn.Close();
-                MessageBox.Show("修改成功！");
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine(ex.Message);
-                conn.Close();
-            }
+           
         }
         //重置按钮
         private void btnReset_Click(object sender, System.Windows.RoutedEventArgs e)

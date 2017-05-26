@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Data.SQLite;
 using System.Data;
+using HASystem.StaticClass;
 
 namespace HASystem.Panels
 {
@@ -23,7 +24,7 @@ namespace HASystem.Panels
     public partial class DataManagerPanel : UserControl
     {
         private bool _isTestInfo = true;
-        SQLiteConnection conn = new SQLiteConnection("Data Source=db\\BS.db");
+        SQLiteConnection conn = ModelInfo.conn;
         public DataManagerPanel()
         {
             InitializeComponent();

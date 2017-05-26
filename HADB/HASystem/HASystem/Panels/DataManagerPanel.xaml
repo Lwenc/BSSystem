@@ -131,21 +131,22 @@
 
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="型号" Width="auto" Binding="{Binding model}"/>
-                            <DataGridTextColumn Header="条码" Width="auto" Binding="{Binding barcod}"/>
-                            <DataGridTextColumn Header="O1测试" Width="auto" Binding="{Binding testtype_1}"/>
-                            <DataGridTextColumn Header="通道编号_01" Width="auto" Binding="{Binding passageway_1}"/>
-                            <DataGridTextColumn Header="日期时间_01" Width="auto" Binding="{Binding time_1}"/>
-                            <DataGridTextColumn Header="电压01(V)" Width="auto" Binding="{Binding volt_1}"/>
-                            <DataGridTextColumn Header="内阻01(Ω)" Width="auto" Binding="{Binding resistance_1}"/>
-                            <DataGridTextColumn Header="是否合格01" Width="auto" Binding="{Binding ispass_1}"/>
-                            <DataGridTextColumn Header="OB测试" Width="auto" Binding="{Binding testtype_2}"/>
-                            <DataGridTextColumn Header="通道编号_02" Width="auto" Binding="{Binding passageway_2}"/>
-                            <DataGridTextColumn Header="日期时间_02" Width="auto" Binding="{Binding time_2}"/>
-                            <DataGridTextColumn Header="电压02(V)" Width="auto" Binding="{Binding volt_2}"/>
-                            <DataGridTextColumn Header="内阻02(Ω)" Width="auto" Binding="{Binding resistance_2}"/>
-                            <DataGridTextColumn Header="K值02" Width="auto" Binding="{Binding k_value_2}"/>
-                            <DataGridTextColumn Header="是否合格02" Width="auto" Binding="{Binding ispass_2}"/>
-                            <DataGridTextColumn Header="测试用户" Width="auto" Binding="{Binding from_user}"/>
+                            <DataGridTextColumn Header="电池条码" Width="auto" Binding="{Binding barcod}"/>
+                            <DataGridTextColumn Header="测试类型" Width="auto" Binding="{Binding testtype_1}"/>
+                            <DataGridTextColumn Header="测试用户（O1）" Width="auto"  Binding="{Binding from_user1}"/>
+                            <DataGridTextColumn Header="通道（O1）" Width="auto" Binding="{Binding passageway_1}"/>
+                            <DataGridTextColumn Header="测试时间（O1）" Width="auto" Binding="{Binding time_1}"/>
+                            <DataGridTextColumn Header="电压/V（O1）" Width="auto" Binding="{Binding volt_1}"/>
+                            <DataGridTextColumn Header="内阻/mΩ（O1）" Width="auto" Binding="{Binding resistance_1}"/>
+                            <DataGridTextColumn Header="是否合格（O1）" Width="auto" Binding="{Binding ispass_1}"/>
+                            <DataGridTextColumn Header="测试类型" Width="auto" Binding="{Binding testtype_2}"/>
+                            <DataGridTextColumn Header="是否合格（OB）" Width="auto" Binding="{Binding ispass_2}"/>
+                            <DataGridTextColumn Header="通道（OB）" Width="auto" Binding="{Binding passageway_2}"/>
+                            <DataGridTextColumn Header="测试时间（OB）" Width="auto" Binding="{Binding time_2}"/>
+                            <DataGridTextColumn Header="电压/V（OB）" Width="auto" Binding="{Binding volt_2}"/>
+                            <DataGridTextColumn Header="内阻/mΩ（OB）" Width="auto" Binding="{Binding resistance_2}"/>
+                            <DataGridTextColumn Header="K值（OB）" Width="auto" Binding="{Binding k_value_2}"/>
+                            <DataGridTextColumn Header="测试用户（OB）" Width="auto" Binding="{Binding from_user2}"/>
                         </DataGrid.Columns>
                         <DataGrid.ContextMenu>
                             <ContextMenu>
