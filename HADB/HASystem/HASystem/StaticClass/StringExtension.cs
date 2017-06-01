@@ -41,7 +41,7 @@ namespace HASystem.StaticClass
             return sb.ToString();
         }
         //判断电压并计算
-        public static string strVoltRemove(this string str,string parameter)
+        public static string strVoltRemove(this string str, string parameter)
         {
             //string[] result = new string[4];
             IsVoltRight = true;
@@ -53,20 +53,17 @@ namespace HASystem.StaticClass
                 str = str.Replace(".", "");
                 if (str.Length == 1)
                     if (volt == "2")
-                        str = "0" + str + "00";
+                        return "0" + str + "00";
                     else
-                        str = str + "000";
+                        return str + "000";
                 if (str.Length == 2)
                     if (volt == "2")
-                        str = str + "00";
+                        return str + "00";
                     else
                         IsVoltRight = false;
 
                 if (str.Length == 3)
-                    if (volt == "2")
-                        str = str + "0";
-                    else
-                        IsVoltRight = false;
+                    IsVoltRight = false;
             }
             //电压为小数时
             else
@@ -74,12 +71,12 @@ namespace HASystem.StaticClass
                 str = str.Replace(".", "");
                 if (strs[0].Length == 1 && strs[1].Length == 1)
                     if (volt == "2")
-                        str = "0" + str + "0";
+                        return "0" + str + "0";
                     else
-                        str = str + "00";
+                        return str + "00";
                 if (strs[0].Length == 2 && strs[1].Length == 1)
                     if (volt == "2")
-                        str = str + "0";
+                        return str + "0";
                     else
                         IsVoltRight = false;
                 if (strs[0].Length >= 3 && strs[1].Length == 1)
@@ -87,9 +84,9 @@ namespace HASystem.StaticClass
 
                 if (strs[0].Length == 1 && strs[1].Length == 2)
                     if (volt == "2")
-                        str = "0" + str;
+                        return "0" + str;
                     else
-                        str = str + "0";
+                        return str + "0";
                 if (strs[0].Length == 2 && strs[1].Length == 2)
                     if (volt == "2")
                         return str;
@@ -100,7 +97,7 @@ namespace HASystem.StaticClass
 
                 if (strs[0].Length == 1 && strs[1].Length == 3)
                     if (volt == "2")
-                        str = "0" + str;
+                        return "0" + str;
                     else
                         return str;
                 if (strs[0].Length >= 2 && strs[1].Length == 3)
@@ -122,19 +119,19 @@ namespace HASystem.StaticClass
                 str = str.Replace(".", "");
                 if (str.Length == 1)
                     if (resis == "0")
-                        str = "000" + str;
+                        return "000" + str;
                     else
-                        str = "00" + str + "0";
+                        return "00" + str + "0";
                 if (str.Length == 2)
                     if (resis == "0")
-                        str = "00" + str;
+                        return "00" + str;
                     else
-                        str = "0" + str + "0";
+                        return "0" + str + "0";
                 if (str.Length == 3)
                     if (resis == "0")
-                        str = "0" + str;
+                        return "0" + str;
                     else
-                        str = str + "0";
+                        return str + "0";
                 if (str.Length == 4)
                     if (resis == "0")
                         return str;
@@ -158,14 +155,38 @@ namespace HASystem.StaticClass
                 //
                 str = str.Replace(".", "");
                 if (strs[0].Length == 1)
-                    str = "00" + str;
+                    return "00" + str;
                 if (strs[0].Length == 2)
-                    str = "0" + str;
+                    return "0" + str;
                 if (strs[0].Length == 3)
                     return str;
 
             }
             return str;
+        }
+        public static string ThrowIfResistWrong(this string str)
+        {
+            if (IsResisRight)
+                return str;
+
+            throw new ResultWrongException("电阻档位不符，请重新设置!");
+        }
+
+        public static string ThrowIfVoltageWrong(this string str)
+        {
+            if (IsVoltRight)
+                return str;
+
+            throw new ResultWrongException("电压档位不符，请重新设置!");
+        }
+    }
+
+    public class ResultWrongException : Exception
+    {
+        public ResultWrongException(string message)
+            : base(message)
+        {
+
         }
     }
 }

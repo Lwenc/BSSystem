@@ -30,17 +30,17 @@
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                             <Label Content="通道数：" VerticalAlignment="Center" HorizontalAlignment="Right"/>
-                            <RadioButton Content="1" GroupName="gppassageway" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left"/>
-                            <RadioButton Content="2" GroupName="gppassageway" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Left"/>
-                            <RadioButton Content="3" GroupName="gppassageway" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Left"/>
-                            <RadioButton Content="4" GroupName="gppassageway" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                            <RadioButton Content="1" GroupName="gppassageway" Grid.Column="1" VerticalAlignment="Center" IsChecked="True" HorizontalAlignment="Left"/>
+                            <RadioButton Content="2" GroupName="gppassageway" Grid.Column="2" VerticalAlignment="Center" IsEnabled="False" HorizontalAlignment="Left"/>
+                            <RadioButton Content="3" GroupName="gppassageway" Grid.Column="3" VerticalAlignment="Center" IsEnabled="False" HorizontalAlignment="Left"/>
+                            <RadioButton Content="4" GroupName="gppassageway" Grid.Column="4" VerticalAlignment="Center" IsEnabled="False" HorizontalAlignment="Left"/>
                         </Grid>
                     </GroupBox>
                     <GroupBox Header="数据设置" Grid.Column="1" BorderThickness="3" Margin="25">
                         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                            <CheckBox x:Name="cbCover" Content="如果有相同电池编号，覆盖原有测试数据"/>
+                            <CheckBox x:Name="cbCover" Content="如果有相同电池编号，覆盖原有测试数据" IsChecked="True"/>
                             <Label/>
-                            <CheckBox x:Name="cbClear" Content="测完一个电池后清空条码输入框"/>
+                            <CheckBox x:Name="cbClear" Content="测完一个电池后清空条码输入框" IsChecked="True"/>
                         </StackPanel>
                     </GroupBox>
                     <Line X1="0" X2="1500" Y1="0" Y2="0" Grid.Row="1" Grid.ColumnSpan="2" Stroke="#b6bfc6" StrokeThickness="3"/>

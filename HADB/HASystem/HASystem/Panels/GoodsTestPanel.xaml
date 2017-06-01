@@ -56,6 +56,7 @@
                 <Setter Property="FontSize" Value="12"/>
             </Style>
         </Grid.Resources>
+        <Grid x:Name="gridTestInfo">
         <Grid.RowDefinitions>
             <!--<RowDefinition Height="2*"/>
             <RowDefinition Height="6.2*"/>-->
@@ -129,8 +130,8 @@
                     <Label Content="内阻下限/mΩ:" Grid.Row="1" Grid.Column="2"/>
                     <Label Content="       K值上限：" Grid.Row="2"/>
                     <Label Content="       K值下限：" Grid.Row="2" Grid.Column="2"/>
-                    <Label x:Name="labVoltMax" Content="00.00" HorizontalAlignment="Left" Grid.Column="1"/>
-                    <Label x:Name="labVoltMin" Content="00.00" HorizontalAlignment="Left" Grid.Column="3"/>
+                    <Label x:Name="labVoltMax" Content="0" HorizontalAlignment="Left" Grid.Column="1"/>
+                    <Label x:Name="labVoltMin" Content="0" HorizontalAlignment="Left" Grid.Column="3"/>
                     <Label x:Name="labResistanceMax" Content="0" HorizontalAlignment="Left" Grid.Row="1" Grid.Column="1"/>
                     <Label x:Name="labResistanceMin" Content="0" HorizontalAlignment="Left" Grid.Row="1" Grid.Column="3"/>
                     <Label x:Name="labKMax" Content="0" HorizontalAlignment="Left" Grid.Row="2" Grid.Column="1"/>
@@ -182,7 +183,7 @@
                 <RowDefinition/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <DataGrid x:Name="dgO1" Grid.ColumnSpan="2" Grid.RowSpan="2" Margin="10,0,10,10" IsReadOnly="True">
+            <DataGrid x:Name="dgO1" Grid.ColumnSpan="2" FontWeight="Bold" Grid.RowSpan="2" IsHitTestVisible="False" Margin="12,-4,8,14" LoadingRow="dgO1_LoadingRow" IsReadOnly="True">
                 <DataGrid.Columns>
                     <DataGridTextColumn Binding="{Binding barcod}" ClipboardContentBinding="{x:Null}" Header="电池条码"/>
                     <DataGridTextColumn Binding="{Binding model}" ClipboardContentBinding="{x:Null}" Header="电池类型"/>
@@ -193,9 +194,10 @@
                     <DataGridTextColumn Binding="{Binding volt_1}" ClipboardContentBinding="{x:Null}" Header="电压/V"/>
                     <DataGridTextColumn Binding="{Binding resistance_1}" ClipboardContentBinding="{x:Null}" Header="电阻/ mΩ"/>
                     <DataGridTextColumn Binding="{Binding ispass_1}" ClipboardContentBinding="{x:Null}" Header="是否通过"/>
+                    <DataGridTextColumn Binding="{Binding remark_1}" ClipboardContentBinding="{x:Null}" Header="测试报告"/>
                 </DataGrid.Columns>
             </DataGrid>
-            <DataGrid x:Name="dgOB" Margin="10,0,10,10" Grid.ColumnSpan="2" Grid.RowSpan="2" Visibility="Hidden" IsReadOnly="True">
+                <DataGrid x:Name="dgOB" Margin="12,-4,8,14" Grid.ColumnSpan="2" FontWeight="Bold" Grid.RowSpan="2" LoadingRow="dgO1_LoadingRow" IsHitTestVisible="False" Visibility="Collapsed" IsReadOnly="True">
                 <DataGrid.Columns>
                     <DataGridTextColumn Binding="{Binding barcod}" ClipboardContentBinding="{x:Null}" Header="电池条码"/>
                     <DataGridTextColumn Binding="{Binding model}" ClipboardContentBinding="{x:Null}" Header="电池类型"/>
@@ -207,11 +209,17 @@
                     <DataGridTextColumn Binding="{Binding resistance_2}" ClipboardContentBinding="{x:Null}" Header="电阻/mΩ"/>
                     <DataGridTextColumn Binding="{Binding k_value_2}" ClipboardContentBinding="{x:Null}" Header="K值"/>
                     <DataGridTextColumn Binding="{Binding ispass_2}" ClipboardContentBinding="{x:Null}" Header="是否通过"/>
+                    <DataGridTextColumn Binding="{Binding remark_2}" ClipboardContentBinding="{x:Null}" Header="测试报告"/>
                 </DataGrid.Columns>
             </DataGrid>
             <!--<uc:PassageWayUC Grid.Column="1"/>
                 <uc:PassageWayUC Grid.Row="1"/>
                 <uc:PassageWayUC  Grid.Row="1" Grid.Column="1"/>-->
+        </Grid>
+        </Grid>
+        <Grid x:Name="gridPB" Visibility="Collapsed">
+            <TextBlock x:Name="tbProgressBar" Width="200" Height="34" Text="正在操作：0%" Margin="463,225,345,270" FontSize="15" FontWeight="Bold"/>
+            <ProgressBar x:Name="pb" Width="200" Height="34" Background="LightBlue"  Foreground="#323b44" Minimum="0" Maximum="10"/>
         </Grid>
     </Grid>
 </UserControl>

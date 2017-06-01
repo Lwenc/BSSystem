@@ -102,7 +102,9 @@
                 <Label Content="型号："  Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right"/>
                 <TextBox x:Name="txtModel" Width="110" VerticalContentAlignment="Center"  HorizontalContentAlignment="Center" 
                                 Height="30" HorizontalAlignment="Left" Grid.Column="1" FontSize="12"/>
-               
+                <Label x:Name="label" Content="注意：电压输入范围为0~100（不包括100）" Grid.Column="2" HorizontalAlignment="Left" Margin="6,0,0,0" VerticalAlignment="Top" Grid.ColumnSpan="3" Width="354" Foreground="#FFDE2323"/>
+                <Label x:Name="label1" Content="电阻输入范围为0~10000（不包括10000），电压与内阻规格输入框只能输入五位数" HorizontalAlignment="Left" Margin="50,28,0,-20" VerticalAlignment="Top" FontSize="13.333" FontWeight="Bold" Foreground="#FFE02121" Grid.ColumnSpan="4" Grid.Column="2"/>
+
             </Grid>
             <GroupBox Grid.Row="1" Header="O1测试规格输入" FontSize="14" FontWeight="Bold" Margin="5">
                 <Grid>

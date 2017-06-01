@@ -36,7 +36,6 @@
                     </Setter>
                 </Style>
                 <Style TargetType="Button" BasedOn="{StaticResource btnBase}">
-                    <Setter Property="Width" Value="128"/>
                     <Setter Property="Height" Value="40"/>
                     <Setter Property="Background" Value="#414c57"/>
                     <Setter Property="FontSize" Value="15"/>

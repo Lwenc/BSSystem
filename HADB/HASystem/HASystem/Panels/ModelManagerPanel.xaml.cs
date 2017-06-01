@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using System.Data.SqlClient;
 using System.Windows;
 using System.Windows.Controls;
 using System.Data.SQLite;
@@ -14,7 +13,7 @@ namespace HASystem.Panels
     public partial class ModelManagerPanel : UserControl
     {
         private ObservableCollection<mi.ModelResult> list;
-        private SqlConnection conn = new SqlConnection("Server=localhost;Database=HADB;User id=sa;PWD=Lwenc");
+        private  SQLiteConnection conn = new SQLiteConnection("Data Source=DB\\BS.db");
         public ModelManagerPanel()
         {
             InitializeComponent();
@@ -70,7 +69,8 @@ namespace HASystem.Panels
             catch(Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine(ex.Message);
-            } 
+            }
+           
         }
         //刷新按钮
         private void menuRefresh_Click(object sender, RoutedEventArgs e)
@@ -98,8 +98,8 @@ namespace HASystem.Panels
                     {
                         modelId[i] = (((mi.ModelResult)deleteList[i]).model).ToString();
                         conn.Open();
-                        SqlCommand cmd = conn.CreateCommand();
-                        cmd.CommandText = $"use HADB exec proc_delModel '{modelId[i]}'";
+                        SQLiteCommand cmd = conn.CreateCommand();
+                        cmd.CommandText = $"delete from ModelInfo where model = '{modelId[i]}'";
                         cmd.ExecuteNonQuery();
                         conn.Close();
                       
@@ -118,20 +118,8 @@ namespace HASystem.Panels
         //查找按钮
         private void btnSearch_Click(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                if (txtSearch.Text != "")
-                {
-                    list = mi.SearchModelData(txtSearch.Text);
-                    dgModelInfo.ItemsSource = list;
-                }
-                else
-                    MessageBox.Show("请输入关键字查询型号！");
-             }
-            catch(Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine(ex.Message);
-            }
-}
+            list = mi.SearchModelData(txtSearch.Text);
+            dgModelInfo.ItemsSource = list;
+        }
     }
 }

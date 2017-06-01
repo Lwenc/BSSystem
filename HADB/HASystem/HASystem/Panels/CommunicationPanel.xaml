@@ -78,7 +78,7 @@
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                             <Label Content="型号选择：" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Right"/>
-                            <ComboBox x:Name="comboModel" Height="30" Grid.Column="1"/>
+                            <ComboBox x:Name="comboModel" IsEnabled="False" Height="30" Grid.Column="1"/>
                         </Grid>
                     </GroupBox>
                     <GroupBox Header="串口参数配置" Margin="10" FontSize="20" FontWeight="Bold" Grid.Row="1">
@@ -145,7 +145,7 @@
                         </Grid.ColumnDefinitions>
                         <Label Content="通讯模式选择：" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Column="0"/>
                         <RadioButton x:Name="rdiSerial" Content="串口通讯：" HorizontalAlignment="Left" VerticalAlignment="Center" IsChecked="True" Grid.Column="1"/>
-                        <RadioButton x:Name="rdiNet" Content="网口选通讯：" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Column="1"/>
+                        <RadioButton x:Name="rdiNet" IsEnabled="False" Content="网口选通讯：" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Column="1"/>
                     </Grid>
                     <Button x:Name="btnSave" Content="保存" Width="70" Background="#414c57" Grid.Row="4" Height="30" Margin="400,0" VerticalAlignment="Top" Click="btnSave_Click"/>
                 </Grid>

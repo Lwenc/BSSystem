@@ -35,7 +35,6 @@
                     </Setter>
                 </Style>
                 <Style TargetType="Button" BasedOn="{StaticResource btnBase}">
-                    <Setter Property="Width" Value="128"/>
                     <Setter Property="Height" Value="40"/>
                     <Setter Property="Background" Value="#414c57"/>
                     <Setter Property="FontSize" Value="15"/>
@@ -46,7 +45,7 @@
                 <RowDefinition Height="auto"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <Button x:Name="btnModelInfo" Content="型号信息" Click="btnModelInfo_Click" Grid.Row="0"/>
+            <Button x:Name="btnModelInfo" Content="查看全部型号" Click="btnModelInfo_Click" Grid.Row="0"/>
             <Button x:Name="btnModleAdd" Content="型号信息录入" Click="btnModleAdd_Click" Grid.Row="1"/>
         </Grid>
         <Grid Grid.Column="1">
@@ -66,7 +65,7 @@
                     <TextBox.Resources>
                         <VisualBrush x:Key="HelpBrush" TileMode="None" Opacity="0.3" Stretch="None" AlignmentX="Left">
                             <VisualBrush.Visual>
-                                <TextBlock FontStyle="Italic" Text="型号/类型"/>
+                                    <TextBlock FontStyle="Italic" Text="请输入型号/类型"/>
                             </VisualBrush.Visual>
                         </VisualBrush>
                     </TextBox.Resources>
@@ -160,7 +159,6 @@
                             <Separator x:Name="sepDelete"/>
                             <MenuItem Header="删除" x:Name="menuDelete" Click="menuDelete_Click"/>
                             <Separator x:Name="sepSelect"/>
-                            <MenuItem Header="测试规格选定" x:Name="menuSelect"/>
                             </ContextMenu>
                     </DataGrid.ContextMenu>
                 </DataGrid>

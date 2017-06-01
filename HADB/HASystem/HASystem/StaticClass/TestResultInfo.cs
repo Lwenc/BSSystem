@@ -23,8 +23,7 @@ namespace HASystem.StaticClass
         }
 
         public static ObservableCollection<Result> SetTestInfo()
-        {
-          
+        {         
             Result result = default(Result);
             result.Barcode = barcode;
             result.Type = type;

@@ -2,6 +2,7 @@
 using System.Windows.Controls;
 using System.Data.SqlClient;
 using System;
+using HASystem.StaticClass;
 
 namespace HASystem.Panels
 {
@@ -10,7 +11,6 @@ namespace HASystem.Panels
     /// </summary>
     public partial class AddModelInfo : UserControl
     {
-        SqlConnection conn = new SqlConnection("Server=localhost;Database=HADB;User id=sa;PWD=Lwenc");
         public AddModelInfo()
         {
             InitializeComponent();
@@ -18,22 +18,64 @@ namespace HASystem.Panels
         //保存按钮
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
+            if (txtModel.Text.Trim() == "" || txtModel.Text.Trim() == null)
+            {
+                MessageBox.Show("请输入型号！");
+                return;
+            }
+            //格式检查
+            bool b = true;
+            bool b2 = true;
+            b = txtMinVolt.getGeShi();
+            if (b == false)
+                b2 = false;
+            b = txtMaxVolt.getGeShi();
+            if (b == false)
+                b2 = false;
+            b = txtMinResistance.getGeShi();
+            if (b == false)
+                b2 = false;
+            b = txtMaxResistance.getGeShi();
+            if (b == false)
+                b2 = false;
+            b = txtMinVolt2.getGeShi();
+            if (b == false)
+                b2 = false;
+            b = txtMaxVolt2.getGeShi();
+            if (b == false)
+                b2 = false;
+            b = txtMinResistance2.getGeShi();
+            if (b == false)
+                b2 = false;
+            b = txtMaxResistance2.getGeShi();
+            if (b == false)
+                b2 = false;
+            b = txtCompence.getGeShi();
+            if (b == false)
+                b2 = false;
+            b = txtMaxK2.getGeShi();
+            if (b == false)
+                b2 = false;
+            b = txtMinK2.getGeShi();
+            if (b == false)
+                b2 = false;
+            if (b2 == false)
+            {
+                MessageBox.Show("红色标记为错误数据，请修正，并注意所有数据不能为空！数值之间不能出现空格！");
+                return;
+            }
+
+            //进行数据保存
             try
             {
-                conn.Open();
-                SqlCommand cmd = conn.CreateCommand();
-                cmd.CommandText = $"use HADB exec proc_addModel '{txtModel.Text}'," +
-                    $"'{txtMaxVolt.Text}','{txtMinVolt.Text}','{txtMaxResistance.Text}','{txtMinResistance.Text}'," +
-                   $"'{txtMaxVolt2.Text}','{txtMinVolt2.Text}','{txtMaxResistance2.Text}','{txtMinResistance2.Text}','{txtMaxK2.Text}','{txtMinK2.Text}'";
-                cmd.ExecuteNonQuery();
-                conn.Close();
-                MessageBox.Show("添加成功！");
+                ModelInfo.AddNewModeInfo(txtModel.Text, "O1", double.Parse(txtMaxVolt.Text), double.Parse(txtMinVolt.Text), double.Parse(txtMaxResistance.Text), double.Parse(txtMinResistance.Text), "OB", double.Parse(txtMaxVolt2.Text), double.Parse(txtMinVolt2.Text), double.Parse(txtMaxResistance2.Text), double.Parse(txtMinResistance2.Text), double.Parse(txtMaxK2.Text), double.Parse(txtMinK2.Text), double.Parse(txtCompence.Text), 0, "未启用", DateTime.Now);
+                MessageBox.Show("型号：" + txtModel.Text + "添加成功！");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine(ex.Message);
-                conn.Close();
+                MessageBox.Show(ex.Message);
             }
+
         }
         //重置按钮
         private void btnReset_Click(object sender, RoutedEventArgs e)
@@ -49,6 +91,7 @@ namespace HASystem.Panels
             txtMinVolt.Text = "";
             txtMinK2.Text = "";
             txtModel.Text = "";
+            txtCompence.Text = "";
         }
     }
 }

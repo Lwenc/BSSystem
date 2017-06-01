@@ -6,14 +6,15 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 using System.Windows.Threading;
+using ini = HASystem.StaticClass.IniConfigure;
 using mi = HASystem.StaticClass.ModelInfo;
 using si = HASystem.StaticClass.SerialInfo;
 using ssi = HASystem.StaticClass.StructSerialInfo;
 using test = HASystem.StaticClass.TestResultInfo;
-using ini = HASystem.StaticClass.IniConfigure;
-using System.Windows.Controls.Primitives;
+using System.Threading.Tasks;
 
 namespace HASystem.Panels
 {
@@ -24,11 +25,12 @@ namespace HASystem.Panels
     {
         DataGridRow dgr;
         private DispatcherTimer timer;
+        private DispatcherTimer pbTimer;
         private string[] model = new string[] { };
-        private int sum = 0;//计算测试总数；
-        private int pass = 0;//保存测试的合格数；
-        private int npass = 0;//保存测试的不合格数；
-        private int rapass = 0;//保存测试的合格率；
+        private double sum = 0;//计算测试总数；
+        private double pass = 0;//保存测试的合格数；
+        private double npass = 0;//保存测试的不合格数；
+        private double rapass = 0;//保存测试的合格率；
         private string strReset = "23 AA AA 41 37 41 31 33 46 33 45 0D";
         SerialPort sp = new SerialPort();
         string strModel;
@@ -36,12 +38,14 @@ namespace HASystem.Panels
         string strTesttype_1;
         string strPassageway_1="1";
         string strIspass_1;
+        string strRemark_1;
         DateTime dtTime_1;
         string strFrom_user2 = "";
         string strTesttype_2;
         string strPassageway_2 = "1";
         string strIspass_2;
-        string compensate=" ";
+        string strRemark_2;
+        string strcompensate=" ";//电压补偿的值
         DateTime dtTime_2;
 
         public GoodsTestPanel()
@@ -49,8 +53,10 @@ namespace HASystem.Panels
             InitializeComponent();
             InitCombo();
             timer = new DispatcherTimer();
+            pbTimer = new DispatcherTimer();
             timer.Tick += new EventHandler(GetTestData);
             timer.Interval = new TimeSpan(0, 0, 0,1);
+            pbTimer.Interval = new TimeSpan(0,0,0,1);
         }
         private void InitCombo()
         {
@@ -80,7 +86,6 @@ namespace HASystem.Panels
                 txtBarcode.IsEnabled = true;
                 IniSerial();
                 SendData();
-                txtBarcode.Focus();
             }
             else
                 MessageBox.Show("请选择型号进行测试！");
@@ -94,31 +99,27 @@ namespace HASystem.Panels
                 ini.path = @"..\\..\\IniConfigures\\VoltResisSetting.ini";
                 string resis = ini.IniReadvalue("SectionResis", "key1");
                 string volt = ini.IniReadvalue("SectionVolt", "key1");
-                string strResistanceMax = labResistanceMax.Content.ToString().strResisRemove(resis);
-                string strResistanceMin = labResistanceMin.Content.ToString().strResisRemove(resis);
-                string strVoltMax = labVoltMax.Content.ToString().strVoltRemove(volt);
-                string strVoltMin = labVoltMin.Content.ToString().strVoltRemove(volt);
-                if (StringExtension.IsVoltRight == false&&StringExtension.IsResisRight==false)
+                string strResistanceMax;
+                string strResistanceMin;
+                string strVoltMax;
+                string strVoltMin;
+                try
                 {
-                    MessageBox.Show("电压挡位和电阻挡位设置不正确");
+                    strResistanceMax = labResistanceMax.Content.ToString().strResisRemove(resis).ThrowIfResistWrong();
+                    strResistanceMin = labResistanceMin.Content.ToString().strResisRemove(resis).ThrowIfResistWrong();
+                    strVoltMax = labVoltMax.Content.ToString().strVoltRemove(volt).ThrowIfVoltageWrong();
+                    strVoltMin = labVoltMin.Content.ToString().strVoltRemove(volt).ThrowIfVoltageWrong();
+                }
+                catch (ResultWrongException rwe)
+                {
+                    MessageBox.Show(rwe.Message);
                     btnStop_Click(this, new RoutedEventArgs(ButtonBase.ClickEvent));
                     return;
                 }
-               if (StringExtension.IsVoltRight == false)
-                {
-                    MessageBox.Show("电压挡位设置不正确");
-                    btnStop_Click(this, new RoutedEventArgs(ButtonBase.ClickEvent));
-                    return;
-                }
-                if (StringExtension.IsResisRight == false)
-                {
-                    MessageBox.Show("电压挡位设置不正确");
-                    btnStop_Click(this, new RoutedEventArgs(ButtonBase.ClickEvent));
-                    return;
-                }
+
                 sb.Append("0");
-                sb.Append(resis);
-                sb.Append(volt);
+                sb.Append(ini.IniReadvalue("SectionResis", "key1"));
+                sb.Append(ini.IniReadvalue("SectionVolt", "key1"));
                 sb.Append(strResistanceMax.Substring(0, 1));
                 sb.Append(strResistanceMax.Substring(1, 1));
                 sb.Append(strResistanceMax.Substring(2, 1));
@@ -152,7 +153,7 @@ namespace HASystem.Panels
                     bytes[i] = byte.Parse(strs[i], System.Globalization.NumberStyles.HexNumber);
                 }
                 sp.Write(bytes, 0, bytes.Length);
-                System.Threading.Thread.Sleep(6000);
+                ProcessBarVisity();
                 sp.DiscardInBuffer();
             }
             catch (Exception ex)
@@ -160,7 +161,48 @@ namespace HASystem.Panels
                 System.Diagnostics.Debug.WriteLine(ex.Message);
             }
         }
-
+        //开始进程条
+        private async void ProcessBarVisity()
+        {
+            gridPB.Visibility = Visibility.Visible;
+            gridTestInfo.Opacity = 0.5;
+            gridTestInfo.IsEnabled = false;
+            pb.Value = 0;
+            for (int i = 1; i < 11; i++)
+            {
+                this.pb.Dispatcher?.Invoke(() => this.pb.Value = i);
+                this.tbProgressBar.Dispatcher.Invoke(() => this.tbProgressBar.Text = "正在操作：" + i + "0" + "%");
+                await Task.Delay(1000);
+            }
+            await Task.Delay(500);
+            gridPB.Visibility = Visibility.Collapsed;
+            gridTestInfo.Opacity = 1;
+            gridTestInfo.IsEnabled = true;
+            txtBarcode.Focus();
+            int lenght = sp.BytesToRead;
+            if (lenght != 0)
+            {
+                byte[] by = new byte[lenght];
+                sp.Read(by, 0, lenght);
+            }
+        }
+        //复位进程条
+        private async void ResetProcessBarVisity()
+        {
+            gridPB.Visibility = Visibility.Visible;
+            gridTestInfo.Opacity = 0.5;
+            gridTestInfo.IsEnabled = false;
+            pb.Value = 0;
+            for (int i = 1; i < 6; i++)
+            {
+                this.pb.Dispatcher?.Invoke(() => this.pb.Value = i * 2);
+                this.tbProgressBar.Dispatcher.Invoke(() => this.tbProgressBar.Text = "正在操作：" + i * 2 + "0" + "%");
+                await Task.Delay(1000);
+            }
+            gridPB.Visibility = Visibility.Collapsed;
+            gridTestInfo.Opacity = 1;
+            gridTestInfo.IsEnabled = true;
+        }
         //初始化和打开串口
         private void IniSerial()
         {
@@ -236,12 +278,12 @@ namespace HASystem.Panels
             else
             {
                 test.resistance = double.Parse(strResistance) / 10;
-            }   
+            }
 
             if (isVBit == "2")
-                test.volt = double.Parse(strVolt) / 100;
+                test.volt = double.Parse(strVolt) / 100 + double.Parse(strcompensate);
             else
-                test.volt = double.Parse(strVolt) / 1000;
+                test.volt = double.Parse(strVolt) / 1000 + double.Parse(strcompensate);
 
 
             //面板显示控制，只能10条数据
@@ -254,7 +296,7 @@ namespace HASystem.Panels
                 dgOB.Items.Clear();
             }
 
-            if (test.type.Equals("O1"))//执行O1测试
+            if (test.type.Equals("O1"))//判断是否执行O1测试
             {
                 strModel = comboModel.Text;
                 strFrom_user1 = "";
@@ -264,8 +306,9 @@ namespace HASystem.Panels
                 //面板数据处理
                 if (test.volt >= double.Parse(labVoltMin.Content.ToString()) && test.volt <= double.Parse(labVoltMax.Content.ToString()) && test.resistance >= double.Parse(labResistanceMin.Content.ToString()) && test.resistance <= double.Parse(labResistanceMax.Content.ToString()))//与标准规格做判断，合格
                 {
+                    strRemark_1 = "测试通过！";
                     strIspass_1 = "PASS";
-                    dgr = new DataGridRow() { Item = new {barcod = test.barcode, model = strModel, from_user1 = strFrom_user1, testtype_1=test.type, passageway_1=strPassageway_1,time_1=dtTime_1,volt_1=test.volt, resistance_1=test.resistance, ispass_1=strIspass_1 } };
+                    dgr = new DataGridRow() { Item = new {barcod = test.barcode, model = strModel, from_user1 = strFrom_user1, testtype_1=test.type, passageway_1=strPassageway_1,time_1=dtTime_1,volt_1=test.volt, resistance_1=test.resistance, ispass_1=strIspass_1, remark_1=strRemark_1 } };
                     dgO1.Items.Add(dgr);
                     //面板数据控制
                     sum++;
@@ -276,8 +319,17 @@ namespace HASystem.Panels
                 }
                 else
                 {
+                    strRemark_1 = "";
+                    if (test.volt < double.Parse(labVoltMin.Content.ToString()))
+                        strRemark_1 = "测试电压低于下限设定值！ ";
+                    if(test.volt> double.Parse(labVoltMax.Content.ToString()))
+                        strRemark_1 += "测试电压高于上限设定值！ ";
+                    if(test.resistance< double.Parse(labResistanceMin.Content.ToString()))
+                        strRemark_1 += "测试内阻低于下限设定值！ ";
+                    if (test.resistance > double.Parse(labResistanceMax.Content.ToString()))
+                        strRemark_1 += "测试内阻高于上限设定值！ ";
                     strIspass_1 = "FAIL";
-                    dgr = new DataGridRow() { Item = new { barcod = test.barcode, model = strModel, from_user1 = strFrom_user1, testtype_1 = test.type, passageway_1 = strPassageway_1, time_1 = dtTime_1, volt_1 = test.volt, resistance_1 = test.resistance, ispass_1 = strIspass_1 } };
+                    dgr = new DataGridRow() { Item = new { barcod = test.barcode, model = strModel, from_user1 = strFrom_user1, testtype_1 = test.type, passageway_1 = strPassageway_1, time_1 = dtTime_1, volt_1 = test.volt, resistance_1 = test.resistance, ispass_1 = strIspass_1,remark_1=strRemark_1 } };
                     dgr.Background = new SolidColorBrush(Colors.Red);
                     dgO1.Items.Add(dgr);
                     //面板数据控制
@@ -295,7 +347,7 @@ namespace HASystem.Panels
                 {
                     if (MessageBox.Show(test.barcode + "型号的电池已经进行过O1测试，是否覆盖？", "警告", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
                     {
-                        SaveTestData.UpdateTsetData_O1(test.barcode, strFrom_user1, strTesttype_1, strPassageway_1, dtTime_1, (decimal)test.volt, (decimal)test.resistance, strIspass_1);
+                        SaveTestData.UpdateTsetData_O1(test.barcode, strFrom_user1, strTesttype_1, strPassageway_1, dtTime_1, (decimal)test.volt, (decimal)test.resistance, strIspass_1, strRemark_1);
                     }
                     else//面板数据统计调整
                     {
@@ -309,13 +361,14 @@ namespace HASystem.Panels
                             sum--;
                             npass--;
                         }
-                        if(sum>1)
+                        if (sum >= 1)
                             rapass = pass / sum * 100;//通过率的计算
+                        else rapass = 0;
                     }
                 }
                 else
                 {
-                    SaveTestData.AddNewTsetData_O1(test.barcode, strModel, strFrom_user1, strTesttype_1, strPassageway_1, dtTime_1, (decimal)test.volt, (decimal)test.resistance, strIspass_1);
+                    SaveTestData.AddNewTsetData_O1(test.barcode, strModel, strFrom_user1, strTesttype_1, strPassageway_1, dtTime_1, (decimal)test.volt, (decimal)test.resistance, strIspass_1,strRemark_1);
                 }
 
             }
@@ -341,12 +394,21 @@ namespace HASystem.Panels
                     return;
                 }
                 //计算K值
-                test.kvalue = SaveTestData.getK(test.barcode, test.volt, dtTime_2);
+                try
+                {
+                    test.kvalue =Math.Round(SaveTestData.getK(test.barcode, test.volt, dtTime_2),4);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                    return;
+                }
                 //面板数据处理
                 if (test.volt >= double.Parse(labVoltMin.Content.ToString()) && test.volt <= double.Parse(labVoltMax.Content.ToString()) && test.resistance >= double.Parse(labResistanceMin.Content.ToString()) && test.resistance <= double.Parse(labResistanceMax.Content.ToString())&&test.kvalue>=double.Parse(labKMin.Content.ToString())&&test.kvalue<=double.Parse(labKMax.Content.ToString()))//判断为合格
                 {
+                    strRemark_2 = "测试通过！";
                     strIspass_2 = "PASS";
-                    dgr = new DataGridRow() { Item = new { barcod = test.barcode, model = strModel, from_user2 = strFrom_user2, testtype_2 = test.type, passageway_2 = strPassageway_2, time_2 = dtTime_2, volt_2 = test.volt, resistance_2 = test.resistance, k_value_2=test.kvalue, ispass_2 = strIspass_2 } };
+                    dgr = new DataGridRow() { Item = new { barcod = test.barcode, model = strModel, from_user2 = strFrom_user2, testtype_2 = test.type, passageway_2 = strPassageway_2, time_2 = dtTime_2, volt_2 = test.volt, resistance_2 = test.resistance, k_value_2 = test.kvalue, ispass_2 = strIspass_2, remark_2 = strRemark_2 } };
                     dgOB.Items.Add(dgr);
                     //面板数据控制
                     sum++;
@@ -357,8 +419,21 @@ namespace HASystem.Panels
                 }
                 else//判断为不合格
                 {
+                    strRemark_2 = "";
+                    if (test.volt < double.Parse(labVoltMin.Content.ToString()))
+                        strRemark_2 = "测试电压低于下限设定值！ ";
+                    if (test.volt > double.Parse(labVoltMax.Content.ToString()))
+                        strRemark_2 += "测试电压高于上限设定值！ ";
+                    if (test.resistance < double.Parse(labResistanceMin.Content.ToString()))
+                        strRemark_2 += "测试内阻低于下限设定值！ ";
+                    if (test.resistance > double.Parse(labResistanceMax.Content.ToString()))
+                        strRemark_2 += "测试内阻高于上限设定值！ ";
+                    if(test.kvalue< double.Parse(labKMin.Content.ToString()))
+                        strRemark_2 += "测试K值低于下限设定值！ ";
+                    if (test.kvalue > double.Parse(labKMax.Content.ToString()))
+                        strRemark_2 += "测试K值高于上限设定值！ ";
                     strIspass_2 = "FAIL";
-                    dgr = new DataGridRow() { Item = new { barcod = test.barcode, model = strModel, from_user2 = strFrom_user2, testtype_2 = test.type, passageway_2 = strPassageway_2, time_2 = dtTime_2, volt_2 = test.volt, resistance_2 = test.resistance, k_value_2=test.kvalue, ispass_2 = strIspass_2 } };
+                    dgr = new DataGridRow() { Item = new { barcod = test.barcode, model = strModel, from_user2 = strFrom_user2, testtype_2 = test.type, passageway_2 = strPassageway_2, time_2 = dtTime_2, volt_2 = test.volt, resistance_2 = test.resistance, k_value_2 = test.kvalue, ispass_2 = strIspass_2, remark_2 = strRemark_2 } };
                     dgr.Background = new SolidColorBrush(Colors.Red);
                     dgOB.Items.Add(dgr);
                     //面板数据控制
@@ -377,7 +452,7 @@ namespace HASystem.Panels
                 {
                     if (MessageBox.Show(test.barcode + "型号的电池已经进行过OB测试，是否覆盖？", "警告", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
                     {
-                        SaveTestData.AddNewTsetData_OB(test.barcode, strFrom_user2, test.type, strPassageway_2, dtTime_2, (decimal)test.volt, (decimal)test.resistance, (decimal)test.kvalue, strIspass_2);
+                        SaveTestData.AddNewTsetData_OB(test.barcode, strFrom_user2, test.type, strPassageway_2, dtTime_2, (decimal)test.volt, (decimal)test.resistance, (decimal)test.kvalue, strIspass_2, strRemark_2);
                     }
                     else
                     {
@@ -391,13 +466,15 @@ namespace HASystem.Panels
                             sum--;
                             npass--;
                         }
-                        if(sum>1)
+                        if (sum >= 1)
                             rapass = pass / sum * 100;//通过率的计算
+                        else
+                            rapass = 0;
                     }
                 }
                 else
                 {
-                    SaveTestData.AddNewTsetData_OB(test.barcode, strFrom_user2, test.type, strPassageway_2, dtTime_2, (decimal)test.volt, (decimal)test.resistance, (decimal)test.kvalue, strIspass_2);
+                    SaveTestData.AddNewTsetData_OB(test.barcode, strFrom_user2, test.type, strPassageway_2, dtTime_2, (decimal)test.volt, (decimal)test.resistance, (decimal)test.kvalue, strIspass_2, strRemark_2);
                 }
             }
 
@@ -405,15 +482,8 @@ namespace HASystem.Panels
             labTotal.Content = sum;
             labQualified.Content = pass;
             labUnQualified.Content = npass;
-            labQualifiedRate.Content = rapass;
-            if (dgO1.Items.Count > 10)
-            {
-                dgO1.Items.Clear();
-            }
-            if (dgOB.Items.Count > 10)
-            {
-                dgOB.Items.Clear();
-            }
+            labQualifiedRate.Content = Math.Round(rapass, 2);
+          
         }
         //结束按钮
         private void btnStop_Click(object sender, RoutedEventArgs e)
@@ -428,21 +498,14 @@ namespace HASystem.Panels
             txtBarcode.IsEnabled = false;
             sp.Close();
             timer.Stop();
-            //面板计数清除
-            sum = 0;
-            pass = 0;
-            npass = 0;
-            rapass = 0;
-            labTotal.Content = "0";
-            labQualified.Content = "0";
-            labUnQualified.Content = "0";
-            labQualifiedRate.Content = "0";
         }
         //复位按钮
         private void btnReset_Click(object sender, RoutedEventArgs e)
         {
+            dgO1.Items.Clear();
+            dgOB.Items.Clear();
+            txtBarcode.Text = "";
             comboModel.SelectedIndex = -1;
-            btnStart.IsEnabled = true;
             labVoltMax.Content = 0;
             labVoltMin.Content = 0;
             labResistanceMax.Content = 0;
@@ -461,22 +524,31 @@ namespace HASystem.Panels
             labQualified.Content = "0";
             labUnQualified.Content = "0";
             labQualifiedRate.Content = "0";
+            mi.GetModelData();
             //方法体
-            IniSerial();
-            //将命令转换成十六进制
-            var strs = strReset.Split(' ');
-            var bytes = new byte[strs.Length];
-            for (int i = 0; i < strs.Length; i++)
+            try
             {
-                bytes[i] = byte.Parse(strs[i], System.Globalization.NumberStyles.HexNumber);
+                IniSerial();
+                //将命令转换成十六进制
+                var strs = strReset.Split(' ');
+                var bytes = new byte[strs.Length];
+                for (int i = 0; i < strs.Length; i++)
+                {
+                    bytes[i] = byte.Parse(strs[i], System.Globalization.NumberStyles.HexNumber);
+                }
+                sp.Write(bytes, 0, bytes.Length);
+                sp.Close();
+                btnStart.IsEnabled = true;
+                ResetProcessBarVisity();
             }
-            sp.Write(bytes, 0, bytes.Length);
-            sp.Close();
+            catch
+            {
+                MessageBox.Show("暂无插入串口！");
+            }
         }
         //选择型号变更测试规格
         private void comboType_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            //
             string selected = comboModel.SelectedValue?.ToString();
             if (selected == null)
                 return;
@@ -495,7 +567,7 @@ namespace HASystem.Panels
                 labResistanceMin.Content = (from l in mi.list
                                             where l.model == selected
                                             select l.resistanceMin1).ToArray()[0];
-                compensate = (from l in mi.list
+                strcompensate = (from l in mi.list
                               where l.model == selected
                               select l.volt_compensate).ToArray()[0];
                 labKMax.Content = 0;
@@ -523,7 +595,7 @@ namespace HASystem.Panels
                 labKMin.Content = (from l in mi.list
                                    where l.model == selected
                                    select l.k_valueMin2).ToArray()[0];
-                compensate = (from l in mi.list
+                strcompensate = (from l in mi.list
                                      where l.model == selected
                                      select l.volt_compensate).ToArray()[0];
                 test.type = "OB";
@@ -537,17 +609,17 @@ namespace HASystem.Panels
             {
                 if (txtBarcode.Text.Length <= 3)
                 {
-                    MessageBox.Show("错误的电池编码！");
+                    MessageBox.Show("错误的电池编码！","提示", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
                 }
                 else if (comboModel.Text.Substring(0, 3).Equals(txtBarcode.Text.Substring(0, 3)) == false)
                 {
-                    MessageBox.Show("电池型号不符合，无法测试！", "提示", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show("电池型号与条码不符合，无法测试！", "提示", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
                 }
-                else if (txtBarcode.Text.Length != 14)
+                else if (txtBarcode.Text.Trim().Length != 12)
                 {
-                    MessageBox.Show("电池编码为14位！", "提示", MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show("电池编码为12位！", "提示", MessageBoxButton.OK, MessageBoxImage.Information);
                     return;
                 }
                 ReadTestData();
@@ -568,5 +640,8 @@ namespace HASystem.Panels
                 dgOB.Visibility = Visibility.Visible;
             }
         }
+        //加载行号
+        private void dgO1_LoadingRow(object sender, DataGridRowEventArgs e)
+         =>   e.Row.Header = e.Row.GetIndex() + 1;
     }
 }
