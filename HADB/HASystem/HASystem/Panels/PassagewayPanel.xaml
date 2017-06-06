@@ -71,9 +71,9 @@
                     <Button Grid.Row="2" Content="保存" Grid.ColumnSpan="2" Width="70" Height="25" Background="#414c57" Click="btnSave_Click"/>
                 </Grid>
             </TabItem>
-            <TabItem Header="分类条件">
+            <!--<TabItem Header="分类条件">
 
-            </TabItem>
+            </TabItem>-->
         </TabControl>
      
     </Grid>

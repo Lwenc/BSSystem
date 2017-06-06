@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.SQLite;
+using System.Collections.Generic;
 
 namespace HASystem.StaticClass
 {
@@ -164,5 +165,7 @@ namespace HASystem.StaticClass
             conn.Close();
             return b;
         }
+
+        //public static List<string> get
     } 
 }

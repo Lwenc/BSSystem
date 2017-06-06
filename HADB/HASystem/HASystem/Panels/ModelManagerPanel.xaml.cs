@@ -17,7 +17,7 @@ namespace HASystem.Panels
         public ModelManagerPanel()
         {
             InitializeComponent();
-            //GetModel();
+            GetModel();
             panelAlterInfo.RequestBack += (s, e) => Return();
         }
 
@@ -38,6 +38,7 @@ namespace HASystem.Panels
             panelAddModelInfo.Visibility = Visibility.Collapsed;
             gridInfo.Visibility = Visibility.Visible;
             panelAlterInfo.Visibility = Visibility.Collapsed;
+            GetModel();
         }
         //型号信息添加
         private void btnModleAdd_Click(object sender, RoutedEventArgs e)
@@ -118,8 +119,18 @@ namespace HASystem.Panels
         //查找按钮
         private void btnSearch_Click(object sender, RoutedEventArgs e)
         {
-            list = mi.SearchModelData(txtSearch.Text);
-            dgModelInfo.ItemsSource = list;
+            if(txtSearch.Text!="")
+            {
+                list = mi.SearchModelData(txtSearch.Text);
+                dgModelInfo.ItemsSource = list;
+            }
+            else
+                MessageBox.Show("查询信息不能为空！", "提示", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+        //回车键出发查询事件
+        private void txtSearch_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            btnSearch_Click(sender,e);
         }
     }
 }

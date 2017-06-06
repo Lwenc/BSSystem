@@ -42,13 +42,19 @@ namespace HASystem.Panels
         //保存按钮
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
-            ini.path = @"..\\..\\IniConfigures\\SerialSetting.ini";
-            ini.IniWritevalue("Section1", "Key1",comboSerial.Text);
-            ini.IniWritevalue("Section1", "Key2", comBoBaueRate.Text);
-            ini.IniWritevalue("Section1", "Key3", comBoStopBit.Text);
-            ini.IniWritevalue("Section1", "Key4", comboParityBit.Text);
-            ini.IniWritevalue("Section1", "Key5", comBoDataBit.Text);
-            MessageBox.Show("保存成功！");
+            if (comboSerial.Text != "")
+            {
+                ini.path = @"..\\..\\IniConfigures\\SerialSetting.ini";
+                ini.IniWritevalue("Section1", "Key1", comboSerial.Text);
+                ini.IniWritevalue("Section1", "Key2", comBoBaueRate.Text);
+                ini.IniWritevalue("Section1", "Key3", comBoStopBit.Text);
+                ini.IniWritevalue("Section1", "Key4", comboParityBit.Text);
+                ini.IniWritevalue("Section1", "Key5", comBoDataBit.Text);
+                MessageBox.Show("保存成功！");
+
+            }
+            else
+                MessageBox.Show("没有串口数据，保存失败！","提示",MessageBoxButton.OK,MessageBoxImage.Error);
         }
     }
 }

@@ -7,9 +7,56 @@
              mc:Ignorable="d" 
              d:DesignHeight="528.8" d:DesignWidth="1008">
     <Grid Background="White">
+        <Grid.Resources>
+            <!--下拉框箭头-->
+            <ControlTemplate x:Key="ComboBoxTextBox" TargetType="{x:Type TextBox}">
+                <Border x:Name="PART_ContentHost" Focusable="False" Background="{TemplateBinding Background}" />
+            </ControlTemplate>
+            <ControlTemplate x:Key="ComboBoxToggleButton" TargetType="{x:Type ToggleButton}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="30" />
+                    </Grid.ColumnDefinitions>
+                    <Border Grid.Column="0" BorderThickness="2" BorderBrush="Black" Opacity="0.8"/>
+
+                    <Border Grid.Column="1" Background="Black" Opacity="0.8" Cursor="Hand"/>
+                    <Path x:Name="Arrow" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Data="M 0 0 L 4 4 L 8 0 Z" Margin="9,11,8,7" Stretch="Fill" Fill="White" />
+                </Grid>
+            </ControlTemplate>
+            <Style TargetType="{x:Type ComboBox}">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type ComboBox}">
+                            <Grid>
+                                <!-- ToggleButton 已数据绑定到 ComboBox 本身以切换 IsDropDownOpen -->
+                                <ToggleButton Grid.Column="2" Template="{DynamicResource ComboBoxToggleButton}" x:Name="ToggleButton" Focusable="false" IsChecked="{Binding Path=IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" ClickMode="Press"/>
+                                <ContentPresenter HorizontalAlignment="Center" Margin="3,3,23,3" x:Name="ContentSite" VerticalAlignment="Center" Content="{TemplateBinding SelectionBoxItem}" ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}" ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}" IsHitTestVisible="False"/>
+
+                                <!-- 必须将 TextBox 命名为 PART_EditableTextBox，否则 ComboBox 将无法识别它 -->
+                                <TextBox Visibility="Hidden" Template="{DynamicResource ComboBoxTextBox}" HorizontalAlignment="Left" Margin="3,3,23,3" x:Name="PART_EditableTextBox" Style="{x:Null}" VerticalAlignment="Center" Focusable="True" Background="Transparent" IsReadOnly="{TemplateBinding IsReadOnly}"/>
+
+                                <!-- Popup 可显示 ComboBox 中的项列表。IsOpen 已数据绑定到通过 ComboBoxToggleButton 来切换的 IsDropDownOpen -->
+                                <Popup IsOpen="{TemplateBinding IsDropDownOpen}" Placement="Bottom" x:Name="Popup" Focusable="False" AllowsTransparency="True" PopupAnimation="Slide">
+                                    <Grid MaxHeight="{TemplateBinding MaxDropDownHeight}" MinWidth="{TemplateBinding ActualWidth}" x:Name="DropDown" SnapsToDevicePixels="True">
+                                        <Border x:Name="DropDownBorder" Background="{DynamicResource WindowBackgroundBrush}" BorderBrush="{DynamicResource SolidBorderBrush}" BorderThickness="1"/>
+                                        <ScrollViewer Margin="4,6,4,6" Style="{DynamicResource SimpleScrollViewer}" SnapsToDevicePixels="True" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" CanContentScroll="True">
+                                            <!-- StackPanel 用于显示子级，方法是将 IsItemsHost 设置为 True -->
+                                            <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained" Background="White"/>
+                                        </ScrollViewer>
+                                    </Grid>
+                                </Popup>
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="FontSize" Value="12"/>
+            </Style>
+        </Grid.Resources>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="0.15*"/>
-            <ColumnDefinition/>
+            <ColumnDefinition Width="131*"/>
+            <ColumnDefinition Width="224*"/>
+            <ColumnDefinition Width="653*"/>
         </Grid.ColumnDefinitions>
         <Grid Grid.Column="0"  Background="#323b44">
             <Grid.Resources>
@@ -47,26 +94,33 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <Button x:Name="btnTestInfo" Content="查看全部数据" Grid.Row="0" Click="btnTestInfo_Click"/>
-            <Button x:Name="btnLog" Content="操作日志" Grid.Row="1" Click="btnLog_Click" Visibility="Collapsed"/>
+            <!--<Button x:Name="btnLog" Content="操作日志" Grid.Row="1" Click="btnLog_Click" Visibility="Collapsed"/>-->
         </Grid>
-        <Grid Grid.Column="1">
+        <Grid Grid.Column="1" Grid.ColumnSpan="2">
             <Grid x:Name="gridInfo">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="1*"/>
                     <RowDefinition Height="6*"/>
                 </Grid.RowDefinitions>
                 <Grid Grid.Row="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="9*"/>
-                        <ColumnDefinition Width="0.02*"/>
-                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
                     </Grid.ColumnDefinitions>
-                    <TextBox Width="200" Height="30" x:Name="txtSearch" HorizontalAlignment="Right" VerticalAlignment="Center"
-                         VerticalContentAlignment="Center" Foreground="Indigo" TabIndex="0" BorderThickness="1" Grid.Column="0">
+                    <TextBox Width="118" Height="30" x:Name="txtSearch" HorizontalAlignment="Right" VerticalAlignment="Center" KeyDown="txtSearch_KeyDown"
+                         VerticalContentAlignment="Center" Foreground="Indigo" TabIndex="0" BorderThickness="1" Grid.Row="1" Grid.Column="0">
                         <TextBox.Resources>
                             <VisualBrush x:Key="HelpBrush" TileMode="None" Opacity="0.3" Stretch="None" AlignmentX="Left">
                                 <VisualBrush.Visual>
-                                    <TextBlock FontStyle="Italic" Text="请输入型号/条码/测试类型"/>
+                                    <TextBlock FontStyle="Italic" Text="请输入条码"/>
                                 </VisualBrush.Visual>
                             </VisualBrush>
                         </TextBox.Resources>
@@ -83,11 +137,15 @@
                             </Style>
                         </TextBox.Style>
                     </TextBox>
-                    <Button x:Name="btnSearch" Content="查找" Width="80" Height="30" HorizontalAlignment="Left" Foreground="White" Background="#414c57" Grid.Column="2" Click="btnSearch_Click"/>
-                    <Label x:Name="label" Content="按O1测试时间查询：" HorizontalAlignment="Left" Margin="84,27,0,0" VerticalAlignment="Top"/>
-                    <Label x:Name="label_Copy" Content="按OB测试时间查询：" HorizontalAlignment="Left" Margin="339,26,0,0" VerticalAlignment="Top"/>
-                    <DatePicker HorizontalAlignment="Left" Name="dpGetDataOB"  Margin="463,26,0,0" VerticalAlignment="Top" CalendarClosed="dpGetDataOB_CalendarClosed"/>
-                    <DatePicker HorizontalAlignment="Left" Name="dpGetDataO1" Margin="209,28,0,0" VerticalAlignment="Top" CalendarClosed="dpGetDataO1_CalendarClosed"/>
+                    <Button x:Name="btnSearch" Content="查找" Width="80" Height="30" HorizontalAlignment="Left" Grid.Column="1" Grid.Row="1" Foreground="White" Background="#414c57" Click="btnSearch_Click"/>
+                    <Label Content="按测试时间查询：" HorizontalAlignment="Right"  VerticalAlignment="Center"/>
+                    <Label Content="型号查询：" Grid.Column="2"  HorizontalAlignment="Right"  VerticalAlignment="Center"/>
+                    <Label Content="测试类型查询：" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Right"  VerticalAlignment="Center"/>
+                    <DatePicker HorizontalAlignment="Left" Name="dpGetData" Grid.Column="1" VerticalAlignment="Center" CalendarClosed="dpGetData_CalendarClosed"/>
+                    <ComboBox x:Name="comboModel" Grid.Column="3" Height="30" SelectionChanged="comboModel_SelectionChanged"/>
+                    <ComboBox x:Name="comboType" Grid.Row="1" Grid.Column="3" Height="30" SelectionChanged="comboType_SelectionChanged"/>
+                    <Button x:Name="btnImport" Content="导出数据" Grid.Row="1" Grid.Column="4" Height="30" Width="95" Grid.ColumnSpan="2"
+                            Foreground="White" Background="#414c57" Click="menuTestExport_Click"/>
                 </Grid>
                 <Grid Grid.Row="2">
                     <DataGrid x:Name="dgTestInfo" Margin="9,0,6,5" AutoGenerateColumns="False" BorderBrush="#323b44" LoadingRow="dgTestInfo_LoadingRow"

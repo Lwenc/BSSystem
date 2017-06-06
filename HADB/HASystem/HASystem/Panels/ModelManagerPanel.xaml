@@ -60,7 +60,7 @@
                     <ColumnDefinition Width="0.02*"/>
                     <ColumnDefinition Width="1*"/>
                 </Grid.ColumnDefinitions>
-                <TextBox Width="200" Height="30" x:Name="txtSearch" HorizontalAlignment="Right" VerticalAlignment="Center"
+                <TextBox Width="200" Height="30" x:Name="txtSearch" HorizontalAlignment="Right" VerticalAlignment="Center" KeyDown="txtSearch_KeyDown"
                          VerticalContentAlignment="Center" Foreground="Indigo" TabIndex="0" BorderThickness="1" Grid.Column="0">
                     <TextBox.Resources>
                         <VisualBrush x:Key="HelpBrush" TileMode="None" Opacity="0.3" Stretch="None" AlignmentX="Left">

@@ -80,7 +80,7 @@
                     <Grid.RowDefinitions>
                         <RowDefinition/>
                         <RowDefinition/>
-                        <RowDefinition/>
+                        <RowDefinition Height="28"/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
@@ -90,9 +90,11 @@
                     </Grid.ColumnDefinitions>
                     <Label Content="型   号：" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Right"/>
                     <ComboBox x:Name="comboModel" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Width="120" Height="25" HorizontalAlignment="Left" SelectionChanged="comboType_SelectionChanged"/>
-                    <Label Content="测试类型：" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right"/>
+                        <ComboBox x:Name="comboModel2" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Width="120" Height="25" HorizontalAlignment="Left" Visibility="Hidden" DropDownClosed="comboModel2_DropDownClosed"/>
+                        <Label Content="测试类型：" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right"/>
                     <ComboBox x:Name="comboType" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Width="120" Height="25" HorizontalAlignment="Left" SelectionChanged="comboType_SelectionChanged" DropDownClosed="comboType_DropDownClosed"/>
-                    <Label Content="条   码：" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Right"/>
+                        <ComboBox x:Name="comboType2" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Width="120" Height="25" HorizontalAlignment="Left" DropDownClosed="comboModel2_DropDownClosed" Visibility="Hidden"/>
+                        <Label Content="条   码：" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Right"/>
                     <Button  x:Name="btnReset" Content="复位" Width="35" Height="20" FontSize="11" Foreground="White" Background="#414c57"
                              Grid.Row="3" Grid.Column="1" HorizontalAlignment="Center" Margin="47,4,13,3" VerticalAlignment="Center" Click="btnReset_Click"/>
                     <Button  x:Name="btnStart" Content="开始" Width="35" Height="20" FontSize="11" Foreground="White" Background="#414c57" Grid.ColumnSpan="2"
@@ -100,9 +102,8 @@
                     <Button  x:Name="btnStop" Content="结束" Width="35" Height="20" FontSize="11"  Foreground="White" Background="#414c57" Grid.ColumnSpan="2"
                              Grid.Row="3" Grid.Column="1" HorizontalAlignment="Center" Margin="0,1,0,1" VerticalAlignment="Center" Visibility="Collapsed" Click="btnStop_Click"/>
                     <TextBox x:Name="txtBarcode" Grid.ColumnSpan="2" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="0,4,0,0" Grid.Row="2" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" IsEnabled="False" KeyDown="txtBarcode_KeyDown"/>
-                    <ComboBox x:Name="cbCunFang" Grid.ColumnSpan="2" HorizontalAlignment="Left" Margin="15,4,0,0" Grid.Row="3" VerticalAlignment="Top" Width="91" Height="20" SelectedIndex="0">
-                    </ComboBox>
-                </Grid>
+                    <ComboBox x:Name="cbCunFang" Grid.ColumnSpan="2" HorizontalAlignment="Left" Margin="15,4,0,0" Grid.Row="3" VerticalAlignment="Top" Width="91" Height="20" SelectedIndex="0" DropDownClosed="cbCunFang_DropDownClosed"/>
+                    </Grid>
             </GroupBox>
             <GroupBox Header="测试规格" FontWeight="Bold" FontSize="12" Margin="5,0" Grid.Column="1" BorderThickness="2">
                 <Grid>
@@ -138,7 +139,7 @@
                     <Label x:Name="labKMin" Content="0" HorizontalAlignment="Left" Grid.Row="2" Grid.Column="3"/>
                 </Grid>
             </GroupBox>
-            <GroupBox Header="测试统计" Width="215" Height="132" FontSize="12" FontWeight="Bold" Grid.Column="2" BorderThickness="2">
+            <GroupBox Header="测试统计"  FontSize="12" FontWeight="Bold" Grid.Column="2" BorderThickness="2">
                 <Grid>
                     <Grid.Resources>
                         <Style TargetType="Label">
@@ -168,7 +169,7 @@
                 </Grid>
             </GroupBox>
 
-            <GroupBox Header="测试结果" FontSize="12" Width="215" Height="132" FontWeight="Bold" Grid.Column="3" BorderThickness="2">
+            <GroupBox Header="测试结果" FontSize="12" Margin="5,0" FontWeight="Bold" Grid.Column="3" BorderThickness="2">
                 <Grid>
                     <TextBlock x:Name="tbResult" FontSize="50" Text="PASS" Foreground="GreenYellow" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                 </Grid>
@@ -212,7 +213,17 @@
                     <DataGridTextColumn Binding="{Binding remark_2}" ClipboardContentBinding="{x:Null}" Header="测试报告"/>
                 </DataGrid.Columns>
             </DataGrid>
-            <!--<uc:PassageWayUC Grid.Column="1"/>
+                <DataGrid x:Name="dgNet" Grid.ColumnSpan="2" FontWeight="Bold" Grid.RowSpan="2" IsHitTestVisible="False" Margin="12,-4,8,14" LoadingRow="dgO1_LoadingRow" IsReadOnly="True" Visibility="Hidden">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Binding="{Binding CellName}" ClipboardContentBinding="{x:Null}" Header="电池条码"/>
+                        <DataGridTextColumn Binding="{Binding TestType}" ClipboardContentBinding="{x:Null}" Header="测试类型"/>
+                        <DataGridTextColumn Binding="{Binding Machine}" ClipboardContentBinding="{x:Null}" Header="机器名"/>
+                        <DataGridTextColumn Binding="{Binding Ocv1}" ClipboardContentBinding="{x:Null}" Header="电压"/>
+                        <DataGridTextColumn Binding="{Binding Imp1}" ClipboardContentBinding="{x:Null}" Header="内阻"/>
+                        <DataGridTextColumn Binding="{Binding Remark}" ClipboardContentBinding="{x:Null}" Header="测试报告"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+                <!--<uc:PassageWayUC Grid.Column="1"/>
                 <uc:PassageWayUC Grid.Row="1"/>
                 <uc:PassageWayUC  Grid.Row="1" Grid.Column="1"/>-->
         </Grid>

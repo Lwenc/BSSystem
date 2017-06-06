@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.IO.Ports;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -14,7 +15,7 @@ using mi = HASystem.StaticClass.ModelInfo;
 using si = HASystem.StaticClass.SerialInfo;
 using ssi = HASystem.StaticClass.StructSerialInfo;
 using test = HASystem.StaticClass.TestResultInfo;
-using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace HASystem.Panels
 {
@@ -47,6 +48,14 @@ namespace HASystem.Panels
         string strRemark_2;
         string strcompensate=" ";//电压补偿的值
         DateTime dtTime_2;
+
+        //网络测试需要用到的变量
+        string strMachinName;
+        string strBatCode;
+        string strTestType;
+        double dVolt;
+        double dResistance;
+        string strRemark;
 
         public GoodsTestPanel()
         {
@@ -82,6 +91,8 @@ namespace HASystem.Panels
                 btnReset.Visibility = Visibility.Collapsed;
                 comboType.IsEnabled = false;
                 comboModel.IsEnabled = false;
+                comboType2.IsEnabled = false;
+                comboModel2.IsEnabled = false;
                 cbCunFang.IsEnabled = false;
                 txtBarcode.IsEnabled = true;
                 IniSerial();
@@ -245,9 +256,6 @@ namespace HASystem.Panels
                    byte[] by = new byte[lenght];
                    sp.Read(by, 0, lenght);
                    SetData(by);
-                   //tbResult.Text = "PASS";
-                   //test.ispass = "PASS";
-                   //tbResult.Foreground = new SolidColorBrush(Colors.GreenYellow);
                    txtBarcode.Clear();
                    timer.Stop();
                 }     
@@ -269,7 +277,15 @@ namespace HASystem.Panels
             string strResistance = ((char)by[3]).ToString()+ ((char)by[4]).ToString()+ ((char)by[5]).ToString()+ ((char)by[6]).ToString();
             string strVolt= ((char)by[8]).ToString() + ((char)by[9]).ToString() + ((char)by[10]).ToString() + ((char)by[11]).ToString();
             test.barcode = txtBarcode.Text;
-            test.type = comboType.Text;
+            if (cbCunFang.Text.Equals("本地"))
+            {
+                test.type = comboType.Text;
+            }
+            else
+            {
+                test.type = comboType2.Text;
+            }
+           
             
             if (isRBit == "0")
             {
@@ -308,7 +324,7 @@ namespace HASystem.Panels
                 {
                     strRemark_1 = "测试通过！";
                     strIspass_1 = "PASS";
-                    dgr = new DataGridRow() { Item = new {barcod = test.barcode, model = strModel, from_user1 = strFrom_user1, testtype_1=test.type, passageway_1=strPassageway_1,time_1=dtTime_1,volt_1=test.volt, resistance_1=test.resistance, ispass_1=strIspass_1, remark_1=strRemark_1 } };
+                    dgr = new DataGridRow() { Item = new { barcod = test.barcode, model = strModel, from_user1 = strFrom_user1, testtype_1 = test.type, passageway_1 = strPassageway_1, time_1 = dtTime_1, volt_1 = test.volt, resistance_1 = test.resistance, ispass_1 = strIspass_1, remark_1 = strRemark_1 } };
                     dgO1.Items.Add(dgr);
                     //面板数据控制
                     sum++;
@@ -322,14 +338,14 @@ namespace HASystem.Panels
                     strRemark_1 = "";
                     if (test.volt < double.Parse(labVoltMin.Content.ToString()))
                         strRemark_1 = "测试电压低于下限设定值！ ";
-                    if(test.volt> double.Parse(labVoltMax.Content.ToString()))
+                    if (test.volt > double.Parse(labVoltMax.Content.ToString()))
                         strRemark_1 += "测试电压高于上限设定值！ ";
-                    if(test.resistance< double.Parse(labResistanceMin.Content.ToString()))
+                    if (test.resistance < double.Parse(labResistanceMin.Content.ToString()))
                         strRemark_1 += "测试内阻低于下限设定值！ ";
                     if (test.resistance > double.Parse(labResistanceMax.Content.ToString()))
                         strRemark_1 += "测试内阻高于上限设定值！ ";
                     strIspass_1 = "FAIL";
-                    dgr = new DataGridRow() { Item = new { barcod = test.barcode, model = strModel, from_user1 = strFrom_user1, testtype_1 = test.type, passageway_1 = strPassageway_1, time_1 = dtTime_1, volt_1 = test.volt, resistance_1 = test.resistance, ispass_1 = strIspass_1,remark_1=strRemark_1 } };
+                    dgr = new DataGridRow() { Item = new { barcod = test.barcode, model = strModel, from_user1 = strFrom_user1, testtype_1 = test.type, passageway_1 = strPassageway_1, time_1 = dtTime_1, volt_1 = test.volt, resistance_1 = test.resistance, ispass_1 = strIspass_1, remark_1 = strRemark_1 } };
                     dgr.Background = new SolidColorBrush(Colors.Red);
                     dgO1.Items.Add(dgr);
                     //面板数据控制
@@ -356,7 +372,7 @@ namespace HASystem.Panels
                             sum--;
                             pass--;
                         }
-                        else if(strIspass_1.Equals("FAIL"))
+                        else if (strIspass_1.Equals("FAIL"))
                         {
                             sum--;
                             npass--;
@@ -368,11 +384,11 @@ namespace HASystem.Panels
                 }
                 else
                 {
-                    SaveTestData.AddNewTsetData_O1(test.barcode, strModel, strFrom_user1, strTesttype_1, strPassageway_1, dtTime_1, (decimal)test.volt, (decimal)test.resistance, strIspass_1,strRemark_1);
+                    SaveTestData.AddNewTsetData_O1(test.barcode, strModel, strFrom_user1, strTesttype_1, strPassageway_1, dtTime_1, (decimal)test.volt, (decimal)test.resistance, strIspass_1, strRemark_1);
                 }
 
             }
-            else//下面执行OB测试的代码
+            else if (test.type.Equals("OB"))//下面执行OB测试的代码
             {
                 strModel = comboModel.Text;
                 strFrom_user2 = "";
@@ -383,20 +399,20 @@ namespace HASystem.Panels
                 bool b = SaveTestData.CheckBarCode(test.barcode, "O1");
                 if (b == false)
                 {
-                    MessageBox.Show(test.barcode+"电池没有进行O1测试，不可以进行OB测试！","提示",MessageBoxButton.OK,MessageBoxImage.Information);
+                    MessageBox.Show(test.barcode + "电池没有进行O1测试，不可以进行OB测试！", "提示", MessageBoxButton.OK, MessageBoxImage.Information);
                     return;
                 }
                 //判断电池O1测试是否合格
                 bool b2 = SaveTestData.CheckBarCodePsaa1(test.barcode);
                 if (b2 == false)//不合格
                 {
-                    MessageBox.Show(test.barcode+"电池的O1测试不合格，不可以进行OB测试！","提示",MessageBoxButton.OK,MessageBoxImage.Information);
+                    MessageBox.Show(test.barcode + "电池的O1测试不合格，不可以进行OB测试！", "提示", MessageBoxButton.OK, MessageBoxImage.Information);
                     return;
                 }
                 //计算K值
                 try
                 {
-                    test.kvalue =Math.Round(SaveTestData.getK(test.barcode, test.volt, dtTime_2),4);
+                    test.kvalue = Math.Round(SaveTestData.getK(test.barcode, test.volt, dtTime_2), 4);
                 }
                 catch (Exception ex)
                 {
@@ -404,7 +420,7 @@ namespace HASystem.Panels
                     return;
                 }
                 //面板数据处理
-                if (test.volt >= double.Parse(labVoltMin.Content.ToString()) && test.volt <= double.Parse(labVoltMax.Content.ToString()) && test.resistance >= double.Parse(labResistanceMin.Content.ToString()) && test.resistance <= double.Parse(labResistanceMax.Content.ToString())&&test.kvalue>=double.Parse(labKMin.Content.ToString())&&test.kvalue<=double.Parse(labKMax.Content.ToString()))//判断为合格
+                if (test.volt >= double.Parse(labVoltMin.Content.ToString()) && test.volt <= double.Parse(labVoltMax.Content.ToString()) && test.resistance >= double.Parse(labResistanceMin.Content.ToString()) && test.resistance <= double.Parse(labResistanceMax.Content.ToString()) && test.kvalue >= double.Parse(labKMin.Content.ToString()) && test.kvalue <= double.Parse(labKMax.Content.ToString()))//判断为合格
                 {
                     strRemark_2 = "测试通过！";
                     strIspass_2 = "PASS";
@@ -428,7 +444,7 @@ namespace HASystem.Panels
                         strRemark_2 += "测试内阻低于下限设定值！ ";
                     if (test.resistance > double.Parse(labResistanceMax.Content.ToString()))
                         strRemark_2 += "测试内阻高于上限设定值！ ";
-                    if(test.kvalue< double.Parse(labKMin.Content.ToString()))
+                    if (test.kvalue < double.Parse(labKMin.Content.ToString()))
                         strRemark_2 += "测试K值低于下限设定值！ ";
                     if (test.kvalue > double.Parse(labKMax.Content.ToString()))
                         strRemark_2 += "测试K值高于上限设定值！ ";
@@ -446,7 +462,7 @@ namespace HASystem.Panels
 
                 //数据进行存储
                 //数据存储操作
-                //判断是否已经有电池的O1测试
+                //判ELHG
                 bool bb = SaveTestData.CheckBarCode(test.barcode, "OB");
                 if (bb == true)//如果有，需要覆盖吗？
                 {
@@ -461,7 +477,7 @@ namespace HASystem.Panels
                             sum--;
                             pass--;
                         }
-                        else if(strIspass_2.Equals("FAIL"))
+                        else if (strIspass_2.Equals("FAIL"))
                         {
                             sum--;
                             npass--;
@@ -475,6 +491,112 @@ namespace HASystem.Panels
                 else
                 {
                     SaveTestData.AddNewTsetData_OB(test.barcode, strFrom_user2, test.type, strPassageway_2, dtTime_2, (decimal)test.volt, (decimal)test.resistance, (decimal)test.kvalue, strIspass_2, strRemark_2);
+                }
+            }
+            else if (test.type.Equals("OF"))//下面的开始进行联网版测试
+            {
+                strBatCode = txtBarcode.Text.Trim();
+                strMachinName = MiddleService.DataSwap.GetComputerName();
+                strTestType = "OF";
+                dVolt = test.volt;
+                dResistance = test.resistance;
+                string strTip = MiddleService.DataSwap.uploadData(strBatCode,dVolt.ToString(),dResistance.ToString(),strTestType,strMachinName);
+                if (strTip == "-1")
+                {
+                    MessageBox.Show("条码错误！");
+                    tbResult.Text = "";
+                }
+                else if (strTip == "0")
+                {
+                    strRemark = "数据上传成功！";
+                    dgr = new DataGridRow() { Item = new { CellName = strBatCode, TestType = strTestType, Machine = strMachinName, Ocv1 = dVolt, Imp1 = dResistance, Remark = strRemark } };
+                    dgNet.Items.Add(dgr);
+                    //面板数据控制
+                    sum++;
+                    pass++;
+                    rapass = pass / sum * 100;//通过率的计算
+                    tbResult.Text = "PASS";
+                    tbResult.Foreground = new SolidColorBrush(Colors.YellowGreen);
+                }
+                else if (strTip == "1")
+                {
+                    strRemark = "OCV坏品";
+                    dgr = new DataGridRow() { Item = new { CellName = strBatCode, TestType = strTestType, Machine = strMachinName, Ocv1 = dVolt, Imp1 = dResistance, Remark = strRemark } };
+                    dgr.Background = new SolidColorBrush(Colors.Red);
+                    dgNet.Items.Add(dgr);
+                    //面板数据控制
+                    sum++;
+                    npass++;
+                    rapass = pass / sum * 100;//通过率的计算
+                    tbResult.Text = "FAIL";
+                    tbResult.Foreground = new SolidColorBrush(Colors.Red);
+                }
+                else if (strTip == "2")
+                {
+                    strRemark = "K，Drop坏品";
+                    dgr = new DataGridRow() { Item = new { CellName = strBatCode, TestType = strTestType, Machine = strMachinName, Ocv1 = dVolt, Imp1 = dResistance, Remark = strRemark } };
+                    dgr.Background = new SolidColorBrush(Colors.Red);
+                    dgNet.Items.Add(dgr);
+                    //面板数据控制
+                    sum++;
+                    npass++;
+                    rapass = pass / sum * 100;//通过率的计算
+                    tbResult.Text = "FAIL";
+                    tbResult.Foreground = new SolidColorBrush(Colors.Red);
+                }
+                else if (strTip == "3")
+                {
+                    strRemark = "Imp坏品";
+                    dgr = new DataGridRow() { Item = new { CellName = strBatCode, TestType = strTestType, Machine = strMachinName, Ocv1 = dVolt, Imp1 = dResistance, Remark = strRemark } };
+                    dgr.Background = new SolidColorBrush(Colors.Red);
+                    dgNet.Items.Add(dgr);
+                    //面板数据控制
+                    sum++;
+                    npass++;
+                    rapass = pass / sum * 100;//通过率的计算
+                    tbResult.Text = "FAIL";
+                    tbResult.Foreground = new SolidColorBrush(Colors.Red);
+                }
+                else if (strTip == "4")
+                {
+                    MessageBox.Show("超时或者缺失项目");
+                    tbResult.Text = "";
+                }
+                else if (strTip == "5")
+                {
+                    MessageBox.Show("不能插入数据或已存在该数据");
+                    tbResult.Text = "";
+                }
+                else if (strTip == "6")
+                {
+                    MessageBox.Show("未知");
+                    tbResult.Text = "";
+                }
+                else if (strTip == "7")
+                {
+                    MessageBox.Show("MI不匹配");
+                    tbResult.Text = "";
+                }
+                else if (strTip == "8")
+                {
+                    MessageBox.Show("做货类类型不匹配");
+                    tbResult.Text = "";
+
+                }
+                else if (strTip == "9")
+                {
+                    MessageBox.Show("已打包");
+                    tbResult.Text = "";
+                }
+                else if (strTip == "10")
+                {
+                    MessageBox.Show("条码检测有问题");
+                    tbResult.Text = "";
+                }
+                if (strTip == "11")
+                {
+                    MessageBox.Show("无权限");
+                    tbResult.Text = "";
                 }
             }
 
@@ -494,6 +616,8 @@ namespace HASystem.Panels
             btnReset.Visibility = Visibility.Visible;
             comboType.IsEnabled = true;
             comboModel.IsEnabled = true;
+            comboType2.IsEnabled = true;
+            comboModel2.IsEnabled = true;
             cbCunFang.IsEnabled = true;
             txtBarcode.IsEnabled = false;
             sp.Close();
@@ -524,7 +648,7 @@ namespace HASystem.Panels
             labQualified.Content = "0";
             labUnQualified.Content = "0";
             labQualifiedRate.Content = "0";
-            mi.GetModelData();
+            //mi.GetModelData();
             //方法体
             try
             {
@@ -552,8 +676,8 @@ namespace HASystem.Panels
             string selected = comboModel.SelectedValue?.ToString();
             if (selected == null)
                 return;
-
-            if(comboType.SelectedIndex==0)
+            mi.GetModelData();
+            if (comboType.SelectedIndex==0)
             {
                 labVoltMax.Content = (from l in mi.list
                                       where l.model == selected
@@ -643,5 +767,59 @@ namespace HASystem.Panels
         //加载行号
         private void dgO1_LoadingRow(object sender, DataGridRowEventArgs e)
          =>   e.Row.Header = e.Row.GetIndex() + 1;
+
+        private void comboModel2_DropDownClosed(object sender, EventArgs e)
+        {
+            if (comboModel2.SelectedIndex == -1)
+            {
+                return;
+            }
+            string str = MiddleService.DataSwap.GetOCVIMPmiSpec(comboModel2.Text, comboType2.Text);
+            string[] Values = str.Split('&');
+            labVoltMin.Content = Values[0];
+            labVoltMax.Content = Values[1];
+            labResistanceMin.Content = Values[2];
+            labResistanceMax.Content = Values[3];
+        }
+
+        private void cbCunFang_DropDownClosed(object sender, EventArgs e)
+        {
+            if (cbCunFang.Text.Equals("本地"))
+            {
+                comboModel.Visibility = Visibility.Visible;
+                comboType.Visibility = Visibility.Visible;
+                comboModel2.Visibility = Visibility.Hidden;
+                comboType2.Visibility = Visibility.Hidden;
+                dgNet.Visibility = Visibility.Hidden;
+
+            }
+            else if (cbCunFang.Text.Equals("网络"))
+            {
+                comboModel.Visibility = Visibility.Hidden;
+                comboType.Visibility = Visibility.Hidden;
+                comboModel2.Visibility = Visibility.Visible;
+                comboType2.Visibility = Visibility.Visible;
+                dgNet.Visibility = Visibility.Visible;
+
+                //下拉框初始化
+                try
+                {
+                    //测试类型下拉款初始化
+                    List<string> listTestType = new List<string>();
+                    listTestType.Add(MiddleService.DataSwap.GetOCVTestType(MiddleService.DataSwap.GetComputerName()));
+                    comboType2.ItemsSource = listTestType;
+                    comboType2.SelectedIndex = 0;
+                    //型号管理下拉框初始化
+                    string str = MiddleService.DataSwap.GetMIList();
+                    string[] strMode = str.Split('#');
+                    comboModel2.ItemsSource = strMode;
+                    comboModel2.SelectedIndex = -1;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
+        }
     }
 }
