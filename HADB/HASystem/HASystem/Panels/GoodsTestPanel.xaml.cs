@@ -1,5 +1,6 @@
 ﻿using HASystem.StaticClass;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO.Ports;
 using System.Linq;
@@ -15,7 +16,6 @@ using mi = HASystem.StaticClass.ModelInfo;
 using si = HASystem.StaticClass.SerialInfo;
 using ssi = HASystem.StaticClass.StructSerialInfo;
 using test = HASystem.StaticClass.TestResultInfo;
-using System.Collections.Generic;
 
 namespace HASystem.Panels
 {
@@ -240,14 +240,12 @@ namespace HASystem.Panels
                 catch (Exception ex)
                 {
                     System.Diagnostics.Debug.WriteLine(ex.Message);
-                }
-            
+                }           
         }
     
         //获得数据方法
         public void GetTestData(object sender, EventArgs e)
         {
-            //System.Threading.Thread.Sleep(1000);
             if (txtBarcode.Text != "")
             {
                 int lenght = sp.BytesToRead;
@@ -767,7 +765,7 @@ namespace HASystem.Panels
         //加载行号
         private void dgO1_LoadingRow(object sender, DataGridRowEventArgs e)
          =>   e.Row.Header = e.Row.GetIndex() + 1;
-
+        //本地和网络下拉框
         private void comboModel2_DropDownClosed(object sender, EventArgs e)
         {
             if (comboModel2.SelectedIndex == -1)
@@ -781,22 +779,22 @@ namespace HASystem.Panels
             labResistanceMin.Content = Values[2];
             labResistanceMax.Content = Values[3];
         }
-
+        //本地和网络下拉框选择触发事件
         private void cbCunFang_DropDownClosed(object sender, EventArgs e)
         {
             if (cbCunFang.Text.Equals("本地"))
             {
                 comboModel.Visibility = Visibility.Visible;
                 comboType.Visibility = Visibility.Visible;
-                comboModel2.Visibility = Visibility.Hidden;
-                comboType2.Visibility = Visibility.Hidden;
-                dgNet.Visibility = Visibility.Hidden;
+                comboModel2.Visibility = Visibility.Collapsed;
+                comboType2.Visibility = Visibility.Collapsed;
+                dgNet.Visibility = Visibility.Collapsed;
 
             }
             else if (cbCunFang.Text.Equals("网络"))
             {
-                comboModel.Visibility = Visibility.Hidden;
-                comboType.Visibility = Visibility.Hidden;
+                comboModel.Visibility = Visibility.Collapsed;
+                comboType.Visibility = Visibility.Collapsed;
                 comboModel2.Visibility = Visibility.Visible;
                 comboType2.Visibility = Visibility.Visible;
                 dgNet.Visibility = Visibility.Visible;
@@ -820,6 +818,132 @@ namespace HASystem.Panels
                     MessageBox.Show(ex.Message);
                 }
             }
+        }
+        //网络测试按钮
+        private void btn_Click(object sender, RoutedEventArgs e)//联网测试用
+        {
+            Random r = new Random();
+            Random r2 = new Random();
+            test.type = "OF";
+            test.resistance = r.Next(1, 100);
+            test.volt = r2.Next(1, 10);
+            //面板显示控制，只能10条数据
+            if (dgNet.Items.Count >= 10)
+            {
+                dgNet.Items.Clear();
+            }
+            if (test.type.Equals("OF"))//下面的开始进行联网版测试
+            {
+                strBatCode = txtBarcode.Text.Trim();
+                strMachinName = MiddleService.DataSwap.GetComputerName();
+                strTestType = "OF";
+                dVolt = test.volt;
+                dResistance = test.resistance;
+                string strTip = MiddleService.DataSwap.uploadData(strBatCode, dVolt.ToString(), dResistance.ToString(), strTestType, strMachinName);
+                if (strTip == "-1")
+                {
+                    MessageBox.Show("条码错误！");
+                    tbResult.Text = "";
+                }
+                else if (strTip.Equals("0_null_成功"))
+                {
+                    strRemark = "数据上传成功！";
+                    dgr = new DataGridRow() { Item = new { CellName = strBatCode, TestType = strTestType, Machine = strMachinName, Ocv1 = dVolt, Imp1 = dResistance, Remark = strRemark } };
+                    dgNet.Items.Add(dgr);
+                    //面板数据控制
+                    sum++;
+                    pass++;
+                    rapass = pass / sum * 100;//通过率的计算
+                    tbResult.Text = "PASS";
+                    tbResult.Foreground = new SolidColorBrush(Colors.YellowGreen);
+                }
+                else if (strTip == "1")
+                {
+                    strRemark = "OCV坏品";
+                    dgr = new DataGridRow() { Item = new { CellName = strBatCode, TestType = strTestType, Machine = strMachinName, Ocv1 = dVolt, Imp1 = dResistance, Remark = strRemark } };
+                    dgr.Background = new SolidColorBrush(Colors.Red);
+                    dgNet.Items.Add(dgr);
+                    //面板数据控制
+                    sum++;
+                    npass++;
+                    rapass = pass / sum * 100;//通过率的计算
+                    tbResult.Text = "FAIL";
+                    tbResult.Foreground = new SolidColorBrush(Colors.Red);
+                }
+                else if (strTip == "2")
+                {
+                    strRemark = "K，Drop坏品";
+                    dgr = new DataGridRow() { Item = new { CellName = strBatCode, TestType = strTestType, Machine = strMachinName, Ocv1 = dVolt, Imp1 = dResistance, Remark = strRemark } };
+                    dgr.Background = new SolidColorBrush(Colors.Red);
+                    dgNet.Items.Add(dgr);
+                    //面板数据控制
+                    sum++;
+                    npass++;
+                    rapass = pass / sum * 100;//通过率的计算
+                    tbResult.Text = "FAIL";
+                    tbResult.Foreground = new SolidColorBrush(Colors.Red);
+                }
+                else if (strTip == "3")
+                {
+                    strRemark = "Imp坏品";
+                    dgr = new DataGridRow() { Item = new { CellName = strBatCode, TestType = strTestType, Machine = strMachinName, Ocv1 = dVolt, Imp1 = dResistance, Remark = strRemark } };
+                    dgr.Background = new SolidColorBrush(Colors.Red);
+                    dgNet.Items.Add(dgr);
+                    //面板数据控制
+                    sum++;
+                    npass++;
+                    rapass = pass / sum * 100;//通过率的计算
+                    tbResult.Text = "FAIL";
+                    tbResult.Foreground = new SolidColorBrush(Colors.Red);
+                }
+                else if (strTip == "4")
+                {
+                    MessageBox.Show("超时或者缺失项目");
+                    tbResult.Text = "";
+                }
+                else if (strTip == "5")
+                {
+                    MessageBox.Show("不能插入数据或已存在该数据");
+                    tbResult.Text = "";
+                }
+                else if (strTip == "6")
+                {
+                    MessageBox.Show("未知");
+                    tbResult.Text = "";
+                }
+                else if (strTip == "7")
+                {
+                    MessageBox.Show("MI不匹配");
+                    tbResult.Text = "";
+                }
+                else if (strTip == "8")
+                {
+                    MessageBox.Show("做货类类型不匹配");
+                    tbResult.Text = "";
+
+                }
+                else if (strTip == "9")
+                {
+                    MessageBox.Show("已打包");
+                    tbResult.Text = "";
+                }
+                else if (strTip == "10")
+                {
+                    MessageBox.Show("条码检测有问题");
+                    tbResult.Text = "";
+                }
+                else if (strTip == "11")
+                {
+                    MessageBox.Show("无权限");
+                    tbResult.Text = "";
+                }
+            }
+
+            //面板计数显示
+            labTotal.Content = sum;
+            labQualified.Content = pass;
+            labUnQualified.Content = npass;
+            labQualifiedRate.Content = Math.Round(rapass, 2);
         }
     }
 }

@@ -89,12 +89,12 @@
                         <ColumnDefinition Width="1*"/>
                     </Grid.ColumnDefinitions>
                     <Label Content="型   号：" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Right"/>
-                    <ComboBox x:Name="comboModel" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Width="120" Height="25" HorizontalAlignment="Left" SelectionChanged="comboType_SelectionChanged"/>
-                        <ComboBox x:Name="comboModel2" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Width="120" Height="25" HorizontalAlignment="Left" Visibility="Hidden" DropDownClosed="comboModel2_DropDownClosed"/>
-                        <Label Content="测试类型：" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right"/>
-                    <ComboBox x:Name="comboType" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Width="120" Height="25" HorizontalAlignment="Left" SelectionChanged="comboType_SelectionChanged" DropDownClosed="comboType_DropDownClosed"/>
-                        <ComboBox x:Name="comboType2" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Width="120" Height="25" HorizontalAlignment="Left" DropDownClosed="comboModel2_DropDownClosed" Visibility="Hidden"/>
-                        <Label Content="条   码：" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Right"/>
+                    <ComboBox x:Name="comboModel" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Width="130" Height="25" HorizontalAlignment="Left" SelectionChanged="comboType_SelectionChanged"/>
+                    <ComboBox x:Name="comboModel2" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Width="130" Height="25" HorizontalAlignment="Left" Visibility="Collapsed" DropDownClosed="comboModel2_DropDownClosed"/>
+                    <Label Content="测试类型：" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right"/>
+                    <ComboBox x:Name="comboType" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Width="130" Height="25" HorizontalAlignment="Left" SelectionChanged="comboType_SelectionChanged" DropDownClosed="comboType_DropDownClosed"/>
+                    <ComboBox x:Name="comboType2" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Width="130" Height="25" HorizontalAlignment="Left" DropDownClosed="comboModel2_DropDownClosed" Visibility="Hidden"/>
+                    <Label Content="条   码：" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Right"/>
                     <Button  x:Name="btnReset" Content="复位" Width="35" Height="20" FontSize="11" Foreground="White" Background="#414c57"
                              Grid.Row="3" Grid.Column="1" HorizontalAlignment="Center" Margin="47,4,13,3" VerticalAlignment="Center" Click="btnReset_Click"/>
                     <Button  x:Name="btnStart" Content="开始" Width="35" Height="20" FontSize="11" Foreground="White" Background="#414c57" Grid.ColumnSpan="2"
@@ -172,7 +172,8 @@
             <GroupBox Header="测试结果" FontSize="12" Margin="5,0" FontWeight="Bold" Grid.Column="3" BorderThickness="2">
                 <Grid>
                     <TextBlock x:Name="tbResult" FontSize="50" Text="PASS" Foreground="GreenYellow" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                </Grid>
+                        <Button x:Name="btn" Content="联网测试" HorizontalAlignment="Left" Margin="10,80,0,0" VerticalAlignment="Top" Width="75" Click="btn_Click"/>
+                    </Grid>
             </GroupBox>
         </Grid>
         <Grid Grid.Row="1">

@@ -4,10 +4,9 @@ using System;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.SQLite;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Linq;
-using mi = HASystem.StaticClass.ModelInfo;
 
 namespace HASystem.Panels
 {
@@ -67,6 +66,7 @@ namespace HASystem.Panels
                     result.remark_2 = reader["remark_2"].ToString();
                     list.Add(result);
                 }
+                conn.Close();
                 return list;
              }
              catch (Exception ex)
@@ -115,6 +115,12 @@ namespace HASystem.Panels
         {
             if (txtSearch.Text != "")
             {
+                string selectedmodel = comboModel.SelectedValue?.ToString();
+                if(selectedmodel==null)
+                {
+                    MessageBox.Show("请选择型号进行条码查询！", "提示", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
                 list = new ObservableCollection<TestResult>();
                 list.Clear();
                 GC.Collect();
@@ -122,8 +128,7 @@ namespace HASystem.Panels
                 {
                     conn.Open();
                     SQLiteCommand cmd = conn.CreateCommand();
-                    cmd.CommandText = $"select * from TestInfo where barcod like '%{txtSearch.Text}%' or model like '%{txtSearch.Text}%' "
-                       + $"or (testtype_1 = 'O1' and ispass_1 = '{txtSearch.Text}') or testtype_1 = '{txtSearch.Text}' or testtype_2 = '{txtSearch.Text}'";
+                    cmd.CommandText = $"select * from TestInfo where barcod like '%{txtSearch.Text}%' and model like '%{selectedmodel}'";
                     SQLiteDataReader reader = cmd.ExecuteReader();
                     TestResult result = default(TestResult);
                     foreach (var item in reader)
@@ -157,7 +162,9 @@ namespace HASystem.Panels
                     conn.Close();
                     System.Diagnostics.Debug.WriteLine(ex.Message);
                 }
-            }           
+            } 
+            else
+                MessageBox.Show("条码不能为空！", "提示", MessageBoxButton.OK, MessageBoxImage.Warning);
         }
         //删除按钮
         private void menuDelete_Click(object sender, RoutedEventArgs e)
