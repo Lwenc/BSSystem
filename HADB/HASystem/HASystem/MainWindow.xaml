@@ -33,7 +33,7 @@
             <uc:btnUserControl x:Name="rdiTest" AppearanceSource="Image/test.png" Click="Switching" Width="100" Height="100" Grid.Column="0"/>
             <uc:btnUserControl x:Name="rdiData" AppearanceSource="Image/data.png" Click="Switching" Width="100" Height="100" Grid.Column="1"/>
             <uc:btnUserControl x:Name="rdiModel" AppearanceSource="Image/model.png" Click="Switching" Width="100" Height="100" Grid.Column="2"/>
-            <uc:btnUserControl x:Name="rdiUser" AppearanceSource="Image/user.png" Click="Switching" Width="100" Height="100" Grid.Column="4" Visibility="Collapsed"/>
+            <uc:btnUserControl x:Name="rdiUser" AppearanceSource="Image/user.png" Click="Switching" Width="100" Height="100" Grid.Column="4"/>
             <uc:btnUserControl x:Name="rdiSystem" AppearanceSource="Image/system.png" Click="Switching" Width="100" Height="100" Grid.Column="3"/>
         </Grid>
         <Grid x:Name="contentDisplay" Background="White" Opacity="0.8" Grid.Row="1">

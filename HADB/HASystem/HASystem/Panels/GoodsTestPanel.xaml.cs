@@ -627,17 +627,17 @@ namespace HASystem.Panels
             dgO1.Items.Clear();
             dgOB.Items.Clear();
             txtBarcode.Text = "";
-            comboModel.SelectedIndex = -1;
-            labVoltMax.Content = 0;
-            labVoltMin.Content = 0;
-            labResistanceMax.Content = 0;
-            labResistanceMin.Content = 0;
-            labKMax.Content = 0;
-            labKMin.Content = 0;
-            labTotal.Content = 0;
-            labUnQualified.Content = 0;
-            labQualifiedRate.Content = 0;
-            labQualified.Content = 0;
+            //comboModel.SelectedIndex = -1;
+            //labVoltMax.Content = 0;
+            //labVoltMin.Content = 0;
+            //labResistanceMax.Content = 0;
+            //labResistanceMin.Content = 0;
+            //labKMax.Content = 0;
+            //labKMin.Content = 0;
+            //labTotal.Content = 0;
+            //labUnQualified.Content = 0;
+            //labQualifiedRate.Content = 0;
+            //labQualified.Content = 0;
             sum = 0;
             pass = 0;
             npass = 0;
@@ -789,7 +789,7 @@ namespace HASystem.Panels
                 comboModel2.Visibility = Visibility.Collapsed;
                 comboType2.Visibility = Visibility.Collapsed;
                 dgNet.Visibility = Visibility.Collapsed;
-
+                btn.Visibility = Visibility.Collapsed;
             }
             else if (cbCunFang.Text.Equals("网络"))
             {
@@ -798,7 +798,7 @@ namespace HASystem.Panels
                 comboModel2.Visibility = Visibility.Visible;
                 comboType2.Visibility = Visibility.Visible;
                 dgNet.Visibility = Visibility.Visible;
-
+                btn.Visibility = Visibility.Visible;
                 //下拉框初始化
                 try
                 {

@@ -199,9 +199,9 @@
 
                     <Label Content="K值上限：" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Right"/>
                     <numeric:NumericBox x:Name="txtMaxK2" Grid.Column="5" MaxFractionDigits="4"
-                                         IsPadding="False" InputMethod.IsInputMethodEnabled="False">
+                                         IsPadding="False">
                         <i:Interaction.Behaviors>
-                            <numeric:TextBoxFilterBehavior  TextBoxFilterOptions="Numeric,Dot"/>
+                            <numeric:TextBoxFilterBehavior  TextBoxFilterOptions="None"/>
                         </i:Interaction.Behaviors>
                     </numeric:NumericBox>
                     <Label Content="K值下限：" Grid.Row="1" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Right"/>

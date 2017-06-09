@@ -31,6 +31,7 @@ namespace HASystem.Panels
             comboModel.ItemsSource = (from l in GetTestInfo()
                             select l.model).Distinct();
         }
+        //获得全部测试数据
         private ObservableCollection<TestResult> GetTestInfo()
         {
             list = new ObservableCollection<TestResult>();
@@ -101,8 +102,7 @@ namespace HASystem.Panels
         }
         //测试数据
         private void btnTestInfo_Click(object sender, RoutedEventArgs e)
-        =>
-            dgTestInfo.ItemsSource = GetTestInfo();
+        =>dgTestInfo.ItemsSource = GetTestInfo();
 
         //操作日志
         private void btnLog_Click(object sender, RoutedEventArgs e)
@@ -112,59 +112,149 @@ namespace HASystem.Panels
         }
         //查找按钮
         private void btnSearch_Click(object sender, RoutedEventArgs e)
-        {
-            if (txtSearch.Text != "")
-            {
-                string selectedmodel = comboModel.SelectedValue?.ToString();
-                if(selectedmodel==null)
+        {           
+                if (cbBarcode.IsChecked == true)
                 {
-                    MessageBox.Show("请选择型号进行条码查询！", "提示", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    return;
+                    if (txtSearch.Text != "")
+                        BarCodeSearch();
+                    else
+                        MessageBox.Show("条码不能为空！", "提示", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }          
+                else
+                    dpGetData_CalendarClosed();            
+        }
+        //条码查询
+        private void BarCodeSearch()
+        {
+            string selectedmodel = comboModel.SelectedValue?.ToString();
+            if (selectedmodel == null)
+            {
+                MessageBox.Show("请选择型号进行条码查询！", "提示", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+            list = new ObservableCollection<TestResult>();
+            list.Clear();
+            GC.Collect();
+            try
+            {
+                conn.Open();
+                SQLiteCommand cmd = conn.CreateCommand();
+                cmd.CommandText = $"select * from TestInfo where barcod like '%{txtSearch.Text}%' and model like '%{selectedmodel}'";
+                SQLiteDataReader reader = cmd.ExecuteReader();
+                TestResult result = default(TestResult);
+                foreach (var item in reader)
+                {
+                    result.model = reader["model"].ToString();
+                    result.barcod = reader["barcod"].ToString();
+                    result.from_user1 = reader["from_user1"].ToString();
+                    result.testtype_1 = reader["testtype_1"].ToString();
+                    result.passageway_1 = reader["passageway_1"].ToString();
+                    result.time_1 = reader["time_1"].ToString();
+                    result.volt_1 = reader["volt_1"].ToString();
+                    result.resistance_1 = reader["resistance_1"].ToString();
+                    result.ispass_1 = reader["ispass_1"].ToString();
+                    result.remark_1 = reader["remark_1"].ToString();
+                    result.from_user2 = reader["from_user2"].ToString();
+                    result.testtype_2 = reader["testtype_2"].ToString();
+                    result.passageway_2 = reader["passageway_2"].ToString();
+                    result.time_2 = reader["time_2"].ToString();
+                    result.volt_2 = reader["volt_2"].ToString();
+                    result.resistance_2 = reader["resistance_2"].ToString();
+                    result.k_value_2 = reader["k_value_2"].ToString();
+                    result.ispass_2 = reader["ispass_2"].ToString();
+                    result.remark_2 = reader["remark_2"].ToString();
+                    list.Add(result);
                 }
+                if (list.Count == 0)
+                    MessageBox.Show("没有查询结果！", "提示", MessageBoxButton.OK, MessageBoxImage.Warning);
+                dgTestInfo.ItemsSource = list;
+                conn.Close();
+            }
+            catch (Exception ex)
+            {
+                conn.Close();
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+            }
+        }
+        //日期查询
+        private void dpGetData_CalendarClosed()
+        {
+            DateTime dt;
+            if (DateTime.TryParse(dpGetDataStart.Text, out dt) == false)
+            {
+                MessageBox.Show("请选择开始时间！", "提示", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            } 
+            if (DateTime.TryParse(dpGetDataEnd.Text, out dt) == false)
+            {
+                MessageBox.Show("请选择开始时间！", "提示", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+            string selectedModel = comboModel.SelectedValue?.ToString();
+            string selectedType = comboType.SelectedValue?.ToString();
+            DateTime dtTime = DateTime.Parse(dpGetDataStart.Text);
+            DateTime dtTime2 = DateTime.Parse(dpGetDataEnd.Text);
+            if (selectedModel == null)
+            {
+                MessageBox.Show("请选择型号！", "提示", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }               
+            if (selectedType == null)
+            {
+                MessageBox.Show("请选择测试类型！", "提示", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }               
+            if (dtTime > dtTime2)
+            {
+                MessageBox.Show("开始时间大于结束时间，请重新选择！", "提示", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }               
+            try
+            {
                 list = new ObservableCollection<TestResult>();
                 list.Clear();
                 GC.Collect();
-                try
+                conn.Open();
+                SQLiteCommand cmd = conn.CreateCommand();
+                if (selectedType == "O1")
+                    cmd.CommandText = $"select * from TestInfo where time_1>='{dtTime.ToString("yyyy-MM-dd HH:mm:ss.fff")}' and time_1<'{dtTime2.ToString("yyyy-MM-dd HH:mm:ss.fff")}' and model='{selectedModel}'";
+                else
+                    cmd.CommandText = $"select * from TestInfo where time_2>='{dtTime.ToString("yyyy-MM-dd HH:mm:ss.fff")}' and time_2<'{dtTime2.ToString("yyyy-MM-dd HH:mm:ss.fff")}' and model='{selectedModel}'";
+                SQLiteDataReader reader = cmd.ExecuteReader();
+                TestResult result = default(TestResult);
+                foreach (var item in reader)
                 {
-                    conn.Open();
-                    SQLiteCommand cmd = conn.CreateCommand();
-                    cmd.CommandText = $"select * from TestInfo where barcod like '%{txtSearch.Text}%' and model like '%{selectedmodel}'";
-                    SQLiteDataReader reader = cmd.ExecuteReader();
-                    TestResult result = default(TestResult);
-                    foreach (var item in reader)
-                    {
-                        result.model = reader["model"].ToString();
-                        result.barcod = reader["barcod"].ToString();
-                        result.from_user1 = reader["from_user1"].ToString();
-                        result.testtype_1 = reader["testtype_1"].ToString();
-                        result.passageway_1 = reader["passageway_1"].ToString();
-                        result.time_1 = reader["time_1"].ToString();
-                        result.volt_1 = reader["volt_1"].ToString();
-                        result.resistance_1 = reader["resistance_1"].ToString();
-                        result.ispass_1 = reader["ispass_1"].ToString();
-                        result.remark_1 = reader["remark_1"].ToString();
-                        result.from_user2 = reader["from_user2"].ToString();
-                        result.testtype_2 = reader["testtype_2"].ToString();
-                        result.passageway_2 = reader["passageway_2"].ToString();
-                        result.time_2 = reader["time_2"].ToString();
-                        result.volt_2 = reader["volt_2"].ToString();
-                        result.resistance_2 = reader["resistance_2"].ToString();
-                        result.k_value_2 = reader["k_value_2"].ToString();
-                        result.ispass_2 = reader["ispass_2"].ToString();
-                        result.remark_2 = reader["remark_2"].ToString();
-                        list.Add(result);
-                    }
-                    dgTestInfo.ItemsSource = list;
-                    conn.Close();
+                    result.model = reader["model"].ToString();
+                    result.barcod = reader["barcod"].ToString();
+                    result.from_user1 = reader["from_user1"].ToString();
+                    result.testtype_1 = reader["testtype_1"].ToString();
+                    result.passageway_1 = reader["passageway_1"].ToString();
+                    result.time_1 = reader["time_1"].ToString();
+                    result.volt_1 = reader["volt_1"].ToString();
+                    result.resistance_1 = reader["resistance_1"].ToString();
+                    result.ispass_1 = reader["ispass_1"].ToString();
+                    result.remark_1 = reader["remark_1"].ToString();
+                    result.from_user2 = reader["from_user2"].ToString();
+                    result.testtype_2 = reader["testtype_2"].ToString();
+                    result.passageway_2 = reader["passageway_2"].ToString();
+                    result.time_2 = reader["time_2"].ToString();
+                    result.volt_2 = reader["volt_2"].ToString();
+                    result.resistance_2 = reader["resistance_2"].ToString();
+                    result.k_value_2 = reader["k_value_2"].ToString();
+                    result.ispass_2 = reader["ispass_2"].ToString();
+                    result.remark_2 = reader["remark_2"].ToString();
+                    list.Add(result);
                 }
-                catch (Exception ex)
-                {
-                    conn.Close();
-                    System.Diagnostics.Debug.WriteLine(ex.Message);
-                }
-            } 
-            else
-                MessageBox.Show("条码不能为空！", "提示", MessageBoxButton.OK, MessageBoxImage.Warning);
+                if (list.Count == 0)
+                    MessageBox.Show("没有查询结果！", "提示", MessageBoxButton.OK, MessageBoxImage.Warning);
+                dgTestInfo.ItemsSource = list;
+                conn.Close();
+            }
+            catch (Exception ex)
+            {
+                conn.Close();
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+            }
         }
         //删除按钮
         private void menuDelete_Click(object sender, RoutedEventArgs e)
@@ -213,92 +303,32 @@ namespace HASystem.Panels
             if (sfd.ShowDialog().Value == true)
             {
                 ExcelExportHelper.Export(dgTestInfo, sfd.FileName, "Sheet1");
-                //MessageBox.Show("数据保存成功！", "提示", MessageBoxButton.OK, MessageBoxImage.Information);
             }                  
         }
         //加载行号
         private void dgTestInfo_LoadingRow(object sender, DataGridRowEventArgs e)
         =>    e.Row.Header = e.Row.GetIndex() + 1;
 
-        //日期查询
-        private void dpGetData_CalendarClosed(object sender, RoutedEventArgs e)
-        {
-            DateTime dt;
-            if (DateTime.TryParse(dpGetData.Text, out dt)==false) 
-                return;
-            list = new ObservableCollection<TestResult>();
-            list.Clear();
-            GC.Collect();
-            try
-            {
-                string selectedModel = comboModel.SelectedValue?.ToString();
-                string selectedType = comboType.SelectedValue?.ToString();
-                if (selectedModel == null)
-                {
-                    MessageBox.Show("请选择型号进行时间查询！", "提示", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    return;
-                }                   
-                if (selectedType == null)
-                {
-                    MessageBox.Show("请选择类型进行时间查询！", "提示", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    return;
-                }     
-                DateTime dtTime = DateTime.Parse(dpGetData.Text);
-                DateTime dtTime2 = DateTime.Parse(dpGetData.Text).AddDays(1);
-                conn.Open();
-                SQLiteCommand cmd = conn.CreateCommand();
-                if (selectedType == "O1") 
-                    cmd.CommandText = $"select * from TestInfo where time_1>='{dtTime.ToString("yyyy-MM-dd HH:mm:ss.fff")}' and time_1<'{dtTime2.ToString("yyyy-MM-dd HH:mm:ss.fff")}' and model='{selectedModel}'";
-                else
-                    cmd.CommandText = $"select * from TestInfo where time_2>='{dtTime.ToString("yyyy-MM-dd HH:mm:ss.fff")}' and time_2<'{dtTime2.ToString("yyyy-MM-dd HH:mm:ss.fff")}' and model='{selectedModel}'";
-                SQLiteDataReader reader = cmd.ExecuteReader();
-                TestResult result = default(TestResult);
-                foreach (var item in reader)
-                {
-                    result.model = reader["model"].ToString();
-                    result.barcod = reader["barcod"].ToString();
-                    result.from_user1 = reader["from_user1"].ToString();
-                    result.testtype_1 = reader["testtype_1"].ToString();
-                    result.passageway_1 = reader["passageway_1"].ToString();
-                    result.time_1 = reader["time_1"].ToString();
-                    result.volt_1 = reader["volt_1"].ToString();
-                    result.resistance_1 = reader["resistance_1"].ToString();
-                    result.ispass_1 = reader["ispass_1"].ToString();
-                    result.remark_1 = reader["remark_1"].ToString();
-                    result.from_user2 = reader["from_user2"].ToString();
-                    result.testtype_2 = reader["testtype_2"].ToString();
-                    result.passageway_2 = reader["passageway_2"].ToString();
-                    result.time_2 = reader["time_2"].ToString();
-                    result.volt_2 = reader["volt_2"].ToString();
-                    result.resistance_2 = reader["resistance_2"].ToString();
-                    result.k_value_2 = reader["k_value_2"].ToString();
-                    result.ispass_2 = reader["ispass_2"].ToString();
-                    result.remark_2 = reader["remark_2"].ToString();
-                    list.Add(result);
-                }
-                dgTestInfo.ItemsSource = list;
-                conn.Close();
-            }
-            catch (Exception ex)
-            {
-                conn.Close();
-                System.Diagnostics.Debug.WriteLine(ex.Message);
-            }
-        }
         //按回车键触发查询事件
         private void txtSearch_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         =>    btnSearch_Click(sender,e);
-        //型号下拉框触发事件
-        private void comboModel_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        //是否启用条码框
+        private void cbBarcode_Click(object sender, RoutedEventArgs e)
         {
-            string selectedModel = comboModel.SelectedValue?.ToString();
-            string selectedType = comboType.SelectedValue?.ToString();
-            if (selectedModel == null || selectedType == null)
-                return;
-            dpGetData_CalendarClosed(sender, e);
+            if(cbBarcode.IsChecked==true)
+            {
+                txtSearch.IsEnabled = true;
+                comboType.IsEnabled = false;
+                dpGetDataStart.IsEnabled = false;
+                dpGetDataEnd.IsEnabled = false;
+            }
+            else
+            {
+                txtSearch.IsEnabled = false;
+                comboType.IsEnabled = true;
+                dpGetDataStart.IsEnabled = true;
+                dpGetDataEnd.IsEnabled = true;
+            }
         }
-        //类型下拉框触发事件
-        private void comboType_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        => comboModel_SelectionChanged(sender, e);
     }
 }
