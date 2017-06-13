@@ -1,17 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using HASystem.StaticClass;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace HASystem
 {
@@ -20,6 +9,8 @@ namespace HASystem
     /// </summary>
     public partial class LoginWindow : Window
     {
+        //public static string strRole="";
+        //public static string strUserId = "";
         public LoginWindow()
         {
             InitializeComponent();
@@ -36,57 +27,45 @@ namespace HASystem
         //登陆按钮
         private void btnLogin_Click(object sender, RoutedEventArgs e)
         {
-            try
+            string strRoleId;
+            if (comboUserType.Text.Equals("管理员"))
             {
-            //    if (txtPwassWord.Password == "" || txtUserId.Text == "")
-            //    {
-            //        MessageBox.Show("账号或密码不能为空！");
-            //    }
-            //    else
-            //    {
-            //        conn = new SqlConnection($"Server={"localhost"};uid={"sa"};pwd={"Lwenc"}");
-            //        conn.Open();
-            //        SqlCommand cmd = conn.CreateCommand();
-            //        if (comboUserType.SelectedIndex == 0)
-            //            cmd.CommandText = ($"use {DBName} exec proc_Loginuser '{txtUserId.Text}'");
-            //        if (comboUserType.SelectedIndex == 1)
-            //            cmd.CommandText = ($"use {DBName} exec proc_Loginmanager '{txtUserId.Text}'");
-
-            //        var reader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
-            //        //不存在账号
-            //        if (!reader.Read())
-            //        {
-            //            MessageBox.Show("账号或密码错误!");
-            //        }
-            //        else
-            //        {
-            //            List<object> list = new List<object>();
-            //            //string[] info = new string[reader.FieldCount];
-            //            for (int i = 0; i < reader.FieldCount; i++)
-            //                list.Add(reader[i]);
-            //            if ((SHA256Generator.GenerateSHA256String(txtPwassWord.Password)) == list[0].ToString())
-            //            {
-            //                SqlInfo.name = list[1].ToString();
-            //                SqlInfo.account = txtUserId.Text;
-            //                SqlInfo.byImage = list[2] as byte[];
-            //                SqlInfo.type = list[3].ToString();
-            //                SqlInfo.id = list[4].ToString();
-            //                MainWindow mw = new MainWindow();
-            //                this.Close();
-            //                mw.ShowDialog();
-            //            }
-            //            else
-            //            {
-            //                MessageBox.Show("账号或密码错误!");
-            //            }
-
-            //        }
-
-                //}
+                strRoleId = "001";
             }
-            catch
+            else
             {
-                //MessageBox.Show(ex.Message);
+                strRoleId = "002";
+            }
+            if (txtUserId.Text.Trim() == "" || txtUserId.Text.Trim() == null)
+            {
+                MessageBox.Show("请输入用户名！");
+                return;
+            }
+            else if (txtPwassWord.Password == "" || txtPwassWord.Password == null)
+            {
+                MessageBox.Show("请输入密码！");
+                return;
+            }
+            else if (UserInfo.FindUserInfo(txtUserId.Text.Trim()) == false)
+            {
+                MessageBox.Show("账号不存在！");
+                return;
+            }
+            else if (UserInfo.FindUserPassword(txtUserId.Text.Trim(), txtPwassWord.Password) == false)
+            {
+                MessageBox.Show("密码错误！");
+                return;
+            }
+            else if (UserInfo.FindUserPower(txtUserId.Text.Trim(), strRoleId) == false)
+            {
+                MessageBox.Show("角色选择错误！");
+                return;
+            }
+            else
+            {
+                this.DialogResult = true;
+                UserInfo.strRole = comboUserType.Text;
+                UserInfo.strUserId = txtUserId.Text;
             }
         }
         //用户文本框KeyDown

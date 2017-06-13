@@ -198,19 +198,7 @@
                     <Label Content="mΩ" Grid.Column="3" HorizontalAlignment="Right" VerticalAlignment="Center"/>
 
                     <Label Content="K值上限：" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Right"/>
-                    <numeric:NumericBox x:Name="txtMaxK2" Grid.Column="5" MaxFractionDigits="4"
-                                         IsPadding="False" InputMethod.IsInputMethodEnabled="False">
-                        <i:Interaction.Behaviors>
-                            <numeric:TextBoxFilterBehavior  TextBoxFilterOptions="Numeric,Dot"/>
-                        </i:Interaction.Behaviors>
-                    </numeric:NumericBox>
                     <Label Content="K值下限：" Grid.Row="1" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Right"/>
-                    <numeric:NumericBox x:Name="txtMinK2" Grid.Row="1" Grid.Column="5" MaxFractionDigits="4"
-                                         IsPadding="False" InputMethod.IsInputMethodEnabled="False">
-                        <i:Interaction.Behaviors>
-                            <numeric:TextBoxFilterBehavior  TextBoxFilterOptions="Numeric,Dot"/>
-                        </i:Interaction.Behaviors>
-                    </numeric:NumericBox>
                     <Label Content="内阻下限：" Grid.Row="1" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Right"/>
                     <numeric:NumericBox x:Name="txtMinResistance2" Grid.Row="1" Grid.Column="3" MaxFractionDigits="4"
                                          IsPadding="False" InputMethod.IsInputMethodEnabled="False">
@@ -219,6 +207,8 @@
                         </i:Interaction.Behaviors>
                     </numeric:NumericBox>
                     <Label Content="mΩ" Grid.Row="1" Grid.Column="3" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                    <TextBox x:Name="txtMaxK2" HorizontalAlignment="Left" Height="28" Margin="0,20,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="112" Grid.Column="5"/>
+                    <TextBox x:Name="txtMinK2" HorizontalAlignment="Left" Height="28" Margin="0,19,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="112" Grid.Column="5" Grid.Row="1"/>
                 </Grid>
             </GroupBox>
             <GroupBox Header="电压补偿值输入" FontSize="14" FontWeight="Bold" Margin="5" Grid.Row="3">

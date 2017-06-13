@@ -53,10 +53,10 @@ namespace HASystem.Panels
             b = txtCompence.getGeShi();
             if (b == false)
                 b2 = false;
-            b = txtMaxK2.getGeShi();
+            b = txtMaxK2.getKGetShi();
             if (b == false)
                 b2 = false;
-            b = txtMinK2.getGeShi();
+            b = txtMinK2.getKGetShi();
             if (b == false)
                 b2 = false;
             if (b2 == false)
@@ -64,7 +64,27 @@ namespace HASystem.Panels
                 MessageBox.Show("红色标记为错误数据，请修正，并注意所有数据不能为空！数值之间不能出现空格！");
                 return;
             }
-
+            //下面判断上限是否小于下限
+            b = txtMaxVolt.CompaVolues(txtMinVolt);
+            if (b == false)
+                b2 = false;
+            b = txtMaxResistance.CompaVolues(txtMinResistance);
+            if (b == false)
+                b2 = false;
+            b = txtMaxVolt2.CompaVolues(txtMinVolt2);
+            if (b == false)
+                b2 = false;
+            b = txtMaxResistance2.CompaVolues(txtMinResistance2);
+            if (b == false)
+                b2 = false;
+            b = txtMaxK2.CompaVolues(txtMinK2);
+            if (b == false)
+                b2 = false;
+            if (b2 == false)
+            {
+                MessageBox.Show("绿色标记处出错，上限值小于下限值！");
+                return;
+            }
             //进行数据保存
             try
             {

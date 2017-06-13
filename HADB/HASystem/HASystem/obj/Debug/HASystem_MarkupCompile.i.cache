@@ -16,5 +16,5 @@ D:\GitData\BSSystem\HADB\HASystem\HASystem\App.xaml
 25394030812
 LoginWindow.xaml;MainWindow.xaml;Panels\AddModelInfo.xaml;Panels\AddUserPanel.xaml;Panels\AlterModelInfo.xaml;Panels\AlterPassWordPanel.xaml;Panels\AlterUserPanel.xaml;Panels\CommunicationPanel.xaml;Panels\DataManagerPanel.xaml;Panels\GoodsTestPanel.xaml;Panels\ModelManagerPanel.xaml;Panels\PassagewayPanel.xaml;Panels\SystemManagerPanel.xaml;Panels\UserManagerPanel.xaml;UC\btnUserControl.xaml;UC\PassageWayUC.xaml;UC\treeUserControl.xaml;
 
-True
+False
 

@@ -29,7 +29,7 @@ namespace HASystem.Panels
             string[] type = new string[] { "O1", "OB" };
             comboType.ItemsSource = type;
             comboModel.ItemsSource = (from l in GetTestInfo()
-                            select l.model).Distinct();
+                                      select l.model).Distinct();
         }
         //获得全部测试数据
         private ObservableCollection<TestResult> GetTestInfo()
@@ -69,13 +69,13 @@ namespace HASystem.Panels
                 }
                 conn.Close();
                 return list;
-             }
-             catch (Exception ex)
-             {
+            }
+            catch (Exception ex)
+            {
                 conn.Close();
                 System.Diagnostics.Debug.WriteLine(ex.Message);
                 return null;
-             }
+            }
         }
         //存储测试数据结构
         public struct TestResult
@@ -102,7 +102,7 @@ namespace HASystem.Panels
         }
         //测试数据
         private void btnTestInfo_Click(object sender, RoutedEventArgs e)
-        =>dgTestInfo.ItemsSource = GetTestInfo();
+        => dgTestInfo.ItemsSource = GetTestInfo();
 
         //操作日志
         private void btnLog_Click(object sender, RoutedEventArgs e)
@@ -112,16 +112,16 @@ namespace HASystem.Panels
         }
         //查找按钮
         private void btnSearch_Click(object sender, RoutedEventArgs e)
-        {           
-                if (cbBarcode.IsChecked == true)
-                {
-                    if (txtSearch.Text != "")
-                        BarCodeSearch();
-                    else
-                        MessageBox.Show("条码不能为空！", "提示", MessageBoxButton.OK, MessageBoxImage.Warning);
-                }          
+        {
+            if (cbBarcode.IsChecked == true)
+            {
+                if (txtSearch.Text != "")
+                    BarCodeSearch();
                 else
-                    dpGetData_CalendarClosed();            
+                    MessageBox.Show("条码不能为空！", "提示", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+            else
+                dpGetData_CalendarClosed();
         }
         //条码查询
         private void BarCodeSearch()
@@ -184,7 +184,7 @@ namespace HASystem.Panels
             {
                 MessageBox.Show("请选择开始时间！", "提示", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
-            } 
+            }
             if (DateTime.TryParse(dpGetDataEnd.Text, out dt) == false)
             {
                 MessageBox.Show("请选择开始时间！", "提示", MessageBoxButton.OK, MessageBoxImage.Warning);
@@ -198,17 +198,17 @@ namespace HASystem.Panels
             {
                 MessageBox.Show("请选择型号！", "提示", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
-            }               
+            }
             if (selectedType == null)
             {
                 MessageBox.Show("请选择测试类型！", "提示", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
-            }               
+            }
             if (dtTime > dtTime2)
             {
                 MessageBox.Show("开始时间大于结束时间，请重新选择！", "提示", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
-            }               
+            }
             try
             {
                 list = new ObservableCollection<TestResult>();
@@ -286,7 +286,7 @@ namespace HASystem.Panels
                         return;
                     }
                 }
-                btnTestInfo_Click(sender,e);
+                btnTestInfo_Click(sender, e);
                 MessageBox.Show("删除成功！");
             }
         }
@@ -303,19 +303,19 @@ namespace HASystem.Panels
             if (sfd.ShowDialog().Value == true)
             {
                 ExcelExportHelper.Export(dgTestInfo, sfd.FileName, "Sheet1");
-            }                  
+            }
         }
         //加载行号
         private void dgTestInfo_LoadingRow(object sender, DataGridRowEventArgs e)
-        =>    e.Row.Header = e.Row.GetIndex() + 1;
+        => e.Row.Header = e.Row.GetIndex() + 1;
 
         //按回车键触发查询事件
         private void txtSearch_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
-        =>    btnSearch_Click(sender,e);
+        => btnSearch_Click(sender, e);
         //是否启用条码框
         private void cbBarcode_Click(object sender, RoutedEventArgs e)
         {
-            if(cbBarcode.IsChecked==true)
+            if (cbBarcode.IsChecked == true)
             {
                 txtSearch.IsEnabled = true;
                 comboType.IsEnabled = false;

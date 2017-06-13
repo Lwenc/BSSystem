@@ -146,7 +146,8 @@
                     <Label Content="型号查询：" Grid.Column="2" HorizontalAlignment="Right"  VerticalAlignment="Center"/>
                     <Label Content="测试类型查询：" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Right"  VerticalAlignment="Center"/>
                     <Label Content="选择结束时间：" HorizontalAlignment="Center"  VerticalAlignment="Center" Grid.ColumnSpan="2" Grid.Row="1" Grid.Column="0"/>
-                    <DatePicker HorizontalAlignment="Left" Name="dpGetDataStart" Grid.Column="1" Grid.ColumnSpan="2"  VerticalAlignment="Center"/> <!--CalendarClosed="dpGetData_CalendarClosed"-->
+                    <DatePicker HorizontalAlignment="Left" Name="dpGetDataStart" Grid.Column="1" Grid.ColumnSpan="2"  VerticalAlignment="Center"/>
+                    <!--CalendarClosed="dpGetData_CalendarClosed"-->
                     <DatePicker HorizontalAlignment="Left" Name="dpGetDataEnd" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"  VerticalAlignment="Center"/>
                     <ComboBox x:Name="comboModel" Grid.Column="3" HorizontalAlignment="Left" Grid.ColumnSpan="2" Width="130" Height="30"/>
                     <ComboBox x:Name="comboType" Grid.Row="1" Grid.Column="3" HorizontalAlignment="Left" Grid.ColumnSpan="2" Width="130" Height="30"/>

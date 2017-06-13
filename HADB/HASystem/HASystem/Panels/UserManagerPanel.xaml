@@ -66,7 +66,7 @@
                         <TextBox.Resources>
                             <VisualBrush x:Key="HelpBrush" TileMode="None" Opacity="0.3" Stretch="None" AlignmentX="Left">
                                 <VisualBrush.Visual>
-                                    <TextBlock FontStyle="Italic" Text="请输入关键字"/>
+                                    <TextBlock FontStyle="Italic" Text="输入用户账号进行查找"/>
                                 </VisualBrush.Visual>
                             </VisualBrush>
                         </TextBox.Resources>
@@ -83,12 +83,12 @@
                             </Style>
                         </TextBox.Style>
                     </TextBox>
-                <Button x:Name="btnSearch" Content="查找" Width="80" Height="30" HorizontalAlignment="Left" Background="#414c57" Foreground="White" Grid.Column="2"/>
+                <Button x:Name="btnSearch" Content="查找" Width="80" Height="30" HorizontalAlignment="Left" Background="#414c57" Foreground="White" Grid.Column="2" Click="btnSearch_Click"/>
                 </Grid>
                 <Grid Grid.Row="2">
                     <DataGrid x:Name="dgUserInfo" Margin="9,0,6,5" AutoGenerateColumns="False" BorderBrush="#323b44"
                           IsReadOnly="True" ScrollViewer.VerticalScrollBarVisibility="Auto"
-                          CanUserAddRows="False">
+                          CanUserAddRows="False" SelectionMode="Single">
                         <!--给整个表添加颜色开始-->
                         <DataGrid.ColumnHeaderStyle>
                             <Style TargetType="DataGridColumnHeader">
@@ -130,10 +130,10 @@
                         <!--给整个表添加颜色结束-->
 
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="用户账号" Width="*" Binding="{Binding user}"/>
-                            <DataGridTextColumn Header="用户名" Width="*" Binding="{Binding name}"/>
+                            <DataGridTextColumn Header="用户账号" Width="*" Binding="{Binding user_id}"/>
+                            <DataGridTextColumn Header="用户名" Width="*" Binding="{Binding user_name}"/>
                             <DataGridTextColumn Header="联系电话" Width="*" Binding="{Binding telephone}"/>
-                        <DataGridTextColumn Header="角色名" Width="*" Binding="{Binding role}"/>
+                        <DataGridTextColumn Header="角色名" Width="*" Binding="{Binding role_name}"/>
                     </DataGrid.Columns>
                         <DataGrid.ContextMenu>
                             <ContextMenu>

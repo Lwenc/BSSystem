@@ -68,17 +68,39 @@ namespace HASystem.Panels
             b = txtCompence.getGeShi();
             if (b == false)
                 b2 = false;
-            b = txtMaxK2.getGeShi();
+            b = txtMaxK2.getKGetShi();
             if (b == false)
                 b2 = false;
-            b = txtMinK2.getGeShi();
+            b = txtMinK2.getKGetShi();
             if (b == false)
                 b2 = false;
             if (b2 == false)
             {
-                MessageBox.Show("红色标记为错误数据，请修正，并注意所有数据不能为空！数值之间不能出现空格！");
+                MessageBox.Show("红色标记为错误数据，请根据要求修正，并注意所有数据不能为空！数值之间不能出现空格！");
                 return;
             }
+            //下面判断上限是否小于下限
+            b = txtMaxVolt.CompaVolues(txtMinVolt);
+            if (b == false)
+                b2 = false;
+            b = txtMaxResistance.CompaVolues(txtMinResistance);
+            if (b == false)
+                b2 = false;
+            b = txtMaxVolt2.CompaVolues(txtMinVolt2);
+            if (b == false)
+                b2 = false;
+            b = txtMaxResistance2.CompaVolues(txtMinResistance2);
+            if (b == false)
+                b2 = false;
+            b = txtMaxK2.CompaVolues(txtMinK2);
+            if (b == false)
+                b2 = false;
+            if (b2 == false)
+            {
+                MessageBox.Show("绿色标记处出错，上限值小于下限值！");
+                return;
+            }
+            //数据保存
             try
             {
                 ModelInfo.UpdateModeInfo(txtModel.Text, "O1", double.Parse(txtMaxVolt.Text), double.Parse(txtMinVolt.Text), double.Parse(txtMaxResistance.Text), double.Parse(txtMinResistance.Text), "OB", double.Parse(txtMaxVolt2.Text), double.Parse(txtMinVolt2.Text), double.Parse(txtMaxResistance2.Text), double.Parse(txtMinResistance2.Text), double.Parse(txtMaxK2.Text), double.Parse(txtMinK2.Text), double.Parse(txtCompence.Text), 0, "未启用", DateTime.Now);
@@ -147,6 +169,48 @@ namespace HASystem.Panels
                 tex.Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.White);
             }
             return b2;
+        }
+
+        public static bool getKGetShi(this TextBox tex)//K值文本框的格式检查
+        {
+            double d;
+            bool b = true;
+            if (tex.Text.Length > 7)
+            {
+                tex.Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Red);
+                b = false;
+            }
+            else if (double.TryParse(tex.Text.Trim(), out d) == false)
+            {
+                tex.Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Red);
+                b = false;
+            }
+            else
+            {
+                tex.Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.White);
+                b = true;
+            }
+            return b;
+        }
+
+        public static bool CompaVolues(this TextBox tex, TextBox tex2)//将本文本框的值与另一个文本框值比较，比较大，返回true，比较小返回false;
+        {
+            bool b = false;
+            double d1 = double.Parse(tex.Text.Trim());
+            double d2 = double.Parse(tex2.Text.Trim());
+            if (d1 >= d2)
+            {
+                b = true;
+                tex.Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.White);
+                tex2.Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.White);
+            }
+            else
+            {
+                b = false;
+                tex.Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Green);
+                tex2.Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Green);
+            }
+            return b;
         }
     }
 }

@@ -4,6 +4,9 @@ using System.Windows.Controls;
 using System.Data.SqlClient;
 using ui = HASystem.StaticClass.UserInfo;
 using System;
+using System.Data;
+using HASystem.StaticClass;
+using System.Collections.Generic;
 
 namespace HASystem.Panels
 {
@@ -11,14 +14,10 @@ namespace HASystem.Panels
     /// UserManagerPanel.xaml 的交互逻辑
     /// </summary>
     public partial class UserManagerPanel : UserControl
-    {
-        private ObservableCollection<ui.UserResult> list;
-        SqlConnection conn = new SqlConnection($"Server=localhost;Database=HADB;User id=sa;PWD=Lwenc");
-
+    {   
         public UserManagerPanel()
         {
             InitializeComponent();
-            GetUser();
         }
         //查看用户信息
         private void btnModelInfo_Click(object sender, RoutedEventArgs e)
@@ -30,6 +29,10 @@ namespace HASystem.Panels
             panelAddUser.Visibility = Visibility.Collapsed;
             panelAlterPwd.Visibility = Visibility.Collapsed;
             panelAlterInfo.Visibility = Visibility.Collapsed;
+
+            //进入数据库查询用户信息
+            DataSet Ds = UserInfo.getAllUserInfo();
+            dgUserInfo.ItemsSource = Ds.Tables[0].DefaultView;
         }
         //用户信息添加
         private void btnModleAdd_Click(object sender, RoutedEventArgs e)
@@ -56,54 +59,55 @@ namespace HASystem.Panels
         //修改信息
         private void menuAlter_Click(object sender, RoutedEventArgs e)
         {
-            gridData.Visibility = Visibility.Collapsed;
-            panelAlterInfo.Visibility = Visibility.Visible;
-        }
-        //获取用户信息
-        private void GetUser()
-        {
-            list = ui.GetUserData();
-            dgUserInfo.ItemsSource = list;
+            try
+            {
+                string strId;
+                string strUserName;
+                string strtxtTelephone;
+                string strcomBoRole;
+                //获取选中行的用户Id
+                DataRowView mySelectedElement = (DataRowView)dgUserInfo.SelectedItem;
+                strId = mySelectedElement.Row[0].ToString();
+                strUserName= mySelectedElement.Row[1].ToString();
+                strtxtTelephone= mySelectedElement.Row[2].ToString();
+                strcomBoRole= mySelectedElement.Row[3].ToString();
+                panelAlterInfo.txtId.Text = strId;
+                panelAlterInfo.txtUserName.Text = strUserName;
+                panelAlterInfo.txtTelephone.Text = strtxtTelephone;
+                if (strcomBoRole.Equals("普通用户") == true)
+                    panelAlterInfo.comBoRole.SelectedIndex = 0;
+                else
+                    panelAlterInfo.comBoRole.SelectedIndex = 1;
+                gridData.Visibility = Visibility.Collapsed;
+                panelAlterInfo.Visibility = Visibility.Visible;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("请先点击要修改的用户！");
+            }
         }
         //刷新按钮
         private void menuRefresh_Click(object sender, RoutedEventArgs e)
         {
-            GetUser();
+            //进入数据库查询用户信息
+            DataSet Ds = UserInfo.getAllUserInfo();
+            dgUserInfo.ItemsSource = Ds.Tables[0].DefaultView;
         }
         //删除按钮
         private void menuDelete_Click(object sender, RoutedEventArgs e)
         {
-            var deleteList = dgUserInfo.SelectedItems;
-            int num = deleteList.Count;
-            string mess = string.Format("是否删除这" + num + "行数据？");
-            MessageBoxResult result = MessageBox.Show(mess, "提示", MessageBoxButton.YesNo, MessageBoxImage.Question);
-            if (result == MessageBoxResult.Yes)
-            {
-                string[] userlId = new string[num];
-                //string[] modelbrand = new string[num];
-                for (int i = 0; i < num; i++)
-                {
-                    try
-                    {
-                        userlId[i] = (((ui.UserResult)deleteList[i]).user).ToString();
-                        //modelbrand[i] = (((ui.ModelResult)deleteList[i]).brand).ToString();
-                        conn.Open();
-                        SqlCommand cmd = conn.CreateCommand();
-                        cmd.CommandText = $"use HADB exec proc_delUserInfo '{userlId[i]}'";
-                        cmd.ExecuteNonQuery();
-                        conn.Close();
+            DataRowView dr = (DataRowView)dgUserInfo.SelectedItem;
+            string strUserId = dr.Row[0].ToString();
+            UserInfo.DelUserInfo(strUserId);
+            UserInfo.DelURInfo(strUserId);
+            MessageBox.Show("用户" + strUserId + "删除成功！");
+            menuRefresh_Click(sender, e);
+        }
 
-                    }
-                    catch (Exception ex)
-                    {
-                        conn.Close();
-                        System.Diagnostics.Debug.WriteLine(ex.Message);
-                        return;
-                    }
-                }
-                GetUser();
-                MessageBox.Show("删除成功！");
-            }
+        private void btnSearch_Click(object sender, RoutedEventArgs e)
+        {
+            DataSet Ds = UserInfo.getUserInfoByUserId(txtSearch.Text.Trim());
+            dgUserInfo.ItemsSource = Ds.Tables[0].DefaultView;
         }
     }
 }
