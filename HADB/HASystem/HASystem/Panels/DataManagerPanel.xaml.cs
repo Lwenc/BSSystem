@@ -1,10 +1,13 @@
 ﻿using HASystem.StaticClass;
 using Microsoft.Win32;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.SQLite;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -15,8 +18,9 @@ namespace HASystem.Panels
     /// </summary>
     public partial class DataManagerPanel : UserControl
     {
-        public static ObservableCollection<TestResult> list;
-        public static SQLiteConnection conn = new SQLiteConnection("Data Source=DB\\BS.db");
+        private  ObservableCollection<TestResult> list;
+        private ObservableCollection<string> txt;
+        private  SQLiteConnection conn = new SQLiteConnection("Data Source=DB\\BS.db");
 
         public DataManagerPanel()
         {
@@ -125,9 +129,12 @@ namespace HASystem.Panels
             }
             if(cbMultiBarcode.IsChecked==true)
             {
-
+                if (comboBarCode.Text != "")
+                    MultiBarCodeSearch();
+                else
+                    MessageBox.Show("尚未导入条码！", "提示", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
-            else
+            if (cbBarcode.IsChecked == false && cbMultiBarcode.IsChecked == false) 
                 dpGetData_CalendarClosed();
         }
         //单条码查询
@@ -146,7 +153,7 @@ namespace HASystem.Panels
             {
                 conn.Open();
                 SQLiteCommand cmd = conn.CreateCommand();
-                cmd.CommandText = $"select * from TestInfo where barcod like '%{txtSearch.Text}%' and model like '%{selectedmodel}'";
+                cmd.CommandText = $"select * from TestInfo where barcod like '%{txtSearch.Text}%' and model = '{selectedmodel}'";
                 SQLiteDataReader reader = cmd.ExecuteReader();
                 TestResult result = default(TestResult);
                 foreach (var item in reader)
@@ -171,6 +178,62 @@ namespace HASystem.Panels
                     result.ispass_2 = reader["ispass_2"].ToString();
                     result.remark_2 = reader["remark_2"].ToString();
                     list.Add(result);
+                }
+                if (list.Count == 0)
+                    MessageBox.Show("没有查询结果！", "提示", MessageBoxButton.OK, MessageBoxImage.Warning);
+                dgTestInfo.ItemsSource = list;
+                conn.Close();
+            }
+            catch (Exception ex)
+            {
+                conn.Close();
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+            }
+        }
+        //多条码查询
+        private void MultiBarCodeSearch()
+        {
+            string selectedmodel = comboModel.SelectedValue?.ToString();
+            if (selectedmodel == null)
+            {
+                MessageBox.Show("请选择型号进行条码查询！", "提示", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+            list = new ObservableCollection<TestResult>();
+            list.Clear();
+            GC.Collect();
+            try
+            {
+                conn.Open();
+                for(int i=0;i<txt.Count;i++)
+                {
+                    SQLiteCommand cmd = conn.CreateCommand();
+                    cmd.CommandText = $"select * from TestInfo where barcod like '{txt[i]}' and model = '{selectedmodel}'";
+                    SQLiteDataReader reader = cmd.ExecuteReader();
+                    TestResult result = default(TestResult);
+                    foreach (var item in reader)
+                    {
+                        result.model = reader["model"].ToString();
+                        result.barcod = reader["barcod"].ToString();
+                        result.from_user1 = reader["from_user1"].ToString();
+                        result.testtype_1 = reader["testtype_1"].ToString();
+                        result.passageway_1 = reader["passageway_1"].ToString();
+                        result.time_1 = reader["time_1"].ToString();
+                        result.volt_1 = reader["volt_1"].ToString();
+                        result.resistance_1 = reader["resistance_1"].ToString();
+                        result.ispass_1 = reader["ispass_1"].ToString();
+                        result.remark_1 = reader["remark_1"].ToString();
+                        result.from_user2 = reader["from_user2"].ToString();
+                        result.testtype_2 = reader["testtype_2"].ToString();
+                        result.passageway_2 = reader["passageway_2"].ToString();
+                        result.time_2 = reader["time_2"].ToString();
+                        result.volt_2 = reader["volt_2"].ToString();
+                        result.resistance_2 = reader["resistance_2"].ToString();
+                        result.k_value_2 = reader["k_value_2"].ToString();
+                        result.ispass_2 = reader["ispass_2"].ToString();
+                        result.remark_2 = reader["remark_2"].ToString();
+                        list.Add(result);
+                    }
                 }
                 if (list.Count == 0)
                     MessageBox.Show("没有查询结果！", "提示", MessageBoxButton.OK, MessageBoxImage.Warning);
@@ -313,10 +376,22 @@ namespace HASystem.Panels
         //浏览按钮
         private void btnView_Click(object sender, RoutedEventArgs e)
         {
+            txt = new ObservableCollection<string>();
             OpenFileDialog ofd = new OpenFileDialog();
             ofd.Filter = "TXT文件|*.txt";
-            if (ofd.ShowDialog().Value == true)
-                MessageBox.Show("导入成功！");
+            if (ofd.ShowDialog() == true)
+            {
+                using (StreamReader sr = new StreamReader(ofd.FileName, Encoding.Default))
+                {
+                    while (sr.Peek() > 0)
+                    {
+                        string temp = sr.ReadLine();
+                        txt.Add(temp);
+                    }
+                    comboBarCode.ItemsSource = txt;
+                    comboBarCode.SelectedIndex = 0;
+                }
+            }
         }
         //加载行号
         private void dgTestInfo_LoadingRow(object sender, DataGridRowEventArgs e)
