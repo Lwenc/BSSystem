@@ -28,7 +28,7 @@ namespace HASystem.Panels
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            txtUserId.Text = UserInfo.strUserId.Trim();
+            txtUserId.Text = LoginWindow.strUserId.Trim();
         }
 
         private void btnEnter_Click(object sender, RoutedEventArgs e)

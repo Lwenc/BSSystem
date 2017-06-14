@@ -108,16 +108,18 @@
                         <RowDefinition/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="2*"/>
-                        <ColumnDefinition  Width="1*"/>
-                        <ColumnDefinition Width="1*"/>
-                        <ColumnDefinition Width="1*"/>
-                        <ColumnDefinition Width="0.6*"/>
-                        <ColumnDefinition Width="1.5*"/>
-                        <ColumnDefinition Width="1*"/>
-                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="50"/>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="50"/>
+                        <ColumnDefinition />
+
                     </Grid.ColumnDefinitions>
-                    <TextBox Width="110" Height="30" x:Name="txtSearch" HorizontalAlignment="Left" VerticalAlignment="Center" KeyDown="txtSearch_KeyDown"
+                    <TextBox Width="95" Height="30" x:Name="txtSearch" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.ColumnSpan="2"
                         IsEnabled="False" VerticalContentAlignment="Center" Foreground="Indigo" TabIndex="0" BorderThickness="1" Grid.Row="1" Grid.Column="5">
                         <TextBox.Resources>
                             <VisualBrush x:Key="HelpBrush" TileMode="None" Opacity="0.3" Stretch="None" AlignmentX="Left">
@@ -139,19 +141,22 @@
                             </Style>
                         </TextBox.Style>
                     </TextBox>
-                    <CheckBox x:Name="cbBarcode" Content="启用条码查询" HorizontalAlignment="Left" Grid.Column="5" VerticalAlignment="Bottom" Click="cbBarcode_Click"/>
-                    <Button x:Name="btnSearch" Content="确认查找" Width="95" Height="30" HorizontalAlignment="Right" Grid.Row="1" 
-                            Grid.Column="6"  Foreground="White" Background="#414c57" Click="btnSearch_Click"/>
-                    <Label Content="选择开始时间：" HorizontalAlignment="Center" Grid.Column="0" Grid.ColumnSpan="2" VerticalAlignment="Center"/>
+                    <CheckBox x:Name="cbBarcode" Content="单条码" HorizontalAlignment="Left" Grid.Column="5" VerticalAlignment="Bottom" Click="cbBarcode_Click"/>
+                    <CheckBox x:Name="cbMultiBarcode" Content="多条码" HorizontalAlignment="Left" Grid.Column="6" VerticalAlignment="Bottom" Click="cbMultiBarcode_Click"/>
+                    <Button x:Name="btnSearch" Content="确认查找" Width="95" Height="30" HorizontalAlignment="Left" Grid.Row="1" 
+                            Grid.Column="9"  Foreground="White" Background="#414c57" Click="btnSearch_Click"/>
+                    <Button x:Name="btnView" Content="浏览" Width="50" Height="20" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Bottom" IsEnabled="False"
+                            Grid.Column="6" Grid.Row="0" Foreground="White" Background="#414c57" Click="btnView_Click"/>
+                    <Label Content="选择开始时间：" HorizontalAlignment="Right" VerticalAlignment="Center"/>
                     <Label Content="型号查询：" Grid.Column="2" HorizontalAlignment="Right"  VerticalAlignment="Center"/>
                     <Label Content="测试类型查询：" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Right"  VerticalAlignment="Center"/>
-                    <Label Content="选择结束时间：" HorizontalAlignment="Center"  VerticalAlignment="Center" Grid.ColumnSpan="2" Grid.Row="1" Grid.Column="0"/>
+                    <Label Content="选择结束时间：" HorizontalAlignment="Right"  VerticalAlignment="Center" Grid.Row="1"/>
                     <DatePicker HorizontalAlignment="Left" Name="dpGetDataStart" Grid.Column="1" Grid.ColumnSpan="2"  VerticalAlignment="Center"/>
-                    <!--CalendarClosed="dpGetData_CalendarClosed"-->
                     <DatePicker HorizontalAlignment="Left" Name="dpGetDataEnd" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"  VerticalAlignment="Center"/>
                     <ComboBox x:Name="comboModel" Grid.Column="3" HorizontalAlignment="Left" Grid.ColumnSpan="2" Width="130" Height="30"/>
                     <ComboBox x:Name="comboType" Grid.Row="1" Grid.Column="3" HorizontalAlignment="Left" Grid.ColumnSpan="2" Width="130" Height="30"/>
-                    <Button x:Name="btnImport" Content="导出数据" Grid.Column="6" Height="30" Width="95" HorizontalAlignment="Right"
+                    <ComboBox x:Name="comboBarCode" Grid.Row="1" Grid.Column="6" IsEnabled="False" Grid.ColumnSpan="2" HorizontalAlignment="Left" Width="130" Height="30"/>
+                    <Button x:Name="btnImport" Content="导出数据" Grid.Column="9" Height="30" Width="95" HorizontalAlignment="Left"
                             Foreground="White" Background="#414c57" Click="menuTestExport_Click"/>
                 </Grid>
                 <Grid Grid.Row="2">

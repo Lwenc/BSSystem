@@ -1,12 +1,14 @@
-﻿using System.Data;
+﻿using System;
+using System.Data.SqlClient;
+using System.Collections.ObjectModel;
+using System.Data;
 using System.Data.SQLite;
+using System.Collections.Generic;
 
 namespace HASystem.StaticClass
 {
     public static class UserInfo
     {
-        public static string strRole = "";
-        public static string strUserId = "";
         static SQLiteConnection conn = ModelInfo.conn;
         /// <summary>
         /// 获取所有用户信息
@@ -14,13 +16,20 @@ namespace HASystem.StaticClass
         /// <returns></returns>
         public static DataSet getAllUserInfo()
         {
+          
+            string strComm;
+            string role = LoginWindow.strRole;
+            string id = LoginWindow.strUserId;
             conn.Open();
-            string strComm = "select User.user_id,user_name,telephone,role_name from User,Role,UR where User.user_id=UR.user_id and Role.role_id=UR.role_id";
+            if (role == "普通用户")
+                strComm = $"select User.user_id,user_name,telephone,role_name from User,Role,UR where User.user_id=UR.user_id and Role.role_id=UR.role_id and User.user_id='{id}' and UR.role_id='002'";
+            else
+                strComm = $"select User.user_id,user_name,telephone,role_name from User,Role,UR where User.user_id=UR.user_id and Role.role_id=UR.role_id";
             SQLiteDataAdapter Da = new SQLiteDataAdapter(strComm, conn);
             DataSet Ds = new DataSet();
             Da.Fill(Ds);
             conn.Close();
-            return Ds;
+            return Ds;           
         }
 
         /// <summary>

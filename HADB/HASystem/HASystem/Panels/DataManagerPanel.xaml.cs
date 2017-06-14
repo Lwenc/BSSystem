@@ -30,6 +30,9 @@ namespace HASystem.Panels
             comboType.ItemsSource = type;
             comboModel.ItemsSource = (from l in GetTestInfo()
                                       select l.model).Distinct();
+            //string[] s = new string[] { "112345698745", "456575698745" };
+            //comboBarCode.ItemsSource = s;
+            //comboBarCode.SelectedIndex = 0;
         }
         //获得全部测试数据
         private ObservableCollection<TestResult> GetTestInfo()
@@ -120,10 +123,14 @@ namespace HASystem.Panels
                 else
                     MessageBox.Show("条码不能为空！", "提示", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
+            if(cbMultiBarcode.IsChecked==true)
+            {
+
+            }
             else
                 dpGetData_CalendarClosed();
         }
-        //条码查询
+        //单条码查询
         private void BarCodeSearch()
         {
             string selectedmodel = comboModel.SelectedValue?.ToString();
@@ -301,9 +308,15 @@ namespace HASystem.Panels
             SaveFileDialog sfd = new SaveFileDialog();
             sfd.Filter = "Excel文件|*.xlsx";
             if (sfd.ShowDialog().Value == true)
-            {
                 ExcelExportHelper.Export(dgTestInfo, sfd.FileName, "Sheet1");
-            }
+        }
+        //浏览按钮
+        private void btnView_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.Filter = "TXT文件|*.txt";
+            if (ofd.ShowDialog().Value == true)
+                MessageBox.Show("导入成功！");
         }
         //加载行号
         private void dgTestInfo_LoadingRow(object sender, DataGridRowEventArgs e)
@@ -319,13 +332,39 @@ namespace HASystem.Panels
             {
                 txtSearch.IsEnabled = true;
                 comboType.IsEnabled = false;
+                comboBarCode.IsEnabled = false;
+                btnView.IsEnabled = false;
                 dpGetDataStart.IsEnabled = false;
                 dpGetDataEnd.IsEnabled = false;
+                cbMultiBarcode.IsChecked = false;
             }
             else
             {
                 txtSearch.IsEnabled = false;
                 comboType.IsEnabled = true;
+                dpGetDataStart.IsEnabled = true;
+                dpGetDataEnd.IsEnabled = true;
+            }
+        }
+        //多条码查询
+        private void cbMultiBarcode_Click(object sender, RoutedEventArgs e)
+        {
+            if (cbMultiBarcode.IsChecked == true)
+            {
+                txtSearch.IsEnabled = false;
+                comboType.IsEnabled = false;
+                comboBarCode.IsEnabled = true;
+                cbBarcode.IsEnabled = true;
+                btnView.IsEnabled = true;
+                dpGetDataStart.IsEnabled = false;
+                dpGetDataEnd.IsEnabled = false;
+                cbBarcode.IsChecked = false;
+            }
+            else
+            {
+                btnView.IsEnabled = false;
+                comboType.IsEnabled = true;
+                comboBarCode.IsEnabled = false;
                 dpGetDataStart.IsEnabled = true;
                 dpGetDataEnd.IsEnabled = true;
             }

@@ -1,6 +1,18 @@
-﻿using HASystem.StaticClass;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+using HASystem.StaticClass;
 
 namespace HASystem
 {
@@ -9,8 +21,8 @@ namespace HASystem
     /// </summary>
     public partial class LoginWindow : Window
     {
-        //public static string strRole="";
-        //public static string strUserId = "";
+        public static string strRole="";
+        public static string strUserId = "";
         public LoginWindow()
         {
             InitializeComponent();
@@ -64,8 +76,8 @@ namespace HASystem
             else
             {
                 this.DialogResult = true;
-                UserInfo.strRole = comboUserType.Text;
-                UserInfo.strUserId = txtUserId.Text;
+                strRole = comboUserType.Text;
+                strUserId = txtUserId.Text;
             }
         }
         //用户文本框KeyDown

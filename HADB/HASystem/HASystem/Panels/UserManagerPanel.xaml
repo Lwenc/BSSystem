@@ -45,8 +45,8 @@
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
-                <Button x:Name="btnUserlInfo" Content="用户信息" Click="btnModelInfo_Click" Grid.Row="0"/>
-                <Button x:Name="btnUsereAdd" Content="用户信息录入" Click="btnModleAdd_Click" Grid.Row="1"/>
+                <Button x:Name="btnUserlInfo" Content="用户信息" Click="btnUserInfo_Click" Grid.Row="0"/>
+                <Button x:Name="btnUsereAdd" Content="用户信息录入" Click="btnUserAdd_Click" Grid.Row="1"/>
             <Button x:Name="btnPassWord" Content="密码修改" Click="btnPassWord_Click" Grid.Row="2"/>
         </Grid>
         <Grid Grid.Column="1" >

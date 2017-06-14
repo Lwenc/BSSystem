@@ -62,6 +62,14 @@ namespace HASystem.Panels
         //获取型号信息
         private void GetModel()
         {
+            if(LoginWindow.strRole=="普通用户")
+            {
+                btnModleAdd.Visibility = Visibility.Collapsed;
+                menuDelete.Visibility = Visibility.Collapsed;
+                menuAlter.Visibility = Visibility.Collapsed;
+                sepSelect.Visibility = Visibility.Collapsed;
+                sepDelete.Visibility = Visibility.Collapsed;
+            }
             try
             {
                 list = mi.GetModelData();
@@ -70,18 +78,11 @@ namespace HASystem.Panels
             catch(Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine(ex.Message);
-            }
-           
+            }     
         }
         //刷新按钮
         private void menuRefresh_Click(object sender, RoutedEventArgs e)
-        {
-            GetModel();
-
-            //var a = this.dgModelInfo.SelectedItem;
-            //var b = a as DataRowView;
-            //string result = b.Row[0].ToString();
-        }
+         =>   GetModel();
         //删除按钮
         private void menuDelete_Click(object sender, RoutedEventArgs e)
         {
@@ -92,7 +93,6 @@ namespace HASystem.Panels
             if(result==MessageBoxResult.Yes)
             {
                 string[] modelId = new string[num];
-                //string[] modelbrand = new string[num];
                 for(int i=0;i<num;i++)
                 {
                     try
@@ -102,8 +102,7 @@ namespace HASystem.Panels
                         SQLiteCommand cmd = conn.CreateCommand();
                         cmd.CommandText = $"delete from ModelInfo where model = '{modelId[i]}'";
                         cmd.ExecuteNonQuery();
-                        conn.Close();
-                      
+                        conn.Close();       
                     }
                     catch(Exception ex)
                     {
@@ -129,8 +128,6 @@ namespace HASystem.Panels
         }
         //回车键出发查询事件
         private void txtSearch_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
-        {
-            btnSearch_Click(sender,e);
-        }
+        =>    btnSearch_Click(sender,e);
     }
 }

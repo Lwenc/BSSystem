@@ -168,7 +168,8 @@
                 <ColumnDefinition Width="0.5*"/>
                 <ColumnDefinition Width="4.5*"/>
             </Grid.ColumnDefinitions>
-            <Button x:Name="btnSave" Content="保存" Grid.Column="0" HorizontalAlignment="Right" Click="btnSave_Click" Grid.ColumnSpan="3" Margin="0,18,397,18"/>
+            <Button x:Name="btnSave" Content="保存" Grid.Column="0" HorizontalAlignment="Right" Click="btnSave_Click"/>
+            <Button x:Name="btnReturn" Content="返回" Grid.Column="2" HorizontalAlignment="Left" Click="btnReturn_Click"/>
         </Grid>
     </Grid>
 </UserControl>

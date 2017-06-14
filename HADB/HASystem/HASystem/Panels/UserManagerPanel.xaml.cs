@@ -1,12 +1,8 @@
-﻿using System.Collections.ObjectModel;
-using System.Windows;
-using System.Windows.Controls;
-using System.Data.SqlClient;
-using ui = HASystem.StaticClass.UserInfo;
+﻿using HASystem.StaticClass;
 using System;
 using System.Data;
-using HASystem.StaticClass;
-using System.Collections.Generic;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace HASystem.Panels
 {
@@ -18,9 +14,24 @@ namespace HASystem.Panels
         public UserManagerPanel()
         {
             InitializeComponent();
+            IsRoleReturn();
+        }
+        //判断用户角色和修改返回按钮判断
+        private void IsRoleReturn()
+        {
+            if(LoginWindow.strRole=="普通用户")
+            {
+                btnUsereAdd.Visibility = Visibility.Collapsed;
+                menuDelete.Visibility = Visibility.Collapsed;
+            }
+            panelAlterInfo.RequestBack += (s, e) => ShowUserInfo();
+        }
+        private void ShowUserInfo()
+        {
+            btnUserInfo_Click(this,new RoutedEventArgs());
         }
         //查看用户信息
-        private void btnModelInfo_Click(object sender, RoutedEventArgs e)
+        private void btnUserInfo_Click(object sender, RoutedEventArgs e)
         {
             btnUserlInfo.IsEnabled = false;
             btnUsereAdd.IsEnabled = true;
@@ -35,7 +46,7 @@ namespace HASystem.Panels
             dgUserInfo.ItemsSource = Ds.Tables[0].DefaultView;
         }
         //用户信息添加
-        private void btnModleAdd_Click(object sender, RoutedEventArgs e)
+        private void btnUserAdd_Click(object sender, RoutedEventArgs e)
         {
             btnUserlInfo.IsEnabled = true;
             btnUsereAdd.IsEnabled = false;
@@ -81,7 +92,7 @@ namespace HASystem.Panels
                 gridData.Visibility = Visibility.Collapsed;
                 panelAlterInfo.Visibility = Visibility.Visible;
             }
-            catch (Exception ex)
+            catch
             {
                 MessageBox.Show("请先点击要修改的用户！");
             }

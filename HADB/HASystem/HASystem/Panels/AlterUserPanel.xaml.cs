@@ -21,13 +21,20 @@ namespace HASystem.Panels
     /// </summary>
     public partial class AlterUserPanel : UserControl
     {
+        public event EventHandler RequestBack;
         public AlterUserPanel()
         {
             InitializeComponent();
-            List<string> list = new List<string>() { "普通用户", "管理员" };
+            IsRoleInit();  
+        }
+        //判断用户角色和初始化下拉框
+        private void IsRoleInit()
+        {
+            if (LoginWindow.strRole == "普通用户")
+                comBoRole.IsEnabled = false;
+            string[] list = new string[] { "普通用户", "管理员" };
             comBoRole.ItemsSource = list;
         }
-
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
             //判断输入是否为空
@@ -54,5 +61,8 @@ namespace HASystem.Panels
                 MessageBox.Show(ex.Message);
             }
         }
+        //返回按钮
+        private void btnReturn_Click(object sender, RoutedEventArgs e)
+        => RequestBack?.Invoke(sender, EventArgs.Empty);
     }
 }

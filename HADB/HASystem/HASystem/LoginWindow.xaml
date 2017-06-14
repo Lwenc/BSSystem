@@ -74,7 +74,7 @@
                  VerticalContentAlignment="Center" Margin="137,84,84,192" KeyDown="txtUserId_KeyDown"/>
         <PasswordBox x:Name="txtPwassWord"   HorizontalContentAlignment="Center" 
                  VerticalContentAlignment="Center" KeyDown="txtPwassWord_KeyDown" Margin="137,138,84,140"/>
-        <Button x:Name="btnLogin" Content="登   录" Click="btnLogin_Click" Background="White" Margin="158,242,162,43"/>
+        <Button x:Name="btnLogin" Content="登   录" Click="btnLogin_Click" Foreground="White" Background="#323b44" Margin="158,242,162,43"/>
 
     </Grid>
 </Window>

@@ -35,13 +35,13 @@ namespace HASystem.Panels
         private string strReset = "23 AA AA 41 37 41 31 33 46 33 45 0D";
         SerialPort sp = new SerialPort();
         string strModel;
-        string strFrom_user1=UserInfo.strUserId;
+        string strFrom_user1=LoginWindow.strUserId;
         string strTesttype_1;
         string strPassageway_1="1";
         string strIspass_1;
         string strRemark_1;
         DateTime dtTime_1;
-        string strFrom_user2 = UserInfo.strUserId;
+        string strFrom_user2 = LoginWindow.strUserId;
         string strTesttype_2;
         string strPassageway_2 = "1";
         string strIspass_2;

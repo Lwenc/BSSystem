@@ -171,6 +171,7 @@ D:\GitData\BSSystem\HADB\HASystem\HASystem\obj\Debug\UC\treeUserControl.baml
 D:\GitData\BSSystem\HADB\HASystem\HASystem\obj\Debug\HASystem.g.resources
 D:\GitData\BSSystem\HADB\HASystem\HASystem\obj\Debug\HASystem.Properties.Resources.resources
 D:\GitData\BSSystem\HADB\HASystem\HASystem\obj\Debug\HASystem.csproj.GenerateResource.Cache
+D:\GitData\BSSystem\HADB\HASystem\HASystem\obj\Debug\HASystem.csprojResolveAssemblyReference.cache
 C:\Users\小浩\Desktop\HASystem\HASystem\bin\Debug\HASystem.exe.config
 C:\Users\小浩\Desktop\HASystem\HASystem\obj\Debug\HASystem.exe
 C:\Users\小浩\Desktop\HASystem\HASystem\obj\Debug\HASystem.pdb
