@@ -109,10 +109,13 @@ namespace HASystem.Panels
         {
             DataRowView dr = (DataRowView)dgUserInfo.SelectedItem;
             string strUserId = dr.Row[0].ToString();
-            UserInfo.DelUserInfo(strUserId);
-            UserInfo.DelURInfo(strUserId);
-            MessageBox.Show("用户" + strUserId + "删除成功！");
-            menuRefresh_Click(sender, e);
+            if (MessageBox.Show("确定删除" + strUserId + "该账号？", "提示", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+            {
+                UserInfo.DelUserInfo(strUserId);
+                UserInfo.DelURInfo(strUserId);
+                MessageBox.Show("用户" + strUserId + "删除成功！");
+                menuRefresh_Click(sender, e);
+            }
         }
 
         private void btnSearch_Click(object sender, RoutedEventArgs e)

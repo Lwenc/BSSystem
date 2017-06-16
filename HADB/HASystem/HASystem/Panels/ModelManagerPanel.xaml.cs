@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Data.SQLite;
 using mi = HASystem.StaticClass.ModelInfo;
+using HASystem.StaticClass;
 
 namespace HASystem.Panels
 {
@@ -13,7 +14,7 @@ namespace HASystem.Panels
     public partial class ModelManagerPanel : UserControl
     {
         private ObservableCollection<mi.ModelResult> list;
-        private  SQLiteConnection conn = new SQLiteConnection("Data Source=DB\\BS.db");
+        private SQLiteConnection conn = DataBaseOperation.conn;
         public ModelManagerPanel()
         {
             InitializeComponent();

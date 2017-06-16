@@ -116,6 +116,7 @@
     <Compile Include="Panels\UserManagerPanel.xaml.cs">
       <DependentUpon>UserManagerPanel.xaml</DependentUpon>
     </Compile>
+    <Compile Include="StaticClass\DataBaseOperation.cs" />
     <Compile Include="StaticClass\DataGridExtensions.cs" />
     <Compile Include="StaticClass\ExcelExportHelper.cs" />
     <Compile Include="StaticClass\IniConfigure.cs" />

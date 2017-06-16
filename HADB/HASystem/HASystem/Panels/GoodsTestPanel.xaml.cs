@@ -627,17 +627,6 @@ namespace HASystem.Panels
             dgO1.Items.Clear();
             dgOB.Items.Clear();
             txtBarcode.Text = "";
-            //comboModel.SelectedIndex = -1;
-            //labVoltMax.Content = 0;
-            //labVoltMin.Content = 0;
-            //labResistanceMax.Content = 0;
-            //labResistanceMin.Content = 0;
-            //labKMax.Content = 0;
-            //labKMin.Content = 0;
-            //labTotal.Content = 0;
-            //labUnQualified.Content = 0;
-            //labQualifiedRate.Content = 0;
-            //labQualified.Content = 0;
             sum = 0;
             pass = 0;
             npass = 0;
@@ -646,7 +635,6 @@ namespace HASystem.Panels
             labQualified.Content = "0";
             labUnQualified.Content = "0";
             labQualifiedRate.Content = "0";
-            //mi.GetModelData();
             //方法体
             try
             {
@@ -747,7 +735,7 @@ namespace HASystem.Panels
                 ReadTestData();
             }
         }
-
+        //测试u类型下拉框
         private void comboType_DropDownClosed(object sender, EventArgs e)//设置显示哪个dg
         {
             //设置dg显示

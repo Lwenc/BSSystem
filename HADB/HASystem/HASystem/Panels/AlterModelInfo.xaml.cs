@@ -103,7 +103,7 @@ namespace HASystem.Panels
             //数据保存
             try
             {
-                ModelInfo.UpdateModeInfo(txtModel.Text, "O1", double.Parse(txtMaxVolt.Text), double.Parse(txtMinVolt.Text), double.Parse(txtMaxResistance.Text), double.Parse(txtMinResistance.Text), "OB", double.Parse(txtMaxVolt2.Text), double.Parse(txtMinVolt2.Text), double.Parse(txtMaxResistance2.Text), double.Parse(txtMinResistance2.Text), double.Parse(txtMaxK2.Text), double.Parse(txtMinK2.Text), double.Parse(txtCompence.Text), 0, "未启用", DateTime.Now);
+                ModelInfo.UpdateModeInfo(txtModel.Text, "O1", double.Parse(txtMaxVolt.Text), double.Parse(txtMinVolt.Text), double.Parse(txtMaxResistance.Text), double.Parse(txtMinResistance.Text), "OB", double.Parse(txtMaxVolt2.Text), double.Parse(txtMinVolt2.Text), double.Parse(txtMaxResistance2.Text), double.Parse(txtMinResistance2.Text), double.Parse(txtMaxK2.Text), double.Parse(txtMinK2.Text), double.Parse(txtCompence.Text), 0, LoginWindow.strUserId, DateTime.Now);
                 MessageBox.Show("修改成功！");
             }
             catch (Exception ex)

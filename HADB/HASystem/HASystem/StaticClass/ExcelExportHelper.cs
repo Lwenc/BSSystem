@@ -29,7 +29,7 @@ namespace HASystem.StaticClass
             Export(data, path, sheetName, data.Items);
         }
         //多选导出
-        public static void Export(DataGrid data, string path, string sheetName, IList results)
+        public static async void Export(DataGrid data, string path, string sheetName, IList results)
         {
             if (data.Items.IsEmpty)
             {
@@ -78,18 +78,21 @@ namespace HASystem.StaticClass
                 //    for (int column = 0; column < data.Columns.Count; column++)
                 //        //通过反射获取各列的值，性能上大概有点堪忧。。不过现在数据量不大应该能接受
                 //        sheet.Cells[row + 3, column + 1] = bindingType.GetProperty(bindingPropertyName[column]).GetValue(data.Items[row]);
-                for (int row = 0; row < results.Count; row++)
+                await Task.Run(() =>
                 {
-                    for (int column = 0; column < data.Columns.Count; column++)
+                    for (int row = 0; row < results.Count; row++)
                     {
-                        sheet.Cells[row + 3, column + 1] = bindingType.GetProperty(bindingPropertyName[column]).GetValue(results[row]);
+                        for (int column = 0; column < bindingPropertyName.Length; column++)
+                        {
+                            sheet.Cells[row + 3, column + 1] = bindingType.GetProperty(bindingPropertyName[column]).GetValue(results[row]);
+                        }
                     }
-                }
 
-                sheet.Columns.AutoFit();
+                    sheet.Columns.AutoFit();
 
-                book.SaveAs(path, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, XlSaveAsAccessMode.xlNoChange);
-                MessageBox.Show("数据保存成功！", "提示", MessageBoxButton.OK, MessageBoxImage.Information);
+                    book.SaveAs(path, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, XlSaveAsAccessMode.xlNoChange);
+                    MessageBox.Show("数据保存成功！", "提示", MessageBoxButton.OK, MessageBoxImage.Information);
+                });
             }
             catch (Exception ex)
             {

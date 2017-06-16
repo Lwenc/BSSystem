@@ -1,13 +1,13 @@
 ﻿using HASystem.StaticClass;
 using Microsoft.Win32;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.SQLite;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -18,9 +18,9 @@ namespace HASystem.Panels
     /// </summary>
     public partial class DataManagerPanel : UserControl
     {
-        private  ObservableCollection<TestResult> list;
+        private ObservableCollection<TestResult> list;
         private ObservableCollection<string> txt;
-        private  SQLiteConnection conn = new SQLiteConnection("Data Source=DB\\BS.db");
+        private SQLiteConnection conn = ModelInfo.conn;
 
         public DataManagerPanel()
         {
@@ -32,11 +32,8 @@ namespace HASystem.Panels
         {
             string[] type = new string[] { "O1", "OB" };
             comboType.ItemsSource = type;
-            comboModel.ItemsSource = (from l in GetTestInfo()
-                                      select l.model).Distinct();
-            //string[] s = new string[] { "112345698745", "456575698745" };
-            //comboBarCode.ItemsSource = s;
-            //comboBarCode.SelectedIndex = 0;
+                comboModel.ItemsSource = (from l in GetTestInfo()
+                                          select l.model).Distinct();
         }
         //获得全部测试数据
         private ObservableCollection<TestResult> GetTestInfo()
@@ -109,8 +106,28 @@ namespace HASystem.Panels
         }
         //测试数据
         private void btnTestInfo_Click(object sender, RoutedEventArgs e)
-        => dgTestInfo.ItemsSource = GetTestInfo();
+        => GetTest();
+        private void GetTest()
+        {
+            try
+            {
+                conn.Open();
+                string CommandText = "select * from TestInfo;";
+                SQLiteDataAdapter da = new SQLiteDataAdapter(CommandText, conn);
+                DataSet Ds = new DataSet();
+                da.Fill(Ds);
+                dgTestInfo.ItemsSource = Ds.Tables[0].DefaultView;
 
+                if (Ds.Tables[0].Rows.Count == 0)
+                    MessageBox.Show("没有查询结果！", "提示", MessageBoxButton.OK, MessageBoxImage.Warning);
+                conn.Close();
+            }
+            catch (Exception ex)
+            {
+                conn.Close();
+                MessageBox.Show(ex.Message);
+            }
+        }
         //操作日志
         private void btnLog_Click(object sender, RoutedEventArgs e)
         {
@@ -127,14 +144,14 @@ namespace HASystem.Panels
                 else
                     MessageBox.Show("条码不能为空！", "提示", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
-            if(cbMultiBarcode.IsChecked==true)
+            if (cbMultiBarcode.IsChecked == true)
             {
                 if (comboBarCode.Text != "")
                     MultiBarCodeSearch();
                 else
                     MessageBox.Show("尚未导入条码！", "提示", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
-            if (cbBarcode.IsChecked == false && cbMultiBarcode.IsChecked == false) 
+            if (cbBarcode.IsChecked == false && cbMultiBarcode.IsChecked == false)
                 dpGetData_CalendarClosed();
         }
         //单条码查询
@@ -151,37 +168,47 @@ namespace HASystem.Panels
             GC.Collect();
             try
             {
+                //conn.Open();
+                //SQLiteCommand cmd = conn.CreateCommand();
+                //cmd.CommandText = $"select * from TestInfo where barcod like '%{txtSearch.Text}%' and model = '{selectedmodel}'";
+                //SQLiteDataReader reader = cmd.ExecuteReader();
+                //TestResult result = default(TestResult);
+                //foreach (var item in reader)
+                //{
+                //    result.model = reader["model"].ToString();
+                //    result.barcod = reader["barcod"].ToString();
+                //    result.from_user1 = reader["from_user1"].ToString();
+                //    result.testtype_1 = reader["testtype_1"].ToString();
+                //    result.passageway_1 = reader["passageway_1"].ToString();
+                //    result.time_1 = reader["time_1"].ToString();
+                //    result.volt_1 = reader["volt_1"].ToString();
+                //    result.resistance_1 = reader["resistance_1"].ToString();
+                //    result.ispass_1 = reader["ispass_1"].ToString();
+                //    result.remark_1 = reader["remark_1"].ToString();
+                //    result.from_user2 = reader["from_user2"].ToString();
+                //    result.testtype_2 = reader["testtype_2"].ToString();
+                //    result.passageway_2 = reader["passageway_2"].ToString();
+                //    result.time_2 = reader["time_2"].ToString();
+                //    result.volt_2 = reader["volt_2"].ToString();
+                //    result.resistance_2 = reader["resistance_2"].ToString();
+                //    result.k_value_2 = reader["k_value_2"].ToString();
+                //    result.ispass_2 = reader["ispass_2"].ToString();
+                //    result.remark_2 = reader["remark_2"].ToString();
+                //    list.Add(result);
+                //}
+                //if (list.Count == 0)
+
+                //dgTestInfo.ItemsSource = list;
                 conn.Open();
-                SQLiteCommand cmd = conn.CreateCommand();
-                cmd.CommandText = $"select * from TestInfo where barcod like '%{txtSearch.Text}%' and model = '{selectedmodel}'";
-                SQLiteDataReader reader = cmd.ExecuteReader();
-                TestResult result = default(TestResult);
-                foreach (var item in reader)
-                {
-                    result.model = reader["model"].ToString();
-                    result.barcod = reader["barcod"].ToString();
-                    result.from_user1 = reader["from_user1"].ToString();
-                    result.testtype_1 = reader["testtype_1"].ToString();
-                    result.passageway_1 = reader["passageway_1"].ToString();
-                    result.time_1 = reader["time_1"].ToString();
-                    result.volt_1 = reader["volt_1"].ToString();
-                    result.resistance_1 = reader["resistance_1"].ToString();
-                    result.ispass_1 = reader["ispass_1"].ToString();
-                    result.remark_1 = reader["remark_1"].ToString();
-                    result.from_user2 = reader["from_user2"].ToString();
-                    result.testtype_2 = reader["testtype_2"].ToString();
-                    result.passageway_2 = reader["passageway_2"].ToString();
-                    result.time_2 = reader["time_2"].ToString();
-                    result.volt_2 = reader["volt_2"].ToString();
-                    result.resistance_2 = reader["resistance_2"].ToString();
-                    result.k_value_2 = reader["k_value_2"].ToString();
-                    result.ispass_2 = reader["ispass_2"].ToString();
-                    result.remark_2 = reader["remark_2"].ToString();
-                    list.Add(result);
-                }
-                if (list.Count == 0)
+                string CommandText = $"select * from TestInfo where barcod like '%{txtSearch.Text}%' and model = '{selectedmodel}'";
+                SQLiteDataAdapter da = new SQLiteDataAdapter(CommandText, conn);
+                DataSet Ds = new DataSet();
+                da.Fill(Ds);
+                dgTestInfo.ItemsSource = Ds.Tables[0].DefaultView;
+
+                if (Ds.Tables[0].Rows.Count == 0)
                     MessageBox.Show("没有查询结果！", "提示", MessageBoxButton.OK, MessageBoxImage.Warning);
-                dgTestInfo.ItemsSource = list;
+                
                 conn.Close();
             }
             catch (Exception ex)
@@ -194,50 +221,63 @@ namespace HASystem.Panels
         private void MultiBarCodeSearch()
         {
             string selectedmodel = comboModel.SelectedValue?.ToString();
+            string CommandText = "";
             if (selectedmodel == null)
             {
                 MessageBox.Show("请选择型号进行条码查询！", "提示", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
-            list = new ObservableCollection<TestResult>();
-            list.Clear();
+            //list = new ObservableCollection<TestResult>();
+            //list.Clear();
             GC.Collect();
             try
             {
                 conn.Open();
-                for(int i=0;i<txt.Count;i++)
+                SQLiteDataAdapter da;
+                DataSet Ds = new DataSet();
+                for (int i = 0; i < txt.Count; i++)
                 {
-                    SQLiteCommand cmd = conn.CreateCommand();
-                    cmd.CommandText = $"select * from TestInfo where barcod like '{txt[i]}' and model = '{selectedmodel}'";
-                    SQLiteDataReader reader = cmd.ExecuteReader();
-                    TestResult result = default(TestResult);
-                    foreach (var item in reader)
-                    {
-                        result.model = reader["model"].ToString();
-                        result.barcod = reader["barcod"].ToString();
-                        result.from_user1 = reader["from_user1"].ToString();
-                        result.testtype_1 = reader["testtype_1"].ToString();
-                        result.passageway_1 = reader["passageway_1"].ToString();
-                        result.time_1 = reader["time_1"].ToString();
-                        result.volt_1 = reader["volt_1"].ToString();
-                        result.resistance_1 = reader["resistance_1"].ToString();
-                        result.ispass_1 = reader["ispass_1"].ToString();
-                        result.remark_1 = reader["remark_1"].ToString();
-                        result.from_user2 = reader["from_user2"].ToString();
-                        result.testtype_2 = reader["testtype_2"].ToString();
-                        result.passageway_2 = reader["passageway_2"].ToString();
-                        result.time_2 = reader["time_2"].ToString();
-                        result.volt_2 = reader["volt_2"].ToString();
-                        result.resistance_2 = reader["resistance_2"].ToString();
-                        result.k_value_2 = reader["k_value_2"].ToString();
-                        result.ispass_2 = reader["ispass_2"].ToString();
-                        result.remark_2 = reader["remark_2"].ToString();
-                        list.Add(result);
-                    }
+                    //    SQLiteCommand cmd = conn.CreateCommand();
+                    //    cmd.CommandText = $"select * from TestInfo where barcod like '{txt[i]}' and model = '{selectedmodel}'";
+                    //    SQLiteDataReader reader = cmd.ExecuteReader();
+                    //    TestResult result = default(TestResult);
+                    //    foreach (var item in reader)
+                    //    {
+                    //        result.model = reader["model"].ToString();
+                    //        result.barcod = reader["barcod"].ToString();
+                    //        result.from_user1 = reader["from_user1"].ToString();
+                    //        result.testtype_1 = reader["testtype_1"].ToString();
+                    //        result.passageway_1 = reader["passageway_1"].ToString();
+                    //        result.time_1 = reader["time_1"].ToString();
+                    //        result.volt_1 = reader["volt_1"].ToString();
+                    //        result.resistance_1 = reader["resistance_1"].ToString();
+                    //        result.ispass_1 = reader["ispass_1"].ToString();
+                    //        result.remark_1 = reader["remark_1"].ToString();
+                    //        result.from_user2 = reader["from_user2"].ToString();
+                    //        result.testtype_2 = reader["testtype_2"].ToString();
+                    //        result.passageway_2 = reader["passageway_2"].ToString();
+                    //        result.time_2 = reader["time_2"].ToString();
+                    //        result.volt_2 = reader["volt_2"].ToString();
+                    //        result.resistance_2 = reader["resistance_2"].ToString();
+                    //        result.k_value_2 = reader["k_value_2"].ToString();
+                    //        result.ispass_2 = reader["ispass_2"].ToString();
+                    //        result.remark_2 = reader["remark_2"].ToString();
+                    //        list.Add(result);
+                    //    }
+                    CommandText = $"select * from TestInfo where barcod like '{txt[i]}' and model = '{selectedmodel}'";
+                    da = new SQLiteDataAdapter(CommandText, conn);
+                    da.Fill(Ds);
                 }
-                if (list.Count == 0)
+                //if (list.Count == 0)
+                //    MessageBox.Show("没有查询结果！", "提示", MessageBoxButton.OK, MessageBoxImage.Warning);
+                //dgTestInfo.ItemsSource = list;
+
+                
+                dgTestInfo.ItemsSource = Ds.Tables[0].DefaultView;
+
+                if (Ds.Tables[0].Rows.Count == 0)
                     MessageBox.Show("没有查询结果！", "提示", MessageBoxButton.OK, MessageBoxImage.Warning);
-                dgTestInfo.ItemsSource = list;
+
                 conn.Close();
             }
             catch (Exception ex)
@@ -262,6 +302,7 @@ namespace HASystem.Panels
             }
             string selectedModel = comboModel.SelectedValue?.ToString();
             string selectedType = comboType.SelectedValue?.ToString();
+            string CommandText = "";
             DateTime dtTime = DateTime.Parse(dpGetDataStart.Text);
             DateTime dtTime2 = DateTime.Parse(dpGetDataEnd.Text);
             if (selectedModel == null)
@@ -281,43 +322,57 @@ namespace HASystem.Panels
             }
             try
             {
-                list = new ObservableCollection<TestResult>();
-                list.Clear();
-                GC.Collect();
+                //list = new ObservableCollection<TestResult>();
+                //list.Clear();
+                //GC.Collect();
+                //conn.Open();
+                //SQLiteCommand cmd = conn.CreateCommand();
+                //if (selectedType == "O1")
+                //    cmd.CommandText = $"select * from TestInfo where time_1>='{dtTime.ToString("yyyy-MM-dd HH:mm:ss.fff")}' and time_1<'{dtTime2.ToString("yyyy-MM-dd HH:mm:ss.fff")}' and model='{selectedModel}'";
+                //else
+                //    cmd.CommandText = $"select * from TestInfo where time_2>='{dtTime.ToString("yyyy-MM-dd HH:mm:ss.fff")}' and time_2<'{dtTime2.ToString("yyyy-MM-dd HH:mm:ss.fff")}' and model='{selectedModel}'";
+                //SQLiteDataReader reader = cmd.ExecuteReader();
+                //TestResult result = default(TestResult);
+                //foreach (var item in reader)
+                //{
+                //    result.model = reader["model"].ToString();
+                //    result.barcod = reader["barcod"].ToString();
+                //    result.from_user1 = reader["from_user1"].ToString();
+                //    result.testtype_1 = reader["testtype_1"].ToString();
+                //    result.passageway_1 = reader["passageway_1"].ToString();
+                //    result.time_1 = reader["time_1"].ToString();
+                //    result.volt_1 = reader["volt_1"].ToString();
+                //    result.resistance_1 = reader["resistance_1"].ToString();
+                //    result.ispass_1 = reader["ispass_1"].ToString();
+                //    result.remark_1 = reader["remark_1"].ToString();
+                //    result.from_user2 = reader["from_user2"].ToString();
+                //    result.testtype_2 = reader["testtype_2"].ToString();
+                //    result.passageway_2 = reader["passageway_2"].ToString();
+                //    result.time_2 = reader["time_2"].ToString();
+                //    result.volt_2 = reader["volt_2"].ToString();
+                //    result.resistance_2 = reader["resistance_2"].ToString();
+                //    result.k_value_2 = reader["k_value_2"].ToString();
+                //    result.ispass_2 = reader["ispass_2"].ToString();
+                //    result.remark_2 = reader["remark_2"].ToString();
+                //    list.Add(result);
+                //}
+                //if (list.Count == 0)
+                //    MessageBox.Show("没有查询结果！", "提示", MessageBoxButton.OK, MessageBoxImage.Warning);
+                //dgTestInfo.ItemsSource = list;
+                //conn.Close();
                 conn.Open();
-                SQLiteCommand cmd = conn.CreateCommand();
                 if (selectedType == "O1")
-                    cmd.CommandText = $"select * from TestInfo where time_1>='{dtTime.ToString("yyyy-MM-dd HH:mm:ss.fff")}' and time_1<'{dtTime2.ToString("yyyy-MM-dd HH:mm:ss.fff")}' and model='{selectedModel}'";
+                    CommandText = $"select * from TestInfo where time_1>='{dtTime.ToString("yyyy-MM-dd HH:mm:ss.fff")}' and time_1<'{dtTime2.ToString("yyyy-MM-dd HH:mm:ss.fff")}' and model='{selectedModel}'";
                 else
-                    cmd.CommandText = $"select * from TestInfo where time_2>='{dtTime.ToString("yyyy-MM-dd HH:mm:ss.fff")}' and time_2<'{dtTime2.ToString("yyyy-MM-dd HH:mm:ss.fff")}' and model='{selectedModel}'";
-                SQLiteDataReader reader = cmd.ExecuteReader();
-                TestResult result = default(TestResult);
-                foreach (var item in reader)
-                {
-                    result.model = reader["model"].ToString();
-                    result.barcod = reader["barcod"].ToString();
-                    result.from_user1 = reader["from_user1"].ToString();
-                    result.testtype_1 = reader["testtype_1"].ToString();
-                    result.passageway_1 = reader["passageway_1"].ToString();
-                    result.time_1 = reader["time_1"].ToString();
-                    result.volt_1 = reader["volt_1"].ToString();
-                    result.resistance_1 = reader["resistance_1"].ToString();
-                    result.ispass_1 = reader["ispass_1"].ToString();
-                    result.remark_1 = reader["remark_1"].ToString();
-                    result.from_user2 = reader["from_user2"].ToString();
-                    result.testtype_2 = reader["testtype_2"].ToString();
-                    result.passageway_2 = reader["passageway_2"].ToString();
-                    result.time_2 = reader["time_2"].ToString();
-                    result.volt_2 = reader["volt_2"].ToString();
-                    result.resistance_2 = reader["resistance_2"].ToString();
-                    result.k_value_2 = reader["k_value_2"].ToString();
-                    result.ispass_2 = reader["ispass_2"].ToString();
-                    result.remark_2 = reader["remark_2"].ToString();
-                    list.Add(result);
-                }
-                if (list.Count == 0)
+                    CommandText = $"select * from TestInfo where time_2>='{dtTime.ToString("yyyy-MM-dd HH:mm:ss.fff")}' and time_2<'{dtTime2.ToString("yyyy-MM-dd HH:mm:ss.fff")}' and model='{selectedModel}'";
+               
+                SQLiteDataAdapter da = new SQLiteDataAdapter(CommandText, conn);
+                DataSet Ds = new DataSet();
+                da.Fill(Ds);
+                dgTestInfo.ItemsSource = Ds.Tables[0].DefaultView;
+
+                if (Ds.Tables[0].Rows.Count == 0)
                     MessageBox.Show("没有查询结果！", "提示", MessageBoxButton.OK, MessageBoxImage.Warning);
-                dgTestInfo.ItemsSource = list;
                 conn.Close();
             }
             catch (Exception ex)
@@ -368,10 +423,30 @@ namespace HASystem.Panels
         //导出按钮
         private void menuTestExport_Click(object sender, RoutedEventArgs e)
         {
-            SaveFileDialog sfd = new SaveFileDialog();
-            sfd.Filter = "Excel文件|*.xlsx";
-            if (sfd.ShowDialog().Value == true)
-                ExcelExportHelper.Export(dgTestInfo, sfd.FileName, "Sheet1");
+            DataGridExtensions.WriteExcel(dgTestInfo);
+            //SaveFileDialog sfd = new SaveFileDialog();
+            //sfd.Filter = "Excel文件|*.xlsx";
+            //if (sfd.ShowDialog().Value == true)
+            //{
+            //Dispatcher.InvokeAsync(() => ResetProcessBarVisity());
+            //ExcelExportHelper.Export(dgTestInfo, sfd.FileName, "Sheet1");
+            //}
+        }
+        private async void ResetProcessBarVisity()
+        {
+            gridPB.Visibility = Visibility.Visible;
+            gridInfo.Opacity = 0.5;
+            gridInfo.IsEnabled = false;
+            pb.Value = 0;
+            for (int i = 1; i < 4; i++)
+            {
+                pb.Value = i * 2;
+                tbProgressBar.Text = "正在操作：" + i * 2 + "0" + "%";
+                await Task.Delay(500);
+            }
+            gridPB.Visibility = Visibility.Collapsed;
+            gridInfo.Opacity = 1;
+           gridInfo.IsEnabled = true;
         }
         //浏览按钮
         private void btnView_Click(object sender, RoutedEventArgs e)

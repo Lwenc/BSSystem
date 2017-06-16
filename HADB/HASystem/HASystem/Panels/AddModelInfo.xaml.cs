@@ -88,7 +88,7 @@ namespace HASystem.Panels
             //进行数据保存
             try
             {
-                ModelInfo.AddNewModeInfo(txtModel.Text, "O1", double.Parse(txtMaxVolt.Text), double.Parse(txtMinVolt.Text), double.Parse(txtMaxResistance.Text), double.Parse(txtMinResistance.Text), "OB", double.Parse(txtMaxVolt2.Text), double.Parse(txtMinVolt2.Text), double.Parse(txtMaxResistance2.Text), double.Parse(txtMinResistance2.Text), double.Parse(txtMaxK2.Text), double.Parse(txtMinK2.Text), double.Parse(txtCompence.Text), 0, "未启用", DateTime.Now);
+                ModelInfo.AddNewModeInfo(txtModel.Text, "O1", double.Parse(txtMaxVolt.Text), double.Parse(txtMinVolt.Text), double.Parse(txtMaxResistance.Text), double.Parse(txtMinResistance.Text), "OB", double.Parse(txtMaxVolt2.Text), double.Parse(txtMinVolt2.Text), double.Parse(txtMaxResistance2.Text), double.Parse(txtMinResistance2.Text), double.Parse(txtMaxK2.Text), double.Parse(txtMinK2.Text), double.Parse(txtCompence.Text), 0, LoginWindow.strUserId, DateTime.Now);
                 MessageBox.Show("型号：" + txtModel.Text + "添加成功！");
             }
             catch (Exception ex)

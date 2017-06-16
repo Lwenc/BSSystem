@@ -16,6 +16,12 @@ namespace HASystem
         public MainWindow()
         {
             InitializeComponent();
+            IsRole();
+        }
+        private void IsRole()
+        {
+            if (LoginWindow.strRole == "普通用户")
+                rdiSystem.Visibility = Visibility.Collapsed;
         }
         #region//功能面板切换
         //故事板输入和输出

@@ -298,6 +298,10 @@
                     </DataGrid>
                 </Grid>
             </Grid>
+            <Grid x:Name="gridPB" Visibility="Collapsed">
+                <TextBlock x:Name="tbProgressBar" Width="200" Height="34" Text="正在操作：0%" Margin="388,225,289,270" FontSize="15" FontWeight="Bold"/>
+                <ProgressBar x:Name="pb" Width="200" Height="34" Background="LightBlue" Foreground="#323b44" Minimum="0" Maximum="10"/>
+            </Grid>
             <local:AddModelInfo x:Name="panelAddModelInfo" Visibility="Collapsed"/>
             <local:AlterModelInfo x:Name="panelAlterInfo" Visibility="Collapsed"/>
         </Grid>

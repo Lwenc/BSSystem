@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         Icon="Image/thunder.jpg"
-        
+        ResizeMode="NoResize"
         Title="登录" Height="350" Width="400">
     <Grid>
         <Grid.Resources>
@@ -24,7 +24,7 @@
                     <Border Grid.Column="0" BorderThickness="2" BorderBrush="Black" Opacity="0.8"/>
 
                     <Border Grid.Column="1" Background="Black" Opacity="0.8" Cursor="Hand"/>
-                    <Path x:Name="Arrow" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Data="M 0 0 L 4 4 L 8 0 Z" Margin="11,10,11,5" Stretch="Fill" Fill="White" />
+                    <Path x:Name="Arrow" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Data="M 0 0 L 4 4 L 8 0 Z" Margin="11,10,11,10" Stretch="Fill" Fill="White" />
                 </Grid>
             </ControlTemplate>
 
@@ -56,7 +56,7 @@
                 </Setter>
                 <Setter Property="FontSize" Value="13"/>
             </Style>
-            
+
             <Style TargetType="Label">
                 <Setter Property="Foreground" Value="White"/>
             </Style>
@@ -67,14 +67,14 @@
 
         <Label Content="电压与内阻测试系统" FontSize="24" Margin="81,19,31,233" Foreground="Black"/>
         <Label Content="用户账号：" Margin="70,90,204,172" />
-        <Label Content="密码：" Margin="79,141,195,121" />
-        <Label Content="用户类型：" Margin="67,194,207,64" />
-        <ComboBox x:Name="comboUserType"  KeyDown="comboUserType_KeyDown" Margin="137,192,83,89"/>
+        <Label Content="密   码：" Margin="79,150,195,112" />
+        <Label Content="用户类型：" Margin="67,211,207,47" />
+        <ComboBox x:Name="comboUserType"  KeyDown="comboUserType_KeyDown" Margin="137,202,83,75"/>
         <TextBox x:Name="txtUserId"   HorizontalContentAlignment="Center" 
-                 VerticalContentAlignment="Center" Margin="137,84,84,192" KeyDown="txtUserId_KeyDown"/>
+                 VerticalContentAlignment="Center" Margin="137,81,84,194" KeyDown="txtUserId_KeyDown"/>
         <PasswordBox x:Name="txtPwassWord"   HorizontalContentAlignment="Center" 
-                 VerticalContentAlignment="Center" KeyDown="txtPwassWord_KeyDown" Margin="137,138,84,140"/>
-        <Button x:Name="btnLogin" Content="登   录" Click="btnLogin_Click" Foreground="White" Background="#323b44" Margin="158,242,162,43"/>
+                 VerticalContentAlignment="Center" KeyDown="txtPwassWord_KeyDown" Margin="137,143,84,133"/>
+        <Button x:Name="btnLogin" Content="登   录" Click="btnLogin_Click" Foreground="White" Background="#323b44" Margin="158,257,162,28" Loaded="btnLogin_Loaded"/>
 
     </Grid>
 </Window>

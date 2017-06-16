@@ -9,7 +9,7 @@ namespace HASystem.StaticClass
     static class ModelInfo
     {
         public static ObservableCollection<ModelResult> list;
-        public static SQLiteConnection conn = new SQLiteConnection("Data Source=DB\\BS.db");
+        public static SQLiteConnection conn = DataBaseOperation.conn;
 
         public struct ModelResult
         {
@@ -71,7 +71,6 @@ namespace HASystem.StaticClass
             }
             catch(Exception ex)
             {
-                conn.Close();
                 System.Diagnostics.Debug.WriteLine(ex.Message);
                 return null;
             }
