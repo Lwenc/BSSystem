@@ -9,8 +9,8 @@
         Icon="Image/thunder.jpg"
         ResizeMode="NoResize"
         Title="登录" Height="350" Width="400">
-    <Grid>
-        <Grid.Resources>
+    <StackPanel>
+        <StackPanel.Resources>
             <!--下拉框箭头-->
             <ControlTemplate x:Key="ComboBoxTextBox" TargetType="{x:Type TextBox}">
                 <Border x:Name="PART_ContentHost" Focusable="False" Background="{TemplateBinding Background}" />
@@ -60,21 +60,43 @@
             <Style TargetType="Label">
                 <Setter Property="Foreground" Value="White"/>
             </Style>
-        </Grid.Resources>
-        <Grid.Background>
+        </StackPanel.Resources>
+        <StackPanel.Background>
             <ImageBrush ImageSource="Image/thunder.jpg" Opacity="0.8"/>
-        </Grid.Background>
+        </StackPanel.Background>
+        <TextBlock Height="30"/>
+        <Label Content="电压与内阻测试系统" FontSize="24"  Foreground="Black" HorizontalAlignment="Center"/>
+        <TextBlock Height="20"/>
+        <Grid Height="34">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1.5*"/>
+                <ColumnDefinition Width="2*"/>
+            </Grid.ColumnDefinitions>
+            <Label Content="用户账号：" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+            <TextBox x:Name="txtUserId"   HorizontalContentAlignment="Center" Grid.Column="1" Width="150" HorizontalAlignment="Left"
+                 VerticalContentAlignment="Center"  KeyDown="txtUserId_KeyDown"/>
+        </Grid>
+        <TextBlock Height="20"/>
+        <Grid Height="34">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1.5*"/>
+                <ColumnDefinition Width="2*"/>
+            </Grid.ColumnDefinitions>
+            <Label Content="密码：" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+            <PasswordBox x:Name="txtPwassWord"   HorizontalContentAlignment="Center" Grid.Column="1" Width="150" HorizontalAlignment="Left"
+                 VerticalContentAlignment="Center" KeyDown="txtPwassWord_KeyDown" />
+        </Grid>
+        <TextBlock Height="20"/>
+        <Grid Height="34">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1.5*"/>
+                <ColumnDefinition Width="2*"/>
+            </Grid.ColumnDefinitions>
+            <Label Content="用户类型：" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+            <ComboBox x:Name="comboUserType"  KeyDown="comboUserType_KeyDown" Grid.Column="1" Width="150" HorizontalAlignment="Left"/>
+        </Grid>
+        <TextBlock Height="20"/>
+        <Button x:Name="btnLogin" Content="登   录" Width="56" Height="30" Click="btnLogin_Click" Foreground="White" Background="#323b44" Loaded="btnLogin_Loaded"/>
 
-        <Label Content="电压与内阻测试系统" FontSize="24" Margin="81,19,31,233" Foreground="Black"/>
-        <Label Content="用户账号：" Margin="70,90,204,172" />
-        <Label Content="密   码：" Margin="79,150,195,112" />
-        <Label Content="用户类型：" Margin="67,211,207,47" />
-        <ComboBox x:Name="comboUserType"  KeyDown="comboUserType_KeyDown" Margin="137,202,83,75"/>
-        <TextBox x:Name="txtUserId"   HorizontalContentAlignment="Center" 
-                 VerticalContentAlignment="Center" Margin="137,81,84,194" KeyDown="txtUserId_KeyDown"/>
-        <PasswordBox x:Name="txtPwassWord"   HorizontalContentAlignment="Center" 
-                 VerticalContentAlignment="Center" KeyDown="txtPwassWord_KeyDown" Margin="137,143,84,133"/>
-        <Button x:Name="btnLogin" Content="登   录" Click="btnLogin_Click" Foreground="White" Background="#323b44" Margin="158,257,162,28" Loaded="btnLogin_Loaded"/>
-
-    </Grid>
+    </StackPanel>
 </Window>
